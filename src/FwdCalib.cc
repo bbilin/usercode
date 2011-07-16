@@ -13,7 +13,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id$
+// $Id: FwdCalib.cc,v 1.1 2011/06/09 08:31:56 bbilin Exp $
 //
 //
 
@@ -142,6 +142,7 @@ private:
   float DeltaR(float eta1, float eta2, float phi1, float phi2);
   edm::InputTag elecTag_;
   string PfJetAlg;
+  string CaloJetAlg;
  
   edm::Service<TFileService> fs;
   TTree * myTree;
@@ -162,8 +163,13 @@ float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[5
   //reco jets 
   int pfNjets,pfNtracks;
   
+  int CaloNjets;
 
-  float PFjetEta[100], PFjetPhi[100],PFjetPt[100],PFCorrjetPt[100],PFjetCEMF[100],PFjetNEMF[100];
+  float PFjetEta[100], PFjetPhi[100],PFjetPt[100],PFCorrjetPt[100],PFjetCEMF[100],PFjetNEMF[100],PFjetPx[100],PFjetPy[100],PFjetPz[100],PFjetE[100],PFjetM[100],PFHadEHF[100],PFEmEHF[100];
+
+ float CalojetEta[100], CalojetPhi[100],CalojetPt[100],CaloCorrjetPt[100],CalojetCEMF[100],CalojetNEMF[100],CalojetPx[100],CalojetPy[100],CalojetPz[100],CalojetE[100],CalojetM[100],CaloHadEHF[100],CaloEmEHF[100];
+
+
   float PFjetTrkVZ[100][100],PFjetTrkPT[100][100];
   float vtxZ[100],vtxZerr[100];
   float vtxY[100],vtxYerr[100];
@@ -190,6 +196,7 @@ ntupleGenerator::ntupleGenerator(const edm::ParameterSet& iConfig)
 
   elecTag_ = iConfig.getParameter<edm::InputTag>("elecTag");
   PfJetAlg = iConfig.getParameter<string>("PfJetAlg");
+  CaloJetAlg = iConfig.getParameter<string>("CaloJetAlg");
 
 }
 
@@ -221,13 +228,15 @@ ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   iEvent.getByLabel("patMETsPF", pfMEThandle); 
 
 
-
+  Handle<edm::View<pat::Jet> > Calojets;
+  iEvent.getByLabel(CaloJetAlg,Calojets);
+//  edm::View<pat::Jet>::const_iterator i_jet;
+//const edm::View<pat::Jet> & i_jet = *Calojets;
  
 
   Handle<edm::View<pat::Jet> > PFjets;
   iEvent.getByLabel(PfJetAlg,PFjets);
-//  edm::View<pat::Jet>::const_iterator i_jet;
-const edm::View<pat::Jet> & i_jet = *PFjets;
+//const edm::View<pat::Jet> & calo_jet = *PFjets;
 
  Handle<edm::View<pat::Electron> > elecs_h;	
   iEvent.getByLabel(elecTag_,elecs_h);
@@ -402,7 +411,28 @@ for(int i=0; i<100; ++i){
     PFjetCEMF[i]=-99.;
     PFjetNEMF[i]=-99.; 
     PFCorrjetPt[i]=-99;
-  }
+    PFjetPx[i]=-99;
+    PFjetPy[i]=-99;
+    PFjetPz[i]=-99;
+    PFjetE[i]=-99;
+    PFjetM[i]=-99;
+    PFHadEHF[i]=-99;
+    PFEmEHF[i]=-99;
+
+    CalojetEta[i]=-99.;
+    CalojetPhi[i]=-99.;
+    CalojetPt[i]=-99.;
+    CalojetCEMF[i]=-99.;
+    CalojetNEMF[i]=-99.; 
+    CaloCorrjetPt[i]=-99;
+    CalojetPx[i]=-99;
+    CalojetPy[i]=-99;
+    CalojetPz[i]=-99;
+    CalojetE[i]=-99;
+    CalojetM[i]=-99;
+    CaloHadEHF[i]=-99;
+    CaloEmEHF[i]=-99;
+}
   //----------------------------PF jets-------------------------------------------------------------------------------------
   for (int kkk = 0;kkk<100;kkk++){
     for (int jjj = 0;jjj<100;jjj++){
@@ -411,17 +441,30 @@ for(int i=0; i<100; ++i){
     }
   }
   pfNjets=0;
+  CaloNjets=0;
   for(edm::View<pat::Jet>::const_iterator i_jet = PFjets->begin(); i_jet != PFjets->end(); i_jet++){
     const math::XYZTLorentzVector theJet = i_jet->p4();
     PFjetEta[pfNjets]=i_jet->eta();
     PFjetPhi[pfNjets]=i_jet->phi();
     PFjetPt[pfNjets]=i_jet->correctedJet(0).pt();
+     PFjetPx[pfNjets]=i_jet->correctedJet(0).px();
+   PFjetPy[pfNjets]=i_jet->correctedJet(0).py();
+   PFjetPz[pfNjets]=i_jet->correctedJet(0).pz();
+   PFjetE[pfNjets]=i_jet->correctedJet(0).energy();
+   PFjetM[pfNjets]=i_jet->correctedJet(0).mass();
     PFCorrjetPt[pfNjets] = i_jet->pt();
     PFjetCEMF[pfNjets]=i_jet->chargedEmEnergyFraction();
     PFjetNEMF[pfNjets]=i_jet->neutralEmEnergyFraction();
-            cout<<PFjetEta[pfNjets]<<"  "<<PFjetPt[pfNjets]<<"  "<<PFCorrjetPt[pfNjets]<<endl;
+
+    PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
+    PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
+
+          cout<<PFjetEta[pfNjets]<<"  "<<PFjetPt[pfNjets]<<"  "<<PFCorrjetPt[pfNjets]<<endl;
     // ---- This accesses to the vertex Z of the track-base constituents of pfjets
     pfNtracks=0;
+
+
+
     const reco::TrackRefVector &tracks = i_jet->associatedTracks();
     for (reco::TrackRefVector::const_iterator iTrack = tracks.begin();iTrack != tracks.end(); ++iTrack) {
           PFjetTrkVZ[pfNjets][pfNtracks] = (**iTrack).vz();
@@ -431,7 +474,33 @@ for(int i=0; i<100; ++i){
     pfNjets++;
 //
   }
+
   //-----------------------------end of pf jets--------------------------------------------------------------------------
+
+ for(edm::View<pat::Jet>::const_iterator i_jet = Calojets->begin(); i_jet != Calojets->end(); i_jet++){
+    const math::XYZTLorentzVector theJet = i_jet->p4();
+   CalojetEta[CaloNjets]=i_jet->eta();
+    CalojetPhi[CaloNjets]=i_jet->phi();
+    CalojetPt[CaloNjets]=i_jet->correctedJet(0).pt();
+     CalojetPx[CaloNjets]=i_jet->correctedJet(0).px();
+   CalojetPy[CaloNjets]=i_jet->correctedJet(0).py();
+   CalojetPz[CaloNjets]=i_jet->correctedJet(0).pz();
+   CalojetE[CaloNjets]=i_jet->correctedJet(0).energy();
+   CalojetM[CaloNjets]=i_jet->correctedJet(0).mass();
+    CaloHadEHF[CaloNjets]=i_jet->hadEnergyInHF();
+    CaloEmEHF[CaloNjets]=i_jet->emEnergyInHF();    
+ //   CaloCorrjetPt[CaloNjets] = i_jet->pt();
+//    CalojetCEMF[CaloNjets]=i_jet->chargedEmEnergyFraction();
+//    CalojetNEMF[CaloNjets]=i_jet->neutralEmEnergyFraction();
+ //           cout<<CalojetEta[CaloNjets]<<"  "<<CalojetPt[CaloNjets]<<"  "<<CaloCorrjetPt[CaloNjets]<<endl;
+    // ---- This accesses to the vertex Z of the track-base constituents of Calojets
+
+    
+    CaloNjets++;
+//
+  }
+
+
 
   
   myTree->Fill();//!!!!!!
@@ -510,14 +579,36 @@ void ntupleGenerator::beginJob()
   myTree->Branch("muCorrSET", &muCorrSET, "muCorrSET/F");	
 
 
+  myTree->Branch("CaloNjets",&CaloNjets,"CaloNjets/I");
+  myTree->Branch("CalojetEta",CalojetEta,"CalojetEta[CaloNjets]/F");
+  myTree->Branch("CalojetPhi",CalojetPhi,"CalojetPhi[CaloNjets]/F");
+  myTree->Branch("CalojetPt",CalojetPt,"CalojetPt[CaloNjets]/F");
+  myTree->Branch("CalojetPx",CalojetPx,"CalojetPx[CaloNjets]/F");
+  myTree->Branch("CalojetPy",CalojetPy,"CalojetPy[CaloNjets]/F"); 
+  myTree->Branch("CalojetPz",CalojetPz,"CalojetPz[CaloNjets]/F");
+  myTree->Branch("CalojetE",CalojetE,"CalojetE[CaloNjets]/F");
+  myTree->Branch("CalojetM",CalojetM,"CalojetM[CaloNjets]/F");
+  myTree->Branch("CaloHadEHF",CaloHadEHF,"CaloHadEHF[CaloNjets]/F");
+  myTree->Branch("CaloEmEHF",CaloEmEHF,"CaloEmEHF[CaloNjets]/F");
+
+//  myTree->Branch("CaloCorrjetPt",CaloCorrjetPt,"CaloCorrjetPt[CaloNjets]/F");
+//  myTree->Branch("CalojetCEMF",CalojetCEMF,"CalojetCEMF[CaloNjets]/F");
+//  myTree->Branch("CalojetNEMF",CalojetNEMF,"CalojetNEMF[CaloNjets]/F");
+
   myTree->Branch("pfNjets",&pfNjets,"pfNjets/I");
   myTree->Branch("PFjetEta",PFjetEta,"PFjetEta[pfNjets]/F");
   myTree->Branch("PFjetPhi",PFjetPhi,"PFjetPhi[pfNjets]/F");
   myTree->Branch("PFjetPt",PFjetPt,"PFjetPt[pfNjets]/F");
+  myTree->Branch("PFjetPx",PFjetPx,"PFjetPx[pfNjets]/F");
+  myTree->Branch("PFjetPy",PFjetPy,"PFjetPy[pfNjets]/F"); 
+  myTree->Branch("PFjetPz",PFjetPz,"PFjetPz[pfNjets]/F");
+  myTree->Branch("PFjetE",PFjetE,"PFjetE[pfNjets]/F");
+  myTree->Branch("PFjetM",PFjetM,"PFjetM[pfNjets]/F");
   myTree->Branch("PFCorrjetPt",PFCorrjetPt,"PFCorrjetPt[pfNjets]/F");
   myTree->Branch("PFjetCEMF",PFjetCEMF,"PFjetCEMF[pfNjets]/F");
   myTree->Branch("PFjetNEMF",PFjetNEMF,"PFjetNEMF[pfNjets]/F");
-
+  myTree->Branch("PFHadEHF",PFHadEHF,"PFHadEHF[CaloNjets]/F");
+  myTree->Branch("PFEmEHF",PFEmEHF,"PFEmEHF[CaloNjets]/F");
   myTree->Branch("pfNtracks",&pfNtracks,"pfNtracks/I");
   myTree->Branch("PFjetTrkVZ",PFjetTrkVZ,"PFjetTrkVZ[pfNjets][30]/F");
   myTree->Branch("PFjetTrkPT",PFjetTrkPT,"PFjetTrkPT[pfNjets][30]/F");
