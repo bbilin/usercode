@@ -12,7 +12,8 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.threshold = 'INFO'
 process.MessageLogger.categories.append('PATSummaryTables')
 
-inputJetCorrLabel = ('AK5PF', [])#NO jet energy correction yet. 
+inputJetCorrLabel = ('AK5PF', ['L1Offset', 'L2Relative', 'L3Absolute']) 
+inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute']) 
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -29,13 +30,25 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 
 #addJetID(process,cms.InputTag('ak5CaloJets'),'ak5')
 
+removeSpecificPATObjects( process, ['Taus'] )
+process.patDefaultSequence.remove( process.patTaus )
+
 removeMCMatching(process, ['All'])
 addPfMET(process, 'PF')
 
 
-
-
 from PhysicsTools.PatAlgos.tools.jetTools import *
+addJetCollection(process,cms.InputTag('ak5CaloJets'),
+		'AK5','Calo',
+                 doJTA        = False,
+                 doBTagging   = False,
+                 jetCorrLabel = inputJetCorrLabell,
+                 doType1MET   = True,
+                 genJetCollection=cms.InputTag("ak5GenJets"),
+                 doJetID      = True
+                 )
+
+
 switchJetCollection(process,cms.InputTag('ak5PFJets'),
                  doJTA        = True,
                  doBTagging   = True,
@@ -50,8 +63,11 @@ process.patJets.tagInfoSources  = cms.VInputTag(
     cms.InputTag("secondaryVertexTagInfosAOD"),
     )
 
-removeSpecificPATObjects( process, ['Taus'] )
-process.patDefaultSequence.remove( process.patTaus )
+
+
+
+
+
 
 
 process.load('CommonTools/RecoAlgos/HBHENoiseFilter_cfi')
@@ -82,6 +98,7 @@ if mytrigs is not None :
 process.demo = cms.EDAnalyzer("ntupleGenerator",
 
 				PfJetAlg = cms.string("selectedPatJets"),
+				CaloJetAlg =cms.string("selectedPatJetsAK5Calo"),
 				elecTag  = cms.InputTag("selectedPatElectrons")
 				
 )
