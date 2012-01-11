@@ -24,7 +24,11 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 
 process.load("Configuration.StandardSequences.Geometry_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+<<<<<<< electron_mc_pat2ntuple_cfg.py
+process.GlobalTag.globaltag = cms.string(  'START42_V15B::All')
+=======
 process.GlobalTag.globaltag = cms.string(  'START42_V13::All')
+>>>>>>> 1.2
 process.load("Configuration.StandardSequences.MagneticField_cff")
 
 

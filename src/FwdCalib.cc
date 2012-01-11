@@ -1,3 +1,4 @@
+
 // -*- C++ -*-
 //
 // Package:    Fwdcalib
@@ -13,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.1 2011/06/09 08:31:56 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.2 2011/07/16 15:16:36 bbilin Exp $
 //
 //
 
@@ -95,7 +96,8 @@
 #include <map>
 #include "DataFormats/Common/interface/AssociationMap.h"
 
-
+#include "FWCore/Common/interface/TriggerNames.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
 class TH1F;
 class TH2F;
 class TStyle;
@@ -183,7 +185,7 @@ float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[5
   float caloMETY, pfMETY;
   float muCorrMET, muCorrSET;
 
-
+int tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL, tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL;
 
 //  reco::helper::JetIDHelper *jetID;
 
@@ -276,10 +278,7 @@ ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     vtxisFake[iv] = vtxs[iv].isFake();
   }
 
-  
-
-
-
+ 
 
   event = iEvent.id().event();
   run = iEvent.id().run();
@@ -287,6 +286,40 @@ ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   bxnumber = iEvent.bunchCrossing();
   realdata = iEvent.isRealData();
 
+
+
+
+//trigger primitive version//
+tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL=0;
+tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=0;
+ 
+ int ntrigs;
+  vector<string> trigname;
+  vector<bool> trigaccept;
+  edm::Handle< edm::TriggerResults > HLTResHandle;
+  edm::InputTag HLTTag = edm::InputTag( "TriggerResults", "", "HLT");
+  iEvent.getByLabel(HLTTag, HLTResHandle);
+  if ( HLTResHandle.isValid() && !HLTResHandle.failedToGet() ) {
+  edm::RefProd<edm::TriggerNames> trigNames( &(iEvent.triggerNames( *HLTResHandle )) );
+  ntrigs = (int)trigNames->size();
+
+for (int i = 0; i < ntrigs; i++) {
+  trigname.push_back(trigNames->triggerName(i));
+  trigaccept.push_back(HLTResHandle->accept(i));
+//cout<<trigname[i]<<endl;
+
+ if (trigaccept[i]){
+
+if(std::string(trigname[i]).find("HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL")!=std::string::npos)tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=1;
+
+if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL")!=std::string::npos)tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL=1;
+
+
+}
+}
+
+}
+//cout<<tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL<<endl;
 
  
   //----------------------------------------------------------------------------
@@ -455,11 +488,19 @@ for(int i=0; i<100; ++i){
     PFCorrjetPt[pfNjets] = i_jet->pt();
     PFjetCEMF[pfNjets]=i_jet->chargedEmEnergyFraction();
     PFjetNEMF[pfNjets]=i_jet->neutralEmEnergyFraction();
+<<<<<<< FwdCalib.cc
+
+    PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
+    PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
+
+//          cout<<PFjetEta[pfNjets]<<"  "<<PFjetPt[pfNjets]<<"  "<<PFCorrjetPt[pfNjets]<<endl;
+=======
 
     PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
     PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
 
           cout<<PFjetEta[pfNjets]<<"  "<<PFjetPt[pfNjets]<<"  "<<PFCorrjetPt[pfNjets]<<endl;
+>>>>>>> 1.2
     // ---- This accesses to the vertex Z of the track-base constituents of pfjets
     pfNtracks=0;
 
@@ -624,6 +665,9 @@ void ntupleGenerator::beginJob()
   myTree->Branch("vtxZerr",vtxZerr,"vtxZerr[nVertices]/F");
   myTree->Branch("vtxisValid",vtxisValid,"vtxisValid[nVertices]/I");
   myTree->Branch("vtxisFake",vtxisFake,"vtxisFake[nVertices]/I");
+
+myTree->Branch("tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL",&tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL,"tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL/I");
+myTree->Branch("tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL",&tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL,"tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL/I");
 
 }
 
