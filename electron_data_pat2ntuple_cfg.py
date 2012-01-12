@@ -109,3 +109,4 @@ process.hltSelection
 * process.patDefaultSequence 
 * process.demo
 )
+process.out.outputCommands = cms.untracked.vstring('drop *')
