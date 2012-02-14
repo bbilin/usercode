@@ -14,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.2 2011/07/16 15:16:36 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.3 2012/01/11 15:46:56 bbilin Exp $
 //
 //
 
@@ -488,20 +488,15 @@ for(int i=0; i<100; ++i){
     PFCorrjetPt[pfNjets] = i_jet->pt();
     PFjetCEMF[pfNjets]=i_jet->chargedEmEnergyFraction();
     PFjetNEMF[pfNjets]=i_jet->neutralEmEnergyFraction();
-<<<<<<< FwdCalib.cc
 
     PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
     PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
 
-//          cout<<PFjetEta[pfNjets]<<"  "<<PFjetPt[pfNjets]<<"  "<<PFCorrjetPt[pfNjets]<<endl;
-=======
 
     PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
     PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
 
           cout<<PFjetEta[pfNjets]<<"  "<<PFjetPt[pfNjets]<<"  "<<PFCorrjetPt[pfNjets]<<endl;
->>>>>>> 1.2
-    // ---- This accesses to the vertex Z of the track-base constituents of pfjets
     pfNtracks=0;
 
 
