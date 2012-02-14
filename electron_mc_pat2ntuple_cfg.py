@@ -113,3 +113,4 @@ process.p = cms.Path(
  process.patDefaultSequence 
 * process.demo
 )
+process.out.outputCommands = cms.untracked.vstring('drop *')
