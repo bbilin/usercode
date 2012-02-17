@@ -14,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.3 2012/01/11 15:46:56 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.4 2012/02/14 12:15:55 bbilin Exp $
 //
 //
 
@@ -299,6 +299,9 @@ tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=0;
   edm::Handle< edm::TriggerResults > HLTResHandle;
   edm::InputTag HLTTag = edm::InputTag( "TriggerResults", "", "HLT");
   iEvent.getByLabel(HLTTag, HLTResHandle);
+
+if(realdata){
+
   if ( HLTResHandle.isValid() && !HLTResHandle.failedToGet() ) {
   edm::RefProd<edm::TriggerNames> trigNames( &(iEvent.triggerNames( *HLTResHandle )) );
   ntrigs = (int)trigNames->size();
@@ -307,7 +310,6 @@ for (int i = 0; i < ntrigs; i++) {
   trigname.push_back(trigNames->triggerName(i));
   trigaccept.push_back(HLTResHandle->accept(i));
 //cout<<trigname[i]<<endl;
-
  if (trigaccept[i]){
 
 if(std::string(trigname[i]).find("HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL")!=std::string::npos)tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=1;
@@ -317,10 +319,10 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_
 
 }
 }
+}
 
 }
 //cout<<tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL<<endl;
-
  
   //----------------------------------------------------------------------------
 
@@ -435,7 +437,7 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_
   }
 
   
-  int NJets = 20;
+ // int NJets = 20;
 
 for(int i=0; i<100; ++i){
     PFjetEta[i]=-99.;
@@ -496,7 +498,6 @@ for(int i=0; i<100; ++i){
     PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
     PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
 
-          cout<<PFjetEta[pfNjets]<<"  "<<PFjetPt[pfNjets]<<"  "<<PFCorrjetPt[pfNjets]<<endl;
     pfNtracks=0;
 
 
