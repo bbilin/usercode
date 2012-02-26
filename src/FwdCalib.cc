@@ -14,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.4 2012/02/14 12:15:55 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.5 2012/02/17 10:54:42 bbilin Exp $
 //
 //
 
@@ -292,6 +292,9 @@ ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 //trigger primitive version//
 tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL=0;
 tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=0;
+
+if(realdata){
+
  
  int ntrigs;
   vector<string> trigname;
@@ -300,7 +303,6 @@ tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=0;
   edm::InputTag HLTTag = edm::InputTag( "TriggerResults", "", "HLT");
   iEvent.getByLabel(HLTTag, HLTResHandle);
 
-if(realdata){
 
   if ( HLTResHandle.isValid() && !HLTResHandle.failedToGet() ) {
   edm::RefProd<edm::TriggerNames> trigNames( &(iEvent.triggerNames( *HLTResHandle )) );
@@ -437,7 +439,7 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_
   }
 
   
- // int NJets = 20;
+  int NJets = 20;
 
 for(int i=0; i<100; ++i){
     PFjetEta[i]=-99.;
@@ -477,7 +479,7 @@ for(int i=0; i<100; ++i){
   }
   pfNjets=0;
   CaloNjets=0;
-  for(edm::View<pat::Jet>::const_iterator i_jet = PFjets->begin(); i_jet != PFjets->end(); i_jet++){
+  for(edm::View<pat::Jet>::const_iterator i_jet = PFjets->begin(); i_jet != PFjets->end() && pfNjets < NJets; i_jet++){
     const math::XYZTLorentzVector theJet = i_jet->p4();
     PFjetEta[pfNjets]=i_jet->eta();
     PFjetPhi[pfNjets]=i_jet->phi();
@@ -661,10 +663,10 @@ void ntupleGenerator::beginJob()
   myTree->Branch("vtxZerr",vtxZerr,"vtxZerr[nVertices]/F");
   myTree->Branch("vtxisValid",vtxisValid,"vtxisValid[nVertices]/I");
   myTree->Branch("vtxisFake",vtxisFake,"vtxisFake[nVertices]/I");
-
+if(realdata){
 myTree->Branch("tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL",&tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL,"tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL/I");
 myTree->Branch("tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL",&tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL,"tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL/I");
-
+}
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
