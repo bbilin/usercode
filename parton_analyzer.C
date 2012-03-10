@@ -27,11 +27,11 @@
 #include "TLatex.h"
 
 #include <TMath.h>
-#include <TFitter.h>
+//#include <TFitter.h>
 #include <TVector.h>
 #include <TF1.h>
 #include <TGraph.h>
-#include "TUnfold.h"
+//#include "TUnfold.h"
 #include "TSystem.h"
 
 
@@ -43,6 +43,16 @@ void ZtoEEanalyzer()
   gStyle->SetPalette(1);
   float DeltaR(float eta1, float eta2, float phi1, float phi2);
   float DeltaPhi(float phi1, float phi2);
+double c_may10[10] ={1.0117,0.994,1.006,0.9976,0.9967,0.9963,0.9963,1.0028,0.9950,1.0126};//elec correction factors//
+double c_promtv4[10] ={1.0474,1.0018,1.0100,1.0007,1.0032,1.0004,0.9990,1.0109,1.0036,1.0597}; 
+double c_aug5[10] ={0.9937,0.9951,1.0142,1.0047,1.0014,1.0008,1.0023,1.0182,0.9880,0.9884};
+double c_promtv6[10] ={0.9713,0.9786,1.0181,1.0064,1.0041,1.0025,1.0046,1.0167,0.9752,0.9659};
+
+double par0[10]={394.199,353.677,414.954,430.286,397.128,424.611,500,500,500,500,};
+double par1[10]={-3.9303,-31.3253,-7.96372,2.11221,-6.87922,1.66457,20,20,20,20,};
+double par2[10]={35.5977,37.9435,35.1436,34.1395,35.6599,34.4009,30,30,30,30,};
+double par3[10]={38.024,20.9857,29.5735,37.962,34.7899,38.268,50,50,50,50,};
+
 
   TChain myTree("demo/Tree");
 
@@ -77,15 +87,45 @@ void ZtoEEanalyzer()
 
 //myTree.Add("/tmp/bbilin/DYToEE_M-20_CT10_TuneZ2_7TeV-powheg-pythia-Summer11-PU_S4_START42_V11-v1.root");
 
+//
+
+int data =0;
+
+
+data=1;
+cout<<"CHECK if 1 for data and 0 for MC=====>>>>    "<<data<<endl;
+//myTree.Add("../ntuples/elec_2011B_promtv1.root");
+
+//myTree.Add("../ntuples/elec_2011_Aug5ReReco.root");
+
+//myTree.Add("../ntuples/elec_2011_Promtv6.root");
+
+//myTree.Add("/media/harddisk1/ntuples/2011_Promtv6_trigger.root");
+
+//myTree.Add("/media/harddisk2/2011_promtv4_trigger.root");
+
+//myTree.Add("../ntuples/2011_may10_trigger.root");
+
+//myTree.Add("../ntuples/2011_aug5_trigger.root");
+
+//myTree.Add("/media/harddisk1/ntuples/madgraph_25_12.root");
+
+myTree.Add("/tmp/bbilin/2011A_Promtv6_05_03_2012.root");
+ 
+//myTree.Add("/tmp/bbilin/mc_mdgrph_04_03_2012.root");
+
+//myTree.Add("/tmp/bbilin/madgraph_25_12.root");
+
 //myTree.Add("/tmp/bbilin/DYtoEE.root");
 
-//myTree.Add("/tmp/bbilin/elec_2011B_promtv1.root");
+//myTree.Add("/media/harddisk2/WW_bg_25_12.root");
 
-//myTree.Add("/tmp/bbilin/elec_2011_Aug5ReReco.root");
+//myTree.Add("/media/harddisk2/WZ_bg_25_12.root");
 
-//myTree.Add("/tmp/bbilin/elec_2011_Promtv6.root");
+//myTree.Add("/media/harddisk2/ZZ_bg_25_12.root");
 
-myTree.Add("/tmp/bbilin/madgraph_25_12.root");
+//myTree.Add("/media/harddisk2/Ztautau_bg_25_12.root");
+
 
 //myTree.Add("/tmp/bbilin/DoubleElectron_05Jul2011ReReco-HF.root");
 
@@ -97,7 +137,7 @@ TH1::AddDirectory(true);
 //  int hlt_trigger_fired;
   int Elecindex;
   int ElecIsEE[50],ElecIsEB[50];
-  float ElecPt[50], ElecEta[50], ElecPhi[50],ElecPx[50], ElecPy[50], ElecPz[50], ElecM[50], ElecE[50], Elecdr03TkSumPt[50], Elecdr03EcalRecHitSumEt[50], Elecdr03HcalTowerSumEt[50], ElecscSigmaIEtaIEta[50], ElecdeltaPhiSuperClusterTrackAtVtx[50], ElecdeltaEtaSuperClusterTrackAtVtx[50], ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecGsfTrk_d0[50];
+  float ElecPt[50], ElecEta[50], ElecPhi[50],ElecPx[50], ElecPy[50], ElecPz[50], ElecM[50], ElecE[50], Elecdr03TkSumPt[50], Elecdr03EcalRecHitSumEt[50], Elecdr03HcalTowerSumEt[50], ElecscSigmaIEtaIEta[50], ElecdeltaPhiSuperClusterTrackAtVtx[50], ElecdeltaEtaSuperClusterTrackAtVtx[50], ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecGsfTrk_d0[50],ElecDcotTheta[50];
 
 
   //particle information
@@ -117,17 +157,22 @@ TH1::AddDirectory(true);
   //met 
 
 
-  int nVertices;
+  int nVertices, tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL, tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL;
   
   myTree.SetBranchAddress("event",  &event);
   myTree.SetBranchAddress("run", &run);
   myTree.SetBranchAddress("lumi", &lumi);
+
+  myTree.SetBranchAddress("tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL",&tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL);
+  myTree.SetBranchAddress("tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL",&tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL);
+
   myTree.SetBranchAddress("bxnumber", &bxnumber);
   myTree.SetBranchAddress("realdata",&realdata);
 //  myTree.SetBranchAddress("hlt_trigger_fired",&hlt_trigger_fired);
   myTree.SetBranchAddress("Elecindex",&Elecindex);
   myTree.SetBranchAddress("ElecPt",ElecPt);
   myTree.SetBranchAddress("ElecGsfTrk_d0",ElecGsfTrk_d0);
+  myTree.SetBranchAddress("ElecDcotTheta",ElecDcotTheta);
   myTree.SetBranchAddress("ElecEta",ElecEta);
   myTree.SetBranchAddress("ElecPhi",ElecPhi);
   myTree.SetBranchAddress("ElecPx",ElecPx);
@@ -191,17 +236,20 @@ myTree.SetBranchAddress("nGoodVertices", &nGoodVertices);
   myTree.SetBranchAddress("nVertices",&nVertices);
 
 
-//  TFile *theFile = new TFile("mc_madgr.root","RECREATE");
-    TFile *theFile = new TFile("data.root","RECREATE");
+// TFile *theFile = new TFile("06_03_mc_mdgrph_4.root","RECREATE");
+ TFile *theFile = new TFile("06_03_2011A_v6_4.root","RECREATE");
+//TFile *theFile = new TFile("test_data.root","RECREATE");
+
+//TFile *theFile = new TFile("bg_Ztautau.root","RECREATE");
   theFile->cd();
 
 
 TH1F *h_deltaphi_z_jet=  new TH1F ("h_deltaphi_z_jet","h_deltaphi_z_jet",35,0,3.5);
 TH1F *h_elec_pt=  new TH1F ("h_elec_pt","h_elec_pt",200,0,200);
 TH1F *h_elec_eta=  new TH1F ("h_elec_eta","h_elec_eta",200,0,200);
-TH1F *h_leading_jet_pt=  new TH1F ("h_leading_jet_pt","h_leading_jet_pt",200,0,200);
+TH1F *h_leading_jet_pt=  new TH1F ("h_leading_jet_pt","h_leading_jet_pt",80,0,200);
 TH1F *h_leading_jet_eta=  new TH1F ("h_leading_jet_eta","h_leading_jet_eta",40,-6,6);
-TH1F *h_mz=  new TH1F ("h_mz","h_mz",200,0,200);
+TH1F *h_mz=  new TH1F ("h_mz","h_mz",50,70,110);
 TH1F *h_deltar_elec_Calojet=  new TH1F ("h_deltar_elec_Calojet","h_deltar_elec_Calojet",100,0,2);
 TH1F *h_deltar_parton_jet=  new TH1F ("h_deltar_parton_jet","h_deltar_parton_jet",100,0,2);
 TH1F *h_parton_pt=  new TH1F ("h_parton_pt","h_parton_pt",100,0,200);
@@ -222,6 +270,9 @@ TH1F * h_jet_quark=  new TH1F ("h_jet_quark","P_{T}^{Jet}/P_{T}^{Quark}",50,-0.5
 TProfile* h_ratio_jetpt_partonpt = new TProfile("h_ratio_jetpt_partonpt","",10,0,200);
 TProfile* h_ratio_gjetpt_partonpt = new TProfile("h_ratio_gjetpt_partonpt","",10,0,200);
 TProfile* h_ratio_qjetpt_partonpt = new TProfile("h_ratio_qjetpt_partonpt","",10,0,200);
+TProfile* h_ratio_corrjetpt_partonpt = new TProfile("h_ratio_corrjetpt_partonpt","",10,0,200);
+TProfile* h_ratio_corrgjetpt_partonpt = new TProfile("h_ratio_corrgjetpt_partonpt","",10,0,200);
+TProfile* h_ratio_corrqjetpt_partonpt = new TProfile("h_ratio_corrqjetpt_partonpt","",10,0,200);
 
 
 
@@ -393,12 +444,18 @@ h_invratio_parton_all_p[i] = new TH1F (name16,"",60,-0.5,5.5);
 
 
  Int_t nevent = myTree.GetEntries();
-// Int_t  nevent = 2000000;
+ //Int_t  nevent = 4000000;
   for (Int_t iev=0;iev<nevent;iev++) {
+
+
 
 //if(iev!=2)continue;
  	  if (iev%100000 == 0) cout<<iev<<"/"<<nevent<<endl;
     	myTree.GetEntry(iev); 
+
+if(data ==1 && tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL!=1 && tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL!=1) continue;
+
+//if (tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL==1)cout<<tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL<<endl;
 
 
 int eCharge[50]={};
@@ -421,6 +478,9 @@ double edeltaEtaSuperClusterTrackAtVtx[50]= {};
 double ehadronicOverEm[50]={} ;
 double egsfTrack_numberOfLostHits[50]={} ;
 double eGsfTrk_d0[50]={} ;
+double eDcotTheta[50]={};
+int e_cut_fired[50]={};
+
 
 
 //cout<<"new"<<endl;
@@ -430,13 +490,57 @@ for(int ii = 0 ; ii < Elecindex ; ii++)
 eCharge[ii]=ElecCharge[ii];
 eIsEE[ii]=ElecIsEE[ii];
 eIsEB[ii]= ElecIsEB[ii];
-ePt[ii] = ElecPt[ii];
 //cout<<ePt[ii]<<endl;
 eEta[ii] = ElecEta[ii];
 ePhi[ii]= ElecPhi[ii];
-ePx[ii]=ElecPx[ii];
-ePy[ii]= ElecPy[ii];
-ePz[ii] = ElecPz[ii];
+//if(data==0){
+
+ePt[ii] = ElecPt[ii];
+ePx[ii]= ElecPx[ii];
+ePy[ii]=  ElecPy[ii];
+ePz[ii] =ElecPz[ii];
+
+//}
+/*
+if(data ==1){
+for(int i = 0 ; i < 9 ; i++){
+if((i-5)*0.5<eEta[ii] && eEta[ii]<(i-4)*0.5){
+//cout<<eEta[ii]<<"     "<<i<<"    "<< c_promtv4[i]<<endl;
+
+
+if(160430<run && run<163870){
+ePt[ii] = c_may10[i]*ElecPt[ii];
+ePx[ii]= c_may10[i]*ElecPx[ii];
+ePy[ii]= c_may10[i]* ElecPy[ii];
+ePz[ii] = c_may10[i]* ElecPz[ii];
+//cout<<"1"<<endl;
+}
+
+if(165087<run && run<167914){
+ePt[ii] = c_promtv4[i]*ElecPt[ii];
+ePx[ii]= c_promtv4[i]*ElecPx[ii];
+ePy[ii]= c_promtv4[i]* ElecPy[ii];
+ePz[ii] = c_promtv4[i]* ElecPz[ii];
+//cout<<"2"<<endl;
+}
+
+if(170825<run && run<172620){
+ePt[ii] = c_aug5[i]*ElecPt[ii];
+ePx[ii]= c_aug5[i]*ElecPx[ii];
+ePy[ii]= c_aug5[i]* ElecPy[ii];
+ePz[ii] = c_aug5[i]* ElecPz[ii];
+//cout<<"3"<<endl;
+}
+
+if(172619<run && run<173693){
+ePt[ii] = c_promtv6[i]*ElecPt[ii];
+ePx[ii]= c_promtv6[i]*ElecPx[ii];
+ePy[ii]= c_promtv6[i]* ElecPy[ii];
+ePz[ii] = c_promtv6[i]* ElecPz[ii];
+//cout<<"4"<<endl;
+}
+}}}
+*/
 eM[ii]= ElecM[ii]; 
 eE[ii]= ElecE[ii]; 
 edr03TkSumPt[ii]= Elecdr03TkSumPt[ii]; 
@@ -448,9 +552,27 @@ edeltaEtaSuperClusterTrackAtVtx[ii]= ElecdeltaEtaSuperClusterTrackAtVtx[ii];
 ehadronicOverEm[ii]= ElechadronicOverEm[ii];
 egsfTrack_numberOfLostHits[ii]= ElecgsfTrack_numberOfLostHits[ii];
 eGsfTrk_d0[ii]= ElecGsfTrk_d0[ii];
+eDcotTheta[ii]=ElecDcotTheta[ii];
 
+
+
+
+
+if(
+egsfTrack_numberOfLostHits[ii]<1 && ( fabs(eGsfTrk_d0[ii])>0.02 && fabs(eDcotTheta[ii])>0.02 ) &&  ePt[ii] > 20.  && fabs(eEta[ii]) <2.5 &&
+
+((eIsEB[ii] ==1 && eIsEB[ii]==1 && edr03TkSumPt[ii]/ePt[ii]<0.09 && edr03EcalRecHitSumEt[ii]/ePt[ii]<0.07 && edr03HcalTowerSumEt[ii]/ePt[ii]<0.10 && escSigmaIEtaIEta[ii]<0.01 && fabs(edeltaPhiSuperClusterTrackAtVtx[ii])<0.06 && fabs(edeltaEtaSuperClusterTrackAtVtx[ii])<0.004 && ehadronicOverEm[ii]<0.04 
+) ||
+(eIsEE[ii] ==1 && edr03TkSumPt[ii]/ePt[ii]<0.04 && edr03EcalRecHitSumEt[ii]/ePt[ii]<0.05 && edr03HcalTowerSumEt[ii]/ePt[ii]<0.025 && escSigmaIEtaIEta[ii]<0.03 && fabs(edeltaPhiSuperClusterTrackAtVtx[ii])<0.03 && fabs(edeltaEtaSuperClusterTrackAtVtx[ii])<0.007 && ehadronicOverEm[ii]<0.025 ))
+
+){e_cut_fired[ii]=1;}
+
+else {e_cut_fired[ii]=0;}
+
+//cout<<e_cut_fired[ii]<<endl;
+//if(e_cut_fired[ii]==1) cout<<"  no of lost hits  "<<egsfTrack_numberOfLostHits[ii]<<"  d0   "<<fabs(eGsfTrk_d0[ii])<<"   dcottheta   "<<fabs(eDcotTheta[ii])<<"   ept   "<<ePt[ii]<<"   eeta   "<<fabs(eEta[ii])<<endl;
 }
-
+//cout<<"aaa"<<endl;
 
 
 double jetEta[50]={};
@@ -484,19 +606,7 @@ for(int ii=0;ii<CaloNjets;ii++){
 jPt[ii]=fabs(CalojetPt[ii]);
 }
 
-//cout<<CaloNjets<<endl;
-
-//cout<<jPt[1]<<endl;
-/*
-cout<<jPt[1]<<endl;
-cout<<jPt[2]<<endl;
-
-cout<<jPt[3]<<endl;
-cout<<jPt[4]<<endl;
-cout<<jPt[5]<<endl;
-*/
-
-//cout<<"helloooooo"<<endl;
+double corr_fact=-999.;
 int sort_jet = 0;
 int ind=0;
 TMath::Sort(CaloNjets,jPt,sorted_jet_index);
@@ -519,10 +629,10 @@ EmEHF[ind]=CaloEmEHF[sort_jet];
 ind++;
 }
 
-
-
-
-
+if(data==1){
+if(tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL!=1 &&
+ tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL!=1) continue;
+}
 
     float particle_pt[50] = {};
     float particle_eta[50] = {};
@@ -554,9 +664,12 @@ ind++;
       particle_pz[nparticle_gen] = ParticlePz[j];
       particle_m[nparticle_gen] = ParticleM[j];
       particle_e[nparticle_gen] = ParticleE[j];
+
+//	cout<<nparticle_gen<<"   "<<particle_id[nparticle_gen]<<endl;
+
 nparticle_gen++ ;//9 or 10 only
 }
-if(nparticle_gen==10){
+if((nparticle_gen==10 )){
 
 h_parton_pt->Fill(particle_pt[7]);
 h_parton_eta->Fill(particle_eta[7]);
@@ -574,11 +687,13 @@ h_gluon_phi->Fill(particle_phi[7]);
 }
 }
 
+//cout<<"neww"<<endl;
 int pr_elecindex_1=-999;
 int pr_elecindex_2=-999;
 for(int ii=0;ii<nparticle_gen;ii++){
 if(particle_id[ii]==11)pr_elecindex_1=ii;
 if(particle_id[ii]==-11)pr_elecindex_2=ii;
+//cout<<nparticle_gen<<"   "<<particle_id[ii]<<endl;
 }
 
 double p1dp2 = (pow(particle_px[pr_elecindex_1]+particle_px[pr_elecindex_2],2) + pow(particle_py[pr_elecindex_1]+particle_py[pr_elecindex_2],2) + pow(particle_pz[pr_elecindex_1]+particle_pz[pr_elecindex_2],2));
@@ -602,119 +717,13 @@ h_number_of_st3_prt->Fill(nparticle_gen);
       for (int jk = j; jk < Elecindex  ; ++jk){
 
 	if (j == jk) continue;
-/*
- 	if (
-	    (eCharge[j]*eCharge[jk]) == -1&&
-	    ePt[j] > 20. && ePt[jk] > 20.  &&  
-	    fabs(eEta[j]) <2.5 && fabs(eEta[jk]) <2.5 &&
-
-(
-(eIsEB[j] ==1 && eIsEB[jk]==1&&
-
-edr03TkSumPt[j]/ePt[j]<0.15 && edr03TkSumPt[jk]/ePt[jk]<0.15&&
-edr03EcalRecHitSumEt[j]/ePt[j]<2. && edr03EcalRecHitSumEt[jk]/ePt[jk]<2. &&
-edr03HcalTowerSumEt[j]/ePt[j]<0.12 && edr03HcalTowerSumEt[jk]/ePt[jk]<0.12 &&
-escSigmaIEtaIEta[j]<0.01 && escSigmaIEtaIEta[jk]<0.01&&
-edeltaEtaSuperClusterTrackAtVtx[j]<0.007 && edeltaEtaSuperClusterTrackAtVtx[jk]<0.007 &&
-ehadronicOverEm[j]<0.15 && ehadronicOverEm[jk]<0.15 &&
-egsfTrack_numberOfLostHits[j]<=1 &&egsfTrack_numberOfLostHits[jk]<=1) ||
-
-(eIsEE[j] ==1 && eIsEE[jk]==1&&
-
-edr03TkSumPt[j]/ePt[j]<0.08 && edr03TkSumPt[jk]/ePt[jk]<0.08&&
-edr03EcalRecHitSumEt[j]/ePt[j]<0.06 && edr03EcalRecHitSumEt[jk]/ePt[jk]<0.06 &&
-edr03HcalTowerSumEt[j]/ePt[j]<0.05 && edr03HcalTowerSumEt[jk]/ePt[jk]<0.05 &&
-escSigmaIEtaIEta[j]<0.03 && escSigmaIEtaIEta[jk]<0.03&&
-ehadronicOverEm[j]<0.07 && ehadronicOverEm[jk]<0.07 &&
-egsfTrack_numberOfLostHits[j]<=1 &&egsfTrack_numberOfLostHits[jk]<=1) ||
-
-
-(eIsEE[j] ==1 && eIsEB[jk]==1&&
-
-edr03TkSumPt[j]/ePt[j]<0.08 && edr03TkSumPt[jk]/ePt[jk]<0.15&&
-edr03EcalRecHitSumEt[j]/ePt[j]<0.06 && edr03EcalRecHitSumEt[jk]/ePt[jk]<2. &&
-edr03HcalTowerSumEt[j]/ePt[j]<0.05 && edr03HcalTowerSumEt[jk]/ePt[jk]<0.12 &&
-escSigmaIEtaIEta[j]<0.03 && escSigmaIEtaIEta[jk]<0.01&&
-edeltaEtaSuperClusterTrackAtVtx[jk]<0.007 && //DeltaEta cut for Barrel only
-ehadronicOverEm[j]<0.07 && ehadronicOverEm[jk]<0.15 &&
-egsfTrack_numberOfLostHits[j]<=1 &&egsfTrack_numberOfLostHits[jk]<=1)||
-
-(eIsEB[j] ==1 && eIsEE[jk]==1&&
-
-edr03TkSumPt[jk]/ePt[jk]<0.08 && edr03TkSumPt[j]/ePt[j]<0.15&&
-edr03EcalRecHitSumEt[jk]/ePt[jk]<0.06 && edr03EcalRecHitSumEt[j]/ePt[j]<2. &&
-edr03HcalTowerSumEt[jk]/ePt[jk]<0.05 && edr03HcalTowerSumEt[j]/ePt[j]<0.12 &&
-escSigmaIEtaIEta[jk]<0.03 && escSigmaIEtaIEta[j]<0.01&&
-edeltaEtaSuperClusterTrackAtVtx[j]<0.007 && //DeltaEta cut for Barrel only
-ehadronicOverEm[jk]<0.07 && ehadronicOverEm[j]<0.15 &&
-egsfTrack_numberOfLostHits[jk]<=1 &&egsfTrack_numberOfLostHits[j]<=1)
-
-	)
-
-)
-*/
-
- 	if (
-	    (eCharge[j]*eCharge[jk]) == -1&&
-	    ePt[j] > ptcut && ePt[jk] > ptcut  &&  
-	    fabs(eEta[j]) <2.5 && fabs(eEta[jk]) <2.5 &&
-((egsfTrack_numberOfLostHits[j]==0 &&egsfTrack_numberOfLostHits[jk]==0 )
-||(fabs(eGsfTrk_d0[j])>0.02&&fabs(eGsfTrk_d0[jk])>0.02))&&
-
-(
-(eIsEB[j] ==1 && eIsEB[jk]==1&&
-
-edr03TkSumPt[j]/ePt[j]<0.09 && edr03TkSumPt[jk]/ePt[jk]<0.09&&
-edr03EcalRecHitSumEt[j]/ePt[j]<0.07 && edr03EcalRecHitSumEt[jk]/ePt[jk]<0.07 &&
-edr03HcalTowerSumEt[j]/ePt[j]<0.10 && edr03HcalTowerSumEt[jk]/ePt[jk]<0.10 &&
-escSigmaIEtaIEta[j]<0.01 && escSigmaIEtaIEta[jk]<0.01&&
-edeltaPhiSuperClusterTrackAtVtx[j]<0.06 && edeltaPhiSuperClusterTrackAtVtx[jk]<0.06&&
-edeltaEtaSuperClusterTrackAtVtx[j]<0.004 && edeltaEtaSuperClusterTrackAtVtx[jk]<0.004 &&
-ehadronicOverEm[j]<0.04 && ehadronicOverEm[jk]<0.04 
-) ||
-
-(eIsEE[j] ==1 && eIsEE[jk]==1&&
-
-edr03TkSumPt[j]/ePt[j]<0.04 && edr03TkSumPt[jk]/ePt[jk]<0.04&&
-edr03EcalRecHitSumEt[j]/ePt[j]<0.05 && edr03EcalRecHitSumEt[jk]/ePt[jk]<0.05 &&
-edr03HcalTowerSumEt[j]/ePt[j]<0.025 && edr03HcalTowerSumEt[jk]/ePt[jk]<0.025 &&
-escSigmaIEtaIEta[j]<0.03 && escSigmaIEtaIEta[jk]<0.03&&
-edeltaPhiSuperClusterTrackAtVtx[j]<0.03 && edeltaPhiSuperClusterTrackAtVtx[jk]<0.03&&
-edeltaEtaSuperClusterTrackAtVtx[j]<0.007 && edeltaEtaSuperClusterTrackAtVtx[jk]<0.007 &&
-ehadronicOverEm[j]<0.025 && ehadronicOverEm[jk]<0.025 
-) ||
-
-
-(eIsEE[j] ==1 && eIsEB[jk]==1&&
-
-edr03TkSumPt[j]/ePt[j]<0.04 && edr03TkSumPt[jk]/ePt[jk]<0.09&&
-edr03EcalRecHitSumEt[j]/ePt[j]<0.05 && edr03EcalRecHitSumEt[jk]/ePt[jk]<0.07 &&
-edr03HcalTowerSumEt[j]/ePt[j]<0.025 && edr03HcalTowerSumEt[jk]/ePt[jk]<0.10 &&
-escSigmaIEtaIEta[j]<0.03 && escSigmaIEtaIEta[jk]<0.01&&
-edeltaPhiSuperClusterTrackAtVtx[j]<0.03 && edeltaPhiSuperClusterTrackAtVtx[jk]<0.06&&
-edeltaEtaSuperClusterTrackAtVtx[j]<0.007 && edeltaEtaSuperClusterTrackAtVtx[jk]<0.004 &&
-ehadronicOverEm[j]<0.025 && ehadronicOverEm[jk]<0.04 
-)||
-
-(eIsEB[j] ==1 && eIsEE[jk]==1&&
-
-edr03TkSumPt[jk]/ePt[jk]<0.04 && edr03TkSumPt[j]/ePt[j]<0.09&&
-edr03EcalRecHitSumEt[jk]/ePt[jk]<0.05 && edr03EcalRecHitSumEt[j]/ePt[j]<0.07 &&
-edr03HcalTowerSumEt[jk]/ePt[jk]<0.025 && edr03HcalTowerSumEt[j]/ePt[j]<0.10 &&
-escSigmaIEtaIEta[jk]<0.03 && escSigmaIEtaIEta[j]<0.01&&
-edeltaPhiSuperClusterTrackAtVtx[jk]<0.03 && edeltaPhiSuperClusterTrackAtVtx[j]<0.06&&
-edeltaEtaSuperClusterTrackAtVtx[jk]<0.007 && edeltaEtaSuperClusterTrackAtVtx[j]<0.004 &&
-ehadronicOverEm[jk]<0.025 && ehadronicOverEm[j]<0.04 
-)
-
-	) 
-
-
-
-){
 if ((fabs(eEta[j]) >1.4442 && fabs(eEta[j])<1.560)|| (fabs(eEta[jk]) >1.4442 && fabs(eEta[jk])<1.560)) continue;
+
+ 	if (
+ (eCharge[j]*eCharge[jk] == -1) && e_cut_fired[j]==1 && e_cut_fired[jk]==1){
+
 if(select==1)continue;
-//cout<<"test"<<endl;
+
 index1=j;
 index2=jk;
 	h_elec_pt->Fill(ePt[j]);
@@ -767,6 +776,7 @@ if (select==0) continue;
       double ratio0 = -999.0;
       double ratio1 = -999.0;
       double ratio2 = -999.0;
+      double ratio3 = -999.0;
 
       int markCalojet;
       for (int Calo=0;Calo < CaloNjets ;Calo++){
@@ -774,11 +784,10 @@ if (select==0) continue;
 
 	  float deltar = fabs(DeltaR(jetEta[Calo],eEta[index1],jetPhi[Calo],ePhi[index1]));
 	  float deltar2 = fabs(DeltaR(jetEta[Calo],eEta[index2],jetPhi[Calo],ePhi[index2]));
-//cout<<deltar<<endl;
-//cout<<deltar2<<endl;
+
 
 	h_deltar_elec_Calojet -> Fill(deltar);
-//	h_deltar_elec_Calojet -> Fill(deltar2); //test the code for deltar
+	h_deltar_elec_Calojet -> Fill(deltar2); //test the code for deltar
 	  if (deltar<0.5) markCalojet = 1; 
 	  if (deltar2<0.5) markCalojet = 1; 
 	if (markCalojet != 1){
@@ -798,12 +807,31 @@ jetindex1=Calo;
 }}
 
 
+double cjetE=0.;
+double cjetPt=0.;
+double cjetPx=0.;
+double cjetPy=0.;
+double cjetPz=0.;
+
+for(int i=0; i<10;i++){//eta index
+if(fabs(jetEta[jetindex1])>0.519*i && fabs(jetEta[jetindex1])<0.519*(i+1) ){
+ corr_fact= par0[i]/(par1[i] + par2[i]* log(par3[i]*jetPt[jetindex1]));
+//cout<<corr_fact<<endl;
+cjetE=corr_fact*jetE[jetindex1];
+cjetPx=corr_fact*jetPx[jetindex1];
+cjetPy=corr_fact*jetPy[jetindex1];
+cjetPz=corr_fact*jetPz[jetindex1];
+cjetPt=corr_fact*jetPt[jetindex1];
+}
+}
+
 
 //cout<< markgoodev<<endl;
 
 //h_numberofCalojets->Fill(numberofCalojets);
 
 if (markgoodev!=1) continue;
+n_particle_after_sellecting_goodjet->Fill(nparticle_gen);
 
 
 //cout<< jetindex1<<endl;
@@ -830,16 +858,20 @@ if (deltaphi<2.8) continue;
 
 //if (deltaphi>3.1) continue;
 //cout<<jetPhi[jetindex1]<<"   "<<dielecphi<<fabs(dielecphi)+fabs(jetPhi[jetindex1])<<endl;
-
-    ratio0 = dielecpt/jetPt[jetindex1];
-    ratio1 = dielecpt/particle_pt[7];
-    ratio2 =jetPt[jetindex1]/particle_pt[7];
 	h_leading_jet_pt->Fill(jetPt[jetindex1]);
 	h_leading_jet_eta->Fill(jetEta[jetindex1]);
 
 //cout<<ratio1<<endl;
 
-n_particle_after_sellecting_goodjet->Fill(nparticle_gen);
+
+
+//if(data == 0 && nparticle_gen!=10 ) continue;
+    ratio0 = dielecpt/jetPt[jetindex1];
+    ratio1 = dielecpt/particle_pt[7];
+    ratio2 =jetPt[jetindex1]/particle_pt[7];
+    ratio3 =cjetPt/particle_pt[7];
+//cout<<cjetPt[jetindex1]<<endl; 
+
 
 double deltar_parton_jet=DeltaR(jetEta[jetindex1],particle_eta[7],jetPhi[jetindex1],particle_phi[7]);
 h_deltar_parton_jet->Fill(deltar_parton_jet);
@@ -851,6 +883,7 @@ h_deltar_parton_jet->Fill(deltar_parton_jet);
     h_ptjet_etajet__average_ratio->Fill(jetPt[jetindex1],fabs(jetEta[jetindex1]),ratio0);
     h_jet_parton->Fill(ratio2);
     h_ratio_jetpt_partonpt->Fill(particle_pt[7],ratio2);
+    h_ratio_corrjetpt_partonpt->Fill(particle_pt[7],ratio3);
 
 h_parton_pt->Fill(particle_pt[7]);
  if(fabs(particle_id[7])<6){
@@ -861,6 +894,7 @@ h_ptz_etajet_q->Fill(dielecpt,fabs(jetEta[jetindex1]));
     h_ptZ_etajet__average_ETraw_q->Fill(dielecpt,fabs(jetEta[jetindex1]),jetPt[jetindex1]);
     h_ptZ_etajet__average_ratio_q->Fill(dielecpt,fabs(jetEta[jetindex1]),ratio0);
         h_ratio_qjetpt_partonpt->Fill(particle_pt[7],ratio2);
+	h_ratio_corrqjetpt_partonpt->Fill(particle_pt[7],ratio3);	
 }
  if(fabs(particle_id[7])==21){
 h_gluon_pt->Fill(particle_pt[7]);
@@ -870,6 +904,7 @@ h_ptz_etajet_g->Fill(dielecpt,fabs(jetEta[jetindex1]));
     h_ptZ_etajet__average_ETraw_g->Fill(dielecpt,fabs(jetEta[jetindex1]),jetPt[jetindex1]);
     h_ptZ_etajet__average_ratio_g->Fill(dielecpt,fabs(jetEta[jetindex1]),ratio0);
     h_ratio_gjetpt_partonpt->Fill(particle_pt[7],ratio2);
+    h_ratio_corrgjetpt_partonpt->Fill(particle_pt[7],ratio3);
 }
 
 
