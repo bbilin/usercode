@@ -92,8 +92,8 @@ double par3[10]={38.024,20.9857,29.5735,37.962,34.7899,38.268,50,50,50,50,};
 int data =0;
 
 
-data=1;
-cout<<"CHECK if 1 for data and 0 for MC=====>>>>    "<<data<<endl;
+//data=1;
+//cout<<"CHECK if 1 for data and 0 for MC=====>>>>    "<<data<<endl;
 //myTree.Add("../ntuples/elec_2011B_promtv1.root");
 
 //myTree.Add("../ntuples/elec_2011_Aug5ReReco.root");
@@ -110,9 +110,11 @@ cout<<"CHECK if 1 for data and 0 for MC=====>>>>    "<<data<<endl;
 
 //myTree.Add("/media/harddisk1/ntuples/madgraph_25_12.root");
 
-myTree.Add("/tmp/bbilin/2011A_Promtv6_05_03_2012.root");
+//myTree.Add("/tmp/bbilin/2011A_Promtv6_05_03_2012.root");
  
-//myTree.Add("/tmp/bbilin/mc_mdgrph_04_03_2012.root");
+//myTree.Add("/tmp/bbilin/merg/2011A_aug5_11_03_2012.root");
+
+myTree.Add("/tmp/bbilin/mc_mdgrph_04_03_2012.root");
 
 //myTree.Add("/tmp/bbilin/madgraph_25_12.root");
 
@@ -236,8 +238,8 @@ myTree.SetBranchAddress("nGoodVertices", &nGoodVertices);
   myTree.SetBranchAddress("nVertices",&nVertices);
 
 
-// TFile *theFile = new TFile("06_03_mc_mdgrph_4.root","RECREATE");
- TFile *theFile = new TFile("06_03_2011A_v6_4.root","RECREATE");
+ TFile *theFile = new TFile("06_03_mc_mdgrph_4.root","RECREATE");
+// TFile *theFile = new TFile("06_03_2011A_v6_4.root","RECREATE");
 //TFile *theFile = new TFile("test_data.root","RECREATE");
 
 //TFile *theFile = new TFile("bg_Ztautau.root","RECREATE");
@@ -452,9 +454,10 @@ h_invratio_parton_all_p[i] = new TH1F (name16,"",60,-0.5,5.5);
 //if(iev!=2)continue;
  	  if (iev%100000 == 0) cout<<iev<<"/"<<nevent<<endl;
     	myTree.GetEntry(iev); 
+//cout<<"test"<<endl;
+if(realdata && tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL!=1 && tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL!=1) continue;
 
-if(data ==1 && tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL!=1 && tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL!=1) continue;
-
+//cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<1"<<endl;
 //if (tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL==1)cout<<tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL<<endl;
 
 
@@ -629,10 +632,7 @@ EmEHF[ind]=CaloEmEHF[sort_jet];
 ind++;
 }
 
-if(data==1){
-if(tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL!=1 &&
- tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL!=1) continue;
-}
+
 
     float particle_pt[50] = {};
     float particle_eta[50] = {};
@@ -854,18 +854,11 @@ h_deltaphi_z_jet->Fill(deltaphi);
 
 if (deltaphi<2.8) continue;
 
-//if(dielecpt<20)cout<<jetPt[jetindex1]<<endl;
-
-//if (deltaphi>3.1) continue;
-//cout<<jetPhi[jetindex1]<<"   "<<dielecphi<<fabs(dielecphi)+fabs(jetPhi[jetindex1])<<endl;
 	h_leading_jet_pt->Fill(jetPt[jetindex1]);
 	h_leading_jet_eta->Fill(jetEta[jetindex1]);
 
-//cout<<ratio1<<endl;
+if(!(realdata) && nparticle_gen!=10 ) continue;
 
-
-
-//if(data == 0 && nparticle_gen!=10 ) continue;
     ratio0 = dielecpt/jetPt[jetindex1];
     ratio1 = dielecpt/particle_pt[7];
     ratio2 =jetPt[jetindex1]/particle_pt[7];
@@ -885,8 +878,9 @@ h_deltar_parton_jet->Fill(deltar_parton_jet);
     h_ratio_jetpt_partonpt->Fill(particle_pt[7],ratio2);
     h_ratio_corrjetpt_partonpt->Fill(particle_pt[7],ratio3);
 
+
 h_parton_pt->Fill(particle_pt[7]);
- if(fabs(particle_id[7])<6){
+ if(fabs(particle_id[7])<6){//quark jets
 h_quark_pt->Fill(particle_pt[7]);
 h_jet_quark->Fill(ratio2);
 h_ptz_etajet_q->Fill(dielecpt,fabs(jetEta[jetindex1]));
@@ -896,7 +890,8 @@ h_ptz_etajet_q->Fill(dielecpt,fabs(jetEta[jetindex1]));
         h_ratio_qjetpt_partonpt->Fill(particle_pt[7],ratio2);
 	h_ratio_corrqjetpt_partonpt->Fill(particle_pt[7],ratio3);	
 }
- if(fabs(particle_id[7])==21){
+
+ if(fabs(particle_id[7])==21){//gluon jets
 h_gluon_pt->Fill(particle_pt[7]);
 h_jet_gluon->Fill(ratio2);
 h_ptz_etajet_g->Fill(dielecpt,fabs(jetEta[jetindex1]));
