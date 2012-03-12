@@ -14,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.5 2012/02/17 10:54:42 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.6 2012/02/26 09:03:35 bbilin Exp $
 //
 //
 
@@ -151,7 +151,7 @@ private:
   int event, run,lumi,bxnumber,realdata;
   int hlt_trigger_fired;
 
-float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50];
+float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecDcotTheta[50];
   int Elecindex,ElecCharge[50],ElecIsEB[50], ElecIsEE[50]; 
  
 
@@ -311,20 +311,23 @@ if(realdata){
 for (int i = 0; i < ntrigs; i++) {
   trigname.push_back(trigNames->triggerName(i));
   trigaccept.push_back(HLTResHandle->accept(i));
+
+
 //cout<<trigname[i]<<endl;
  if (trigaccept[i]){
 
 if(std::string(trigname[i]).find("HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL")!=std::string::npos)tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=1;
 
-if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL")!=std::string::npos)tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL=1;
+if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_Ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL")!=std::string::npos)tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL=1;
 
 
 }
 }
 }
 
+
 }
-//cout<<tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL<<endl;
+//cout<<tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL<<endl;
  
   //----------------------------------------------------------------------------
 
@@ -411,7 +414,7 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_
     ElecdeltaEtaSuperClusterTrackAtVtx[jj] = -99.;
     ElechadronicOverEm[jj] = -99.;
     ElecgsfTrack_numberOfLostHits[jj] = -99.;
-
+    ElecDcotTheta[jj] = -99.;
   }
   Elecindex = 0;
   for(edm::View<pat::Electron>::const_iterator el = elec->begin(); el != elec->end();  ++el) {
@@ -424,7 +427,9 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_
         ElecE[Elecindex] = el->energy();
 	ElecM[Elecindex] = el->mass();
 	ElecCharge[Elecindex] = el->charge();
-	ElecGsfTrk_d0[Elecindex] = el->gsfTrack()->d0();
+	//ElecGsfTrk_d0[Elecindex] = el->gsfTrack()->d0();
+        ElecGsfTrk_d0[Elecindex] =  el->convDist(); //new (28 02 2012)
+	ElecDcotTheta[Elecindex] = el->convDcot();//new (28 02 2012)
 	ElecIsEB[Elecindex] = el->isEB();
 	ElecIsEE[Elecindex] = el->isEE();
 	Elecdr03TkSumPt[Elecindex] = el->dr03TkSumPt();
@@ -434,8 +439,10 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_
 	ElecdeltaPhiSuperClusterTrackAtVtx[Elecindex] = el->deltaPhiSuperClusterTrackAtVtx();
 	ElecdeltaEtaSuperClusterTrackAtVtx[Elecindex] = el->deltaEtaSuperClusterTrackAtVtx();
 	ElechadronicOverEm[Elecindex] = el->hadronicOverEm();
-	ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->numberOfLostHits();
-        ++Elecindex; 
+//	ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->numberOfLostHits();
+        ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->trackerExpectedHitsInner().numberOfHits();//new (28 02 2012)
+
+      ++Elecindex; 
   }
 
   
@@ -583,6 +590,7 @@ void ntupleGenerator::beginJob()
   myTree->Branch("ElecdeltaEtaSuperClusterTrackAtVtx",ElecdeltaEtaSuperClusterTrackAtVtx,"ElecdeltaEtaSuperClusterTrackAtVtx[Elecindex]/F");
   myTree->Branch("ElechadronicOverEm",ElechadronicOverEm,"ElechadronicOverEm[Elecindex]/F");
   myTree->Branch("ElecgsfTrack_numberOfLostHits",ElecgsfTrack_numberOfLostHits,"ElecgsfTrack_numberOfLostHits[Elecindex]/F");
+  myTree->Branch("ElecDcotTheta",ElecDcotTheta,"ElecDcotTheta[Elecindex]/F");
 
 
   myTree->Branch("techTrigger",techTrigger, "techTrigger[44]/I");
@@ -663,10 +671,10 @@ void ntupleGenerator::beginJob()
   myTree->Branch("vtxZerr",vtxZerr,"vtxZerr[nVertices]/F");
   myTree->Branch("vtxisValid",vtxisValid,"vtxisValid[nVertices]/I");
   myTree->Branch("vtxisFake",vtxisFake,"vtxisFake[nVertices]/I");
-if(realdata){
+
 myTree->Branch("tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL",&tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL,"tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL/I");
 myTree->Branch("tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL",&tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL,"tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL/I");
-}
+
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -705,3 +713,4 @@ float ntupleGenerator::DeltaR(float eta1, float eta2, float phi1, float phi2)
 //
 //define this as a plug-in
 DEFINE_FWK_MODULE(ntupleGenerator);
+
