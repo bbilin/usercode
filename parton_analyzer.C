@@ -43,95 +43,73 @@ void ZtoEEanalyzer()
   gStyle->SetPalette(1);
   float DeltaR(float eta1, float eta2, float phi1, float phi2);
   float DeltaPhi(float phi1, float phi2);
-double c_may10[10] ={1.0117,0.994,1.006,0.9976,0.9967,0.9963,0.9963,1.0028,0.9950,1.0126};//elec correction factors//
+/*double c_may10[10] ={1.0117,0.994,1.006,0.9976,0.9967,0.9963,0.9963,1.0028,0.9950,1.0126};//elec correction factors//
 double c_promtv4[10] ={1.0474,1.0018,1.0100,1.0007,1.0032,1.0004,0.9990,1.0109,1.0036,1.0597}; 
 double c_aug5[10] ={0.9937,0.9951,1.0142,1.0047,1.0014,1.0008,1.0023,1.0182,0.9880,0.9884};
 double c_promtv6[10] ={0.9713,0.9786,1.0181,1.0064,1.0041,1.0025,1.0046,1.0167,0.9752,0.9659};
-
+*/
+/*
 double par0[10]={394.199,353.677,414.954,430.286,397.128,424.611,500,500,500,500,};
 double par1[10]={-3.9303,-31.3253,-7.96372,2.11221,-6.87922,1.66457,20,20,20,20,};
 double par2[10]={35.5977,37.9435,35.1436,34.1395,35.6599,34.4009,30,30,30,30,};
 double par3[10]={38.024,20.9857,29.5735,37.962,34.7899,38.268,50,50,50,50,};
+*/
+
+double par0[10]={409.489,350.422,419.937,428.576,399.475,435.435,500,500,500,500,};
+double par1[10]={5.73172,-32.7205,-4.86986,2.66733,-6.01504,7.09596,20,20,20,20,};
+double par2[10]={34.7649,38.1048,34.8069,34.1828,35.5456,33.7855,30,30,30,30,};
+double par3[10]={43.9355,20.0796,32.3097,38.8749,35.2414,41.9533,50,50,50,50,};
+
 
 
   TChain myTree("demo/Tree");
 
-//myTree.Add("rfio:/castor/cern.ch/cms/store/user/bbilin/DY_MuMu_UPDATED_powheg_wo_HLT_filter.root");
 
 
-//myTree.Add("rfio:/castor/cern.ch/cms/store/user/bbilin/elec_ntuples/elec_2011_Promtv4.root"); 
-
-//myTree.Add("rfio:/castor/cern.ch/cms/store/user/bbilin/elec_ntuples/elec_2011_promt_v2.root"); 
-
-//myTree.Add("rfio:/castor/cern.ch/cms/store/user/bbilin/elec_ntuples/elec_2011_may10ReReco.root"); 
-
-//myTree.Add("rfio:/castor/cern.ch/user/k/kovitang/Mu_Run2010_414_v1_1.root");
-
-//myTree.Add("rfio:/castor/cern.ch/cms/store/user/bbilin/elec_2010A.root");
 
 
-//myTree.Add("/tmp/bbilin/elec_DCS_166862-166967.root");
-
-//myTree.Add("/tmp/bbilin/elec_promt_160404-166861.root");
-
-//myTree.Add("/tmp/bbilin/elec_2011_may10ReReco.root");
-
-//myTree.Add("/tmp/bbilin/elec_promt_2011_165088-167151.root");
-
-//myTree.Add("/tmp/bbilin/2011_May10ReReco_01_08.root");
-
-//myTree.Add("/tmp/bbilin/2011_Promt_2807.root");
-
-//myTree.Add("/tmp/bbilin/TT_TuneZ2.root");
 
 
-//myTree.Add("/tmp/bbilin/DYToEE_M-20_CT10_TuneZ2_7TeV-powheg-pythia-Summer11-PU_S4_START42_V11-v1.root");
-
-//
-
-int data =0;
 
 
-//data=1;
-//cout<<"CHECK if 1 for data and 0 for MC=====>>>>    "<<data<<endl;
-//myTree.Add("../ntuples/elec_2011B_promtv1.root");
-
-//myTree.Add("../ntuples/elec_2011_Aug5ReReco.root");
-
-//myTree.Add("../ntuples/elec_2011_Promtv6.root");
-
-//myTree.Add("/media/harddisk1/ntuples/2011_Promtv6_trigger.root");
-
-//myTree.Add("/media/harddisk2/2011_promtv4_trigger.root");
-
-//myTree.Add("../ntuples/2011_may10_trigger.root");
-
-//myTree.Add("../ntuples/2011_aug5_trigger.root");
-
-//myTree.Add("/media/harddisk1/ntuples/madgraph_25_12.root");
-
-//myTree.Add("/tmp/bbilin/2011A_Promtv6_05_03_2012.root");
- 
-//myTree.Add("/tmp/bbilin/merg/2011A_aug5_11_03_2012.root");
-
-myTree.Add("/tmp/bbilin/mc_mdgrph_04_03_2012.root");
-
-//myTree.Add("/tmp/bbilin/madgraph_25_12.root");
-
-//myTree.Add("/tmp/bbilin/DYtoEE.root");
-
-//myTree.Add("/media/harddisk2/WW_bg_25_12.root");
-
-//myTree.Add("/media/harddisk2/WZ_bg_25_12.root");
-
-//myTree.Add("/media/harddisk2/ZZ_bg_25_12.root");
-
-//myTree.Add("/media/harddisk2/Ztautau_bg_25_12.root");
 
 
-//myTree.Add("/tmp/bbilin/DoubleElectron_05Jul2011ReReco-HF.root");
 
-//myTree.Add("rfio:/castor/cern.ch/cms/store/user/bbilin/Test/B/2010_elec_ntuple_1_1_U5x.root");
+
+
+
+
+/*
+myTree.Add("/tmp/bbilin/2011A_aug5_11_03_2012.root");
+myTree.Add("/tmp/bbilin/2011A_may10_11_03_2012.root");
+myTree.Add("/tmp/bbilin/2011A_promtv4_11_03_2012.root");
+myTree.Add("/tmp/bbilin/2011A_promtv6_11_03_2012.root");
+*/
+//TFile *theFile = new TFile("06_03_2011A_4.root","RECREATE");
+
+myTree.Add("/tmp/bbilin/data_2011B_Nov19_15_03_2012_44X.root");
+TFile *theFile = new TFile("16_03_2011B_44X.root","RECREATE");
+
+//myTree.Add("/tmp/bbilin/mc_mdgrph_04_03_2012.root");
+//TFile *theFile = new TFile("06_03_mc_4.root","RECREATE");
+
+//myTree.Add("/tmp/bbilin/WW_bg_12_03_2012.root");
+//TFile *theFile = new TFile("12_03_bg_WW.root","RECREATE");
+
+//myTree.Add("/tmp/bbilin/ZZ_bg_12_03_2012.root");
+//TFile *theFile = new TFile("12_03_bg_ZZ.root","RECREATE");
+
+//myTree.Add("/tmp/bbilin/WZ_bg_12_03_2012.root");
+//TFile *theFile = new TFile("12_03_bg_WZ.root","RECREATE");
+
+//myTree.Add("/tmp/bbilin/Ztautau_bg_12_03_2012.root");
+//TFile *theFile = new TFile("12_03_bg_Ztautau.root","RECREATE");
+
+//myTree.Add("/tmp/bbilin/Wjets_bg_12_03_2012.root");
+//TFile *theFile = new TFile("12_03_bg_Wjets.root","RECREATE");
+
+//myTree.Add("/tmp/bbilin/tt_bg_12_03_2012.root");
+//TFile *theFile = new TFile("12_03_bg_tt.root","RECREATE");
 
 TH1::AddDirectory(true);
 
@@ -159,15 +137,15 @@ TH1::AddDirectory(true);
   //met 
 
 
-  int nVertices, tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL, tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL;
+  int nVertices, tr_1, tr_2, tr_3;
   
   myTree.SetBranchAddress("event",  &event);
   myTree.SetBranchAddress("run", &run);
   myTree.SetBranchAddress("lumi", &lumi);
 
-  myTree.SetBranchAddress("tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL",&tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL);
-  myTree.SetBranchAddress("tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL",&tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL);
-
+  myTree.SetBranchAddress("tr_1",&tr_1);
+  myTree.SetBranchAddress("tr_2",&tr_2);
+ myTree.SetBranchAddress("tr_3",&tr_3);
   myTree.SetBranchAddress("bxnumber", &bxnumber);
   myTree.SetBranchAddress("realdata",&realdata);
 //  myTree.SetBranchAddress("hlt_trigger_fired",&hlt_trigger_fired);
@@ -237,21 +215,35 @@ myTree.SetBranchAddress("nGoodVertices", &nGoodVertices);
 
   myTree.SetBranchAddress("nVertices",&nVertices);
 
+//TFile *theFile = new TFile("06_03_2011A_4.root","RECREATE");
 
- TFile *theFile = new TFile("06_03_mc_mdgrph_4.root","RECREATE");
-// TFile *theFile = new TFile("06_03_2011A_v6_4.root","RECREATE");
-//TFile *theFile = new TFile("test_data.root","RECREATE");
+//TFile *theFile = new TFile("06_03_mc_4.root","RECREATE");
 
-//TFile *theFile = new TFile("bg_Ztautau.root","RECREATE");
+//TFile *theFile = new TFile("12_03_bg_WW.root","RECREATE");
+
+//TFile *theFile = new TFile("12_03_bg_ZZ.root","RECREATE");
+
+//TFile *theFile = new TFile("12_03_bg_WZ.root","RECREATE");
+
+//TFile *theFile = new TFile("12_03_bg_Ztautau.root","RECREATE");
+
+//TFile *theFile = new TFile("12_03_bg_Wjets.root","RECREATE");
+
+//TFile *theFile = new TFile("12_03_bg_tt.root","RECREATE");
+
   theFile->cd();
 
 
 TH1F *h_deltaphi_z_jet=  new TH1F ("h_deltaphi_z_jet","h_deltaphi_z_jet",35,0,3.5);
-TH1F *h_elec_pt=  new TH1F ("h_elec_pt","h_elec_pt",200,0,200);
-TH1F *h_elec_eta=  new TH1F ("h_elec_eta","h_elec_eta",200,0,200);
+TH1F *h_elec_pt=  new TH1F ("h_elec_pt","h_elec_pt",70,0,200);
+TH1F *h_elec_eta=  new TH1F ("h_elec_eta","h_elec_eta",16,-8,8);
 TH1F *h_leading_jet_pt=  new TH1F ("h_leading_jet_pt","h_leading_jet_pt",80,0,200);
 TH1F *h_leading_jet_eta=  new TH1F ("h_leading_jet_eta","h_leading_jet_eta",40,-6,6);
 TH1F *h_mz=  new TH1F ("h_mz","h_mz",50,70,110);
+TH1F *h_dielecphi=  new TH1F ( "h_dielecphi", "h_dielecphi",20,-3,3);
+TH1F *h_dielec_PT=  new TH1F ( "h_dielec_PT", "h_dielec_PT",100,0,200);
+TH1F *h_dielec_rapidity=  new TH1F ( "h_dielec_rapidity", "h_dielec_rapidity",50,-5,5);
+
 TH1F *h_deltar_elec_Calojet=  new TH1F ("h_deltar_elec_Calojet","h_deltar_elec_Calojet",100,0,2);
 TH1F *h_deltar_parton_jet=  new TH1F ("h_deltar_parton_jet","h_deltar_parton_jet",100,0,2);
 TH1F *h_parton_pt=  new TH1F ("h_parton_pt","h_parton_pt",100,0,200);
@@ -451,14 +443,13 @@ h_invratio_parton_all_p[i] = new TH1F (name16,"",60,-0.5,5.5);
 
 
 
-//if(iev!=2)continue;
+
  	  if (iev%100000 == 0) cout<<iev<<"/"<<nevent<<endl;
     	myTree.GetEntry(iev); 
-//cout<<"test"<<endl;
-if(realdata && tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL!=1 && tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL!=1) continue;
 
-//cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<1"<<endl;
-//if (tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL==1)cout<<tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL<<endl;
+if(realdata && tr_1!=1 && tr_2!=1 && tr_3!=1) continue;
+
+
 
 
 int eCharge[50]={};
@@ -496,7 +487,7 @@ eIsEB[ii]= ElecIsEB[ii];
 //cout<<ePt[ii]<<endl;
 eEta[ii] = ElecEta[ii];
 ePhi[ii]= ElecPhi[ii];
-//if(data==0){
+//if(!realdata){
 
 ePt[ii] = ElecPt[ii];
 ePx[ii]= ElecPx[ii];
@@ -504,8 +495,9 @@ ePy[ii]=  ElecPy[ii];
 ePz[ii] =ElecPz[ii];
 
 //}
+
 /*
-if(data ==1){
+if(realdata){
 for(int i = 0 ; i < 9 ; i++){
 if((i-5)*0.5<eEta[ii] && eEta[ii]<(i-4)*0.5){
 //cout<<eEta[ii]<<"     "<<i<<"    "<< c_promtv4[i]<<endl;
@@ -544,6 +536,7 @@ ePz[ii] = c_promtv6[i]* ElecPz[ii];
 }
 }}}
 */
+
 eM[ii]= ElecM[ii]; 
 eE[ii]= ElecE[ii]; 
 edr03TkSumPt[ii]= Elecdr03TkSumPt[ii]; 
@@ -562,7 +555,7 @@ eDcotTheta[ii]=ElecDcotTheta[ii];
 
 
 if(
-egsfTrack_numberOfLostHits[ii]<1 && ( fabs(eGsfTrk_d0[ii])>0.02 && fabs(eDcotTheta[ii])>0.02 ) &&  ePt[ii] > 20.  && fabs(eEta[ii]) <2.5 &&
+egsfTrack_numberOfLostHits[ii]<1 && ( fabs(eGsfTrk_d0[ii])>0.02 || fabs(eDcotTheta[ii])>0.02 ) &&  ePt[ii] > 20.  && fabs(eEta[ii]) <2.4 &&
 
 ((eIsEB[ii] ==1 && eIsEB[ii]==1 && edr03TkSumPt[ii]/ePt[ii]<0.09 && edr03EcalRecHitSumEt[ii]/ePt[ii]<0.07 && edr03HcalTowerSumEt[ii]/ePt[ii]<0.10 && escSigmaIEtaIEta[ii]<0.01 && fabs(edeltaPhiSuperClusterTrackAtVtx[ii])<0.06 && fabs(edeltaEtaSuperClusterTrackAtVtx[ii])<0.004 && ehadronicOverEm[ii]<0.04 
 ) ||
@@ -703,7 +696,7 @@ h_mz_parton->Fill(mZ_particle);
 h_number_of_st3_prt->Fill(nparticle_gen);
 //cout<<nparton_gen;
 
-    float ptcut = 20.;
+//float ptcut = 20.;
     float p1dotp2 = -99.;
     float dielecpt = -999.;
     float dielecrapidity = -999.;
@@ -756,9 +749,9 @@ if (select==0) continue;
 
 //      h_Mass_Z->Fill(MZelec);
 //      h_Mass_Z_range->Fill(MZelec);
-//      h_dielecphi->Fill(dielecphi);
-//      h_dielec_PT->Fill(dielecpt);
-//      h_dielec_rapidity->Fill(dielecrapidity);
+      h_dielecphi->Fill(dielecphi);
+      h_dielec_PT->Fill(dielecpt);
+      h_dielec_rapidity->Fill(dielecrapidity);
 
 
 //      if (MZelec < 60 || MZelec > 120) continue;
