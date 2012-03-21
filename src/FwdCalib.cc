@@ -14,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.6 2012/02/26 09:03:35 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.7 2012/03/12 13:44:48 bbilin Exp $
 //
 //
 
@@ -185,7 +185,7 @@ float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[5
   float caloMETY, pfMETY;
   float muCorrMET, muCorrSET;
 
-int tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL, tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL;
+int tr_1, tr_2, tr_3;
 
 //  reco::helper::JetIDHelper *jetID;
 
@@ -290,8 +290,9 @@ ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
 
 //trigger primitive version//
-tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL=0;
-tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=0;
+tr_1=0;
+tr_2=0;
+tr_3=0;
 
 if(realdata){
 
@@ -316,9 +317,13 @@ for (int i = 0; i < ntrigs; i++) {
 //cout<<trigname[i]<<endl;
  if (trigaccept[i]){
 
-if(std::string(trigname[i]).find("HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL")!=std::string::npos)tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL=1;
+if(std::string(trigname[i]).find("HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL")!=std::string::npos)tr_1=1;
 
-if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_Ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL")!=std::string::npos)tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL=1;
+if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_Ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL")!=std::string::npos)tr_2=1;
+
+if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL")!=std::string::npos)tr_3=1;
+
+
 
 
 }
@@ -327,7 +332,7 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_E
 
 
 }
-//cout<<tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL<<endl;
+//if(tr_3!=0)cout<<tr_3<<endl;
  
   //----------------------------------------------------------------------------
 
@@ -672,8 +677,9 @@ void ntupleGenerator::beginJob()
   myTree->Branch("vtxisValid",vtxisValid,"vtxisValid[nVertices]/I");
   myTree->Branch("vtxisFake",vtxisFake,"vtxisFake[nVertices]/I");
 
-myTree->Branch("tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL",&tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL,"tr_HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL/I");
-myTree->Branch("tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL",&tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL,"tr_HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIso159_VL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL/I");
+myTree->Branch("tr_1",&tr_1,"tr_1/I");
+myTree->Branch("tr_2",&tr_2,"tr_2/I");
+myTree->Branch("tr_3",&tr_3,"tr_3/I");
 
 }
 
