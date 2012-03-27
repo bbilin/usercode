@@ -17,14 +17,14 @@ inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute'])
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'/store/data/Run2011A/DoubleElectron/AOD/PromptReco-v4/000/166/011/DE10197F-CD8C-E011-B8F3-001D09F2546F.root'
+'file:/tmp/bbilin/MyOutputFile_1_2_lW0.root'
 )
 )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 
 process.load("Configuration.StandardSequences.Geometry_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = cms.string(  'GR_R_42_V18::All')
+process.GlobalTag.globaltag = cms.string(  'GR_R_44_V15::All')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 
 
