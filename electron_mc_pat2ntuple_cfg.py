@@ -12,12 +12,12 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.threshold = 'INFO'
 process.MessageLogger.categories.append('PATSummaryTables')
 
-inputJetCorrLabel = ('AK5PF', ['L1Offset', 'L2Relative', 'L3Absolute']) 
+inputJetCorrLabel =  ('AK5PF', ['L1FastJet', 'L2Relative', 'L3Absolute'])
 inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute']) 
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'/store/data/Run2011A/DoubleElectron/AOD/PromptReco-v4/000/166/011/DE10197F-CD8C-E011-B8F3-001D09F2546F.root'
+'file:/tmp/bbilin/MyOutputFile_1_1_EFe.root'
 )
 )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )

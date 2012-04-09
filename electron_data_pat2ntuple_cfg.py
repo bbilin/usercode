@@ -12,12 +12,12 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.threshold = 'INFO'
 process.MessageLogger.categories.append('PATSummaryTables')
 
-inputJetCorrLabel = ('AK5PF', ['L1Offset', 'L2Relative', 'L3Absolute']) 
+inputJetCorrLabel =  ('AK5PF', ['L1FastJet', 'L2Relative', 'L3Absolute', 'L2L3Residual']) 
 inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute']) 
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'file:/tmp/bbilin/MyOutputFile_1_2_lW0.root'
+'file:/tmp/bbilin/MyOutputFile_1_1_0Jk.root'
 )
 )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
@@ -70,7 +70,22 @@ process.patJets.tagInfoSources  = cms.VInputTag(
 
 
 
+process.scrapingVeto = cms.EDFilter("FilterOutScraping",
+                                    applyfilter = cms.untracked.bool(True),
+                                    debugOn = cms.untracked.bool(False),
+                                   numtrack = cms.untracked.uint32(10),
+                                    thresh = cms.untracked.double(0.2)
+                                   )
+ #HB + HE noise filtering
 process.load('CommonTools/RecoAlgos/HBHENoiseFilter_cfi')
+
+
+process.primaryVertexFilter = cms.EDFilter("GoodVertexFilter",
+                                         vertexCollection = cms.InputTag('offlinePrimaryVertices'),
+                                           minimumNDOF = cms.uint32(4) ,
+                                           maxAbsZ = cms.double(24),
+                                           maxd0 = cms.double(2)
+                                          )
 
 
 process.TFileService=cms.Service("TFileService",
@@ -105,8 +120,11 @@ process.demo = cms.EDAnalyzer("ntupleGenerator",
 
 process.p = cms.Path(
 #process.elec_HLT *
-process.hltSelection     
-* process.patDefaultSequence 
-* process.demo
+process.scrapingVeto*
+    process.primaryVertexFilter*
+    process.HBHENoiseFilter*
+#process.hltSelection     * 
+process.patDefaultSequence *
+ process.demo
 )
 process.out.outputCommands = cms.untracked.vstring('drop *')

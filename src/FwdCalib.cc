@@ -14,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.7 2012/03/12 13:44:48 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.8 2012/03/21 12:17:20 bbilin Exp $
 //
 //
 
@@ -60,6 +60,15 @@
 
 #include "DataFormats/PatCandidates/interface/Electron.h"
 
+#include "DataFormats/EgammaReco/interface/HFEMClusterShapeAssociation.h"
+#include "DataFormats/EgammaReco/interface/HFEMClusterShape.h"
+#include "DataFormats/RecoCandidate/interface/RecoEcalCandidate.h"
+#include "DataFormats/RecoCandidate/interface/RecoEcalCandidateFwd.h"
+#include "DataFormats/HcalDetId/interface/HcalDetId.h"
+#include "DataFormats/HcalRecHit/interface/HcalRecHitCollections.h"
+#include "DataFormats/EgammaReco/interface/SuperCluster.h"
+#include "DataFormats/EgammaReco/interface/SuperClusterFwd.h"
+
 //jets
 #include "DataFormats/PatCandidates/interface/Jet.h"
 
@@ -98,6 +107,8 @@
 
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h" 
+#include "PhysicsTools/Utilities/interface/LumiReWeighting.h"
 class TH1F;
 class TH2F;
 class TStyle;
@@ -152,9 +163,11 @@ private:
   int hlt_trigger_fired;
 
 float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecDcotTheta[50];
-  int Elecindex,ElecCharge[50],ElecIsEB[50], ElecIsEE[50]; 
+  int Elecindex, HFElecindex,ElecCharge[50],ElecIsEB[50], ElecIsEE[50]; 
  
+float hfelec_L9[50] ,hfelec_S9[50] ,hfelec_L25[50] ,hfelec_L1[50] ,hhfclustereta[50]   ,hhfclusterphi[50], hfelec_Pt[50] ,hfelec_Eta[50], hfelec_Px[50],hfelec_Py[50],hfelec_Pz[50],hfelec_Phi[50],hfelec_E[50],hfelec_M[50] ,hfelec_charge[50];
 
+ 
   //particle information
   int par_index, mom[500], daug[500];
   float ParticlePt[500], ParticleEta[500], ParticlePhi[500], ParticlePx[500], ParticlePy[500], ParticlePz[500], ParticleE[500], ParticleM[500];
@@ -173,11 +186,17 @@ float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[5
 
 
   float PFjetTrkVZ[100][100],PFjetTrkPT[100][100];
+
+
   float vtxZ[100],vtxZerr[100];
   float vtxY[100],vtxYerr[100];
   float vtxX[100],vtxXerr[100];
   int vtxisValid[100],vtxisFake[100];
   int nVertices,nGoodVertices; 
+int NumInteractions,BunchCrossing;
+  float TrueNumInteractions,Tnpv_check;
+  double MyWeight;
+
   int techTrigger[44];
   //met 
   float caloMET, caloSET, pfMET, pfSET;
@@ -219,9 +238,14 @@ ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   const GenParticleCollection* genParticles  = genParticles_h.failedToGet () ? 0 : &*genParticles_h;
 
 
+Handle<reco::RecoEcalCandidateCollection> HFElectrons;
+  iEvent.getByLabel("hfRecoEcalCandidate",HFElectrons);
+const RecoEcalCandidateCollection* hfelec = HFElectrons.failedToGet() ? 0 : &*HFElectrons;
 
 
- 
+
+ Handle<reco::HFEMClusterShapeAssociationCollection>  electronHFClusterAssociation;
+ iEvent.getByLabel(edm::InputTag("hfEMClusters"),electronHFClusterAssociation);
  
   Handle< edm::View<pat::MET> > caloMEThandle;
   iEvent.getByLabel("patMETs", caloMEThandle); 
@@ -255,6 +279,48 @@ ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   Handle<VertexCollection> pvHandle;
   iEvent.getByLabel("offlinePrimaryVertices", pvHandle);  
 
+ event = iEvent.id().event();
+  run = iEvent.id().run();
+  lumi = iEvent.luminosityBlock();
+  bxnumber = iEvent.bunchCrossing();
+  realdata = iEvent.isRealData();
+
+if(!realdata){
+//cout<<"adasdasdasasasdas"<<endl;
+ edm::LumiReWeighting LumiWeights_;
+
+  LumiWeights_ = edm::LumiReWeighting("npileup.root", "2011AB_pup.root", "npil", "pileup");
+ 
+  Handle<std::vector< PileupSummaryInfo > >  PupInfo;
+  iEvent.getByLabel("addPileupInfo", PupInfo);
+
+  std::vector<PileupSummaryInfo>::const_iterator PVI;
+
+  NumInteractions=-99;
+  TrueNumInteractions=-99;
+  BunchCrossing=-99;
+  float Tnpv = -1; 
+  // (then, for example, you can do)
+  for( PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI) {
+        NumInteractions = PVI->getPU_NumInteractions();
+        BunchCrossing = PVI->getBunchCrossing();
+        TrueNumInteractions = PVI->getTrueNumInteractions();
+//	std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
+    int BX = PVI->getBunchCrossing();
+           
+   if(BX == 0) { 
+     Tnpv = PVI->getTrueNumInteractions();
+     Tnpv_check = Tnpv;
+     continue;
+   }
+
+   }
+
+  MyWeight = LumiWeights_.weight(Tnpv);
+ 
+}
+
+
   nVertices = pvHandle->size(); 
 
   const VertexCollection vertexColl = *(pvHandle.product());
@@ -280,11 +346,7 @@ ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
  
 
-  event = iEvent.id().event();
-  run = iEvent.id().run();
-  lumi = iEvent.luminosityBlock();
-  bxnumber = iEvent.bunchCrossing();
-  realdata = iEvent.isRealData();
+ 
 
 
 
@@ -450,6 +512,47 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_E
       ++Elecindex; 
   }
 
+
+
+
+HFElecindex = 0;
+  for(reco::RecoEcalCandidateCollection::const_iterator hfel = hfelec->begin(); hfel != hfelec->end();  ++hfel) {
+
+	const reco::RecoEcalCandidate& HFcan = (*hfel);
+	reco::SuperClusterRef theClusRef=HFcan.superCluster();
+ 	const reco::SuperCluster& hfECALSuperCluster=*theClusRef;
+	const reco::HFEMClusterShapeRef clusShapeRef=(*electronHFClusterAssociation).find(theClusRef)->val;
+	const reco::HFEMClusterShape& clusShape=*clusShapeRef;
+
+hfelec_Eta[HFElecindex] = hfel->eta();
+hfelec_Pt[HFElecindex] = hfel->pt();
+
+hfelec_Px[HFElecindex] = hfel->px();
+
+hfelec_Py[HFElecindex] = hfel->py();
+
+hfelec_Pz[HFElecindex] = hfel->pz();
+
+hfelec_Phi[HFElecindex] = hfel->phi();
+hfelec_E[HFElecindex] = hfel->energy();
+hfelec_M[HFElecindex] = hfel->mass();
+hfelec_charge[HFElecindex] = hfel->charge();
+
+hfelec_L9[HFElecindex] = clusShape.eLong3x3();
+
+hfelec_S9[HFElecindex] = clusShape.eShort3x3();
+
+hfelec_L25[HFElecindex] = clusShape.eLong5x5();
+
+hfelec_L1[HFElecindex] = clusShape.eLong1x1();
+
+hhfclustereta[HFElecindex]     = hfECALSuperCluster.eta();
+ 
+hhfclusterphi[HFElecindex]     = hfECALSuperCluster.phi();
+
+    ++HFElecindex; 
+  }
+
   
   int NJets = 20;
 
@@ -597,6 +700,25 @@ void ntupleGenerator::beginJob()
   myTree->Branch("ElecgsfTrack_numberOfLostHits",ElecgsfTrack_numberOfLostHits,"ElecgsfTrack_numberOfLostHits[Elecindex]/F");
   myTree->Branch("ElecDcotTheta",ElecDcotTheta,"ElecDcotTheta[Elecindex]/F");
 
+myTree->Branch("HFElecindex",&HFElecindex,"HFElecindex/I");
+myTree->Branch("hfelec_Pt",hfelec_Pt,"hfelec_Pt[HFElecindex]/F");
+myTree->Branch("hfelec_Eta",hfelec_Eta,"hfelec_Eta[HFElecindex]/F");
+myTree->Branch("hfelec_L9",hfelec_L9,"hfelec_L9[HFElecindex]/F");
+myTree->Branch("hfelec_S9",hfelec_S9,"hfelec_S9[HFElecindex]/F");
+myTree->Branch("hfelec_L25",hfelec_L25,"hfelec_L25[HFElecindex]/F");
+myTree->Branch("hfelec_L1",hfelec_L1,"hfelec_L1[HFElecindex]/F");
+myTree->Branch("hhfclustereta",hhfclustereta,"hhfclustereta[HFElecindex]/F");
+myTree->Branch("hhfclusterphi",hhfclusterphi,"hhfclusterphi[HFElecindex]/F");
+
+myTree->Branch("hfelec_Px",hfelec_Px,"hfelec_Px[HFElecindex]/F");
+myTree->Branch("hfelec_Py",hfelec_Py,"hfelec_Py[HFElecindex]/F");
+myTree->Branch("hfelec_Pz",hfelec_Pz,"hfelec_Pz[HFElecindex]/F");
+myTree->Branch("hfelec_Phi",hfelec_Phi,"hfelec_Phi[HFElecindex]/F");
+myTree->Branch("hfelec_E",hfelec_E,"hfelec_E[HFElecindex]/F");
+myTree->Branch("hfelec_M",hfelec_M,"hfelec_M[HFElecindex]/F");
+myTree->Branch("hfelec_charge",hfelec_charge,"hfelec_charge[HFElecindex]/F");
+
+
 
   myTree->Branch("techTrigger",techTrigger, "techTrigger[44]/I");
 
@@ -668,6 +790,11 @@ void ntupleGenerator::beginJob()
 
   myTree->Branch("nVertices",&nVertices,"nVertices/I");
   myTree->Branch("nGoodVertices",&nGoodVertices,"nGoodVertices/I");
+  myTree->Branch("NumInteractions", &NumInteractions, "NumInteractions/I");
+  myTree->Branch("TrueNumInteractions", &TrueNumInteractions, "TrueNumInteractions/F");
+  myTree->Branch("Tnpv_check", &Tnpv_check, "Tnpv_check/F");
+  myTree->Branch("BunchCrossing", &BunchCrossing,"BunchCrossing/I");
+  myTree->Branch("MyWeight",&MyWeight,"MyWeight/D");
   myTree->Branch("vtxX",vtxX,"vtxX[nVertices]/F");
   myTree->Branch("vtxY",vtxY,"vtxY[nVertices]/F");
   myTree->Branch("vtxZ",vtxZ,"vtxZ[nVertices]/F");
