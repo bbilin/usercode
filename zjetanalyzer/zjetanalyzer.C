@@ -51,7 +51,7 @@ TString dataname;
 
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/data_2012A.root");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/data_2012B.root");
-TFile *theFile = new TFile("rootfiles/16_08_data.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_data.root","RECREATE");
  dataname = "DATA";
 
 
@@ -59,27 +59,27 @@ TFile *theFile = new TFile("rootfiles/16_08_data.root","RECREATE");
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball.root");
  ismc =1;
-TFile *theFile = new TFile("rootfiles/16_08_mc.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_mc.root","RECREATE");
  dataname = "MC";
 */
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_10_50.root");
  ismc =1;
-TFile *theFile = new TFile("rootfiles/16_08_mc_low.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_mc_low.root","RECREATE");
  dataname = "MC_LOW";
 */
 
 //TTbar
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_tt.root");
-TFile *theFile = new TFile("rootfiles/16_08_bg_tt.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_bg_tt.root","RECREATE");
  dataname = "TTBAR";
 */
 
 //WJets
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_WJets.root");
-TFile *theFile = new TFile("rootfiles/16_08_bg_wjets.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_bg_wjets.root","RECREATE");
  dataname = "WJets";
 */
 
@@ -87,28 +87,28 @@ TFile *theFile = new TFile("rootfiles/16_08_bg_wjets.root","RECREATE");
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball.root");
  istau =1;
-TFile *theFile = new TFile("rootfiles/16_08_bg_ztautau.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_bg_ztautau.root","RECREATE");
  dataname = "ZTauTau";
 */
 
 //WW
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_ww.root");
-TFile *theFile = new TFile("rootfiles/16_08_ww.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_ww.root","RECREATE");
  dataname = "WW";
 */
 
 //WZ
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_wz.root");
-TFile *theFile = new TFile("rootfiles/16_08_wz.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_wz.root","RECREATE");
  dataname = "WZ";
 */
 
 //ZZ
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_zz.root");
-TFile *theFile = new TFile("rootfiles/16_08_zz.root","RECREATE");
+TFile *theFile = new TFile("rootfiles/17_08_zz.root","RECREATE");
  dataname = "ZZ";
 */
 
@@ -239,6 +239,7 @@ TH1F*h_no_good_vtx_zevents[12]; TH1F*h_no_good_vtx_noWeight_zevents[12]; TH1F *h
 TString name2[100];
 
 //sprintf(name2[0],"h_no_good_vtx_zevents_%i",i);
+for(int i=0;i<12;i++){
 name2[0] = "h_no_good_vtx_zevents_";
 name2[1] ="h_no_good_vtx_noWeight_zevents_";
 name2[2] ="h_deltaphi_z_jet_";
@@ -269,12 +270,11 @@ name2[26] ="h_numberofPFjets_hf_";
 name2[27] ="h_leading_jet_pt_";
 name2[28] ="h_leading_jet_eta_";
 name2[29] ="h_jet_pt_all_";
-name2[30] ="h_jet_eta_all";
+name2[30] ="h_jet_eta_all_";
 name2[31] ="h_jet_pt_hbhe_";
-name2[32] ="h_jet_eta_hbhe";
+name2[32] ="h_jet_eta_hbhe_";
 name2[33] ="h_jet_pt_hf_";
-name2[34] ="h_jet_eta_hf";
-for(int i=0;i<12;i++){
+name2[34] ="h_jet_eta_hf_";
 for(int k=0;k<35;k++){
 name2[k]+=(i);
 }
@@ -553,7 +553,7 @@ int j=elec_ind_cut[0], jk = elec_ind_cut[1];
 //		float Mz = fabs(sqrt(pow(eE[j]+eE[jk],2)- (pow(ePx[j]+ePx[jk],2)+pow(ePy[j]+ePy[jk],2)+pow(ePz[j]+ePz[jk],2) )));
 
 if (eCharge[j]*eCharge[jk] != -1){
-h_mz_same_sign[9]->Fill(MZelec[1],MyWeight); 
+h_mz_same_sign[6]->Fill(MZelec[1],MyWeight); 
 }
 
 if (eCharge[j]*eCharge[jk] == -1) {
