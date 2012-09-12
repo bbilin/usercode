@@ -17,21 +17,21 @@ inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute'])
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'file:/tmp/bbilin/MyOutputFile_1_1_EFe.root'
+'root://eoscms.cern.ch//eos/cms//store/user/bbilin/ntuples/mc/copy/MyOutputFile_1_1_aS5.root'
 )
 )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
 process.load("Configuration.StandardSequences.Geometry_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = cms.string(  'START44_V13::All')
+process.GlobalTag.globaltag = cms.string(  'START52_V9::All')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 
 
 #addJetID(process,cms.InputTag('ak5CaloJets'),'ak5')
 
-removeSpecificPATObjects( process, ['Taus'] )
-process.patDefaultSequence.remove( process.patTaus )
+#removeSpecificPATObjects( process, ['Taus'] )
+#process.patDefaultSequence.remove( process.patTaus )
 
 
 addPfMET(process, 'PF')
@@ -94,6 +94,23 @@ if mytrigs is not None :
 # ) 
 
 
+process.patElectrons.electronIDSources = cms.PSet(
+    #MVA
+    mvaTrigV0 = cms.InputTag("mvaTrigV0"),
+    mvaNonTrigV0 = cms.InputTag("mvaNonTrigV0"),
+)
+
+process.load('EGamma.EGammaAnalysisTools.electronIdMVAProducer_cfi')
+process.mvaID = cms.Sequence(  process.mvaTrigV0 + process.mvaNonTrigV0 )
+
+#add pat conversions
+process.patConversions = cms.EDProducer("PATConversionProducer",
+    # input collection
+    #electronSource = cms.InputTag("gsfElectrons"),
+    electronSource = cms.InputTag("selectedPatElectrons")  
+    # this should be your last selected electron collection name since currently index is used to match with electron later. We can fix this using reference pointer. ,
+)
+
 
 process.demo = cms.EDAnalyzer("ntupleGenerator",
 
@@ -106,7 +123,9 @@ process.demo = cms.EDAnalyzer("ntupleGenerator",
 process.p = cms.Path(
 #process.elec_HLT *
 #process.hltSelection *    
- process.patDefaultSequence 
-* process.demo
+    process.mvaID + 
+    process.patDefaultSequence+
+    process.patConversions*
+ process.demo
 )
 process.out.outputCommands = cms.untracked.vstring('drop *')

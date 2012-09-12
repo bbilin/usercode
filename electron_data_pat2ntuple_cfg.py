@@ -3,8 +3,15 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("CALIB")
 
 from PhysicsTools.PatAlgos.patTemplate_cfg import *
+from PhysicsTools.PatAlgos.tools.pfTools import *
+usePFIso( process )
+#process.patElectrons.pfElectronSource = 'particleFlow'
 from PhysicsTools.PatAlgos.tools.metTools import *
 from PhysicsTools.PatAlgos.tools.coreTools import *
+
+#from RecoJets.JetProducers.kt4PFJets_cfi import *
+#kt6PFJetsForIsolation = kt4PFJets.clone( rParam = 0.6, doRhoFastjet = True )
+#kt6PFJetsForIsolation.Rho_EtaMax = cms.double(2.5)
 
 mytrigs = ['*']
 # initialize MessageLogger and output report
@@ -17,24 +24,22 @@ inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute'])
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'file:/tmp/bbilin/MyOutputFile_1_1_0Jk.root'
+'root://eoscms.cern.ch//eos/cms/store/data/Run2012A/DoubleElectron/RECO/30May2012-GR_P_V32_525p1-v1/0000/040D970A-B0AA-E111-A70B-0026189438F9.root'
 )
 )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
 process.load("Configuration.StandardSequences.Geometry_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = cms.string(  'GR_R_44_V15::All')
+process.GlobalTag.globaltag = cms.string(  'GR_R_52_V9D::All')
 process.load("Configuration.StandardSequences.MagneticField_cff")
-
-
-#addJetID(process,cms.InputTag('ak5CaloJets'),'ak5')
-
-removeSpecificPATObjects( process, ['Taus'] )
-process.patDefaultSequence.remove( process.patTaus )
 
 removeMCMatching(process, ['All'])
 addPfMET(process, 'PF')
+
+process.load('HLTrigger.special.hltPhysicsDeclared_cfi')
+process.hltPhysicsDeclared.L1GtReadoutRecordTag = 'gtDigis'
+
 
 
 from PhysicsTools.PatAlgos.tools.jetTools import *
@@ -59,15 +64,9 @@ switchJetCollection(process,cms.InputTag('ak5PFJets'),
                  )
 
 process.patJets.addTagInfos = True
-process.patJets.tagInfoSources  = cms.VInputTag(
-    cms.InputTag("secondaryVertexTagInfosAOD"),
-    )
-
-
-
-
-
-
+#process.patJets.tagInfoSources  = cms.VInputTag(
+#    cms.InputTag("secondaryVertexTagInfosAOD"),
+#    )
 
 
 process.scrapingVeto = cms.EDFilter("FilterOutScraping",
@@ -89,7 +88,7 @@ process.primaryVertexFilter = cms.EDFilter("GoodVertexFilter",
 
 
 process.TFileService=cms.Service("TFileService",
-    fileName=cms.string("elec_ntuple.root")
+    fileName=cms.string("/tmp/bbilin/elec_ntuple.root")
 )
 
 
@@ -109,6 +108,25 @@ if mytrigs is not None :
 # ) 
 
 
+process.patElectrons.electronIDSources = cms.PSet(
+    #MVA
+    mvaTrigV0 = cms.InputTag("mvaTrigV0"),
+    mvaNonTrigV0 = cms.InputTag("mvaNonTrigV0"),
+)
+
+process.load('EGamma.EGammaAnalysisTools.electronIdMVAProducer_cfi')
+process.mvaID = cms.Sequence(  process.mvaTrigV0 + process.mvaNonTrigV0 )
+
+#add pat conversions
+process.patConversions = cms.EDProducer("PATConversionProducer",
+    # input collection
+    #electronSource = cms.InputTag("gsfElectrons"),
+    electronSource = cms.InputTag("selectedPatElectrons")  
+    # this should be your last selected electron collection name since currently index is used to match with electron later. We can fix this using reference pointer. ,
+)
+
+
+
 
 process.demo = cms.EDAnalyzer("ntupleGenerator",
 
@@ -117,14 +135,19 @@ process.demo = cms.EDAnalyzer("ntupleGenerator",
 				elecTag  = cms.InputTag("selectedPatElectrons")
 				
 )
-
 process.p = cms.Path(
 #process.elec_HLT *
 process.scrapingVeto*
     process.primaryVertexFilter*
     process.HBHENoiseFilter*
 #process.hltSelection     * 
-process.patDefaultSequence *
+    process.mvaID + 
+    process.patDefaultSequence+
+    process.patConversions*
  process.demo
 )
-process.out.outputCommands = cms.untracked.vstring('drop *')
+#process.out.outputCommands = cms.untracked.vstring('drop *')
+
+#process.out.outputCommands +=[
+#     'keep *_patConversions*_*_*'
+#]

@@ -14,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.8 2012/03/21 12:17:20 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.9 2012/04/09 15:46:49 bbilin Exp $
 //
 //
 
@@ -56,6 +56,10 @@
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
+#include "EGamma/EGammaAnalysisTools/interface/ElectronEffectiveArea.h"
+#include "DataFormats/PatCandidates/interface/Conversion.h"
+#include "PhysicsTools/PatAlgos/plugins/PATConversionProducer.h"
+#include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
 //elec
 
 #include "DataFormats/PatCandidates/interface/Electron.h"
@@ -123,6 +127,7 @@ using namespace reco;
 using namespace std;
 using namespace ROOT::Math::VectorUtil;
 using namespace HepMC;
+using namespace isodeposit;
 
 
 class ntupleGenerator : public edm::EDAnalyzer {
@@ -155,16 +160,17 @@ private:
   float DeltaR(float eta1, float eta2, float phi1, float phi2);
   edm::InputTag elecTag_;
   string PfJetAlg;
-  string CaloJetAlg;
+
  
   edm::Service<TFileService> fs;
   TTree * myTree;
   int event, run,lumi,bxnumber,realdata;
   int hlt_trigger_fired;
 
-float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecDcotTheta[50];
-  int Elecindex, HFElecindex,ElecCharge[50],ElecIsEB[50], ElecIsEE[50]; 
- 
+float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecDcotTheta[50],ElecMVATrigId[50],ElecMVANonTrigId[50],Elecd0vtx[50],Elecdzvtx[50], chIso03[50],nhIso03[50],phIso03[50],puChIso03[50],relIso[50],relIsodb[50],relIsorho[50];
+  int Elecindex, HFElecindex,ElecCharge[50],ElecIsEB[50], ElecIsEE[50], Elecooeoop[50]; 
+bool hasMatchedConversion[50]; 
+
 float hfelec_L9[50] ,hfelec_S9[50] ,hfelec_L25[50] ,hfelec_L1[50] ,hhfclustereta[50]   ,hhfclusterphi[50], hfelec_Pt[50] ,hfelec_Eta[50], hfelec_Px[50],hfelec_Py[50],hfelec_Pz[50],hfelec_Phi[50],hfelec_E[50],hfelec_M[50] ,hfelec_charge[50];
 
  
@@ -182,7 +188,6 @@ float hfelec_L9[50] ,hfelec_S9[50] ,hfelec_L25[50] ,hfelec_L1[50] ,hhfclustereta
 
   float PFjetEta[100], PFjetPhi[100],PFjetPt[100],PFCorrjetPt[100],PFjetCEMF[100],PFjetNEMF[100],PFjetPx[100],PFjetPy[100],PFjetPz[100],PFjetE[100],PFjetM[100],PFHadEHF[100],PFEmEHF[100];
 
- float CalojetEta[100], CalojetPhi[100],CalojetPt[100],CaloCorrjetPt[100],CalojetCEMF[100],CalojetNEMF[100],CalojetPx[100],CalojetPy[100],CalojetPz[100],CalojetE[100],CalojetM[100],CaloHadEHF[100],CaloEmEHF[100];
 
 
   float PFjetTrkVZ[100][100],PFjetTrkPT[100][100];
@@ -199,9 +204,9 @@ int NumInteractions,BunchCrossing;
 
   int techTrigger[44];
   //met 
-  float caloMET, caloSET, pfMET, pfSET;
-  float caloMETX, pfMETX;
-  float caloMETY, pfMETY;
+  float  pfMET, pfSET;
+  float  pfMETX;
+  float  pfMETY;
   float muCorrMET, muCorrSET;
 
 int tr_1, tr_2, tr_3;
@@ -217,7 +222,7 @@ ntupleGenerator::ntupleGenerator(const edm::ParameterSet& iConfig)
 
   elecTag_ = iConfig.getParameter<edm::InputTag>("elecTag");
   PfJetAlg = iConfig.getParameter<string>("PfJetAlg");
-  CaloJetAlg = iConfig.getParameter<string>("CaloJetAlg");
+
 
 }
 
@@ -247,19 +252,18 @@ const RecoEcalCandidateCollection* hfelec = HFElectrons.failedToGet() ? 0 : &*HF
  Handle<reco::HFEMClusterShapeAssociationCollection>  electronHFClusterAssociation;
  iEvent.getByLabel(edm::InputTag("hfEMClusters"),electronHFClusterAssociation);
  
-  Handle< edm::View<pat::MET> > caloMEThandle;
-  iEvent.getByLabel("patMETs", caloMEThandle); 
-
+  
   Handle< edm::View<pat::MET> > pfMEThandle;
   iEvent.getByLabel("patMETsPF", pfMEThandle); 
 
 
-  Handle<edm::View<pat::Jet> > Calojets;
-  iEvent.getByLabel(CaloJetAlg,Calojets);
-//  edm::View<pat::Jet>::const_iterator i_jet;
-//const edm::View<pat::Jet> & i_jet = *Calojets;
- 
+  edm::Handle<edm::View<pat::Conversion>> conversions;
+  iEvent.getByLabel("patConversions",conversions);
 
+edm::Handle<double>  rho_;
+iEvent.getByLabel(InputTag("kt6PFJetsForIsolation", "rho"), rho_);
+//double rhoIso = *(rho_.product());
+double rhoIso = *rho_;
   Handle<edm::View<pat::Jet> > PFjets;
   iEvent.getByLabel(PfJetAlg,PFjets);
 //const edm::View<pat::Jet> & calo_jet = *PFjets;
@@ -285,11 +289,12 @@ const RecoEcalCandidateCollection* hfelec = HFElectrons.failedToGet() ? 0 : &*HF
   bxnumber = iEvent.bunchCrossing();
   realdata = iEvent.isRealData();
 
+
 if(!realdata){
 //cout<<"adasdasdasasasdas"<<endl;
  edm::LumiReWeighting LumiWeights_;
 
-  LumiWeights_ = edm::LumiReWeighting("npileup.root", "2011AB_pup.root", "npil", "pileup");
+  LumiWeights_ = edm::LumiReWeighting("mc_pup.root", "data.root", "h1D", "pup");
  
   Handle<std::vector< PileupSummaryInfo > >  PupInfo;
   iEvent.getByLabel("addPileupInfo", PupInfo);
@@ -317,6 +322,7 @@ if(!realdata){
    }
 
   MyWeight = LumiWeights_.weight(Tnpv);
+std::cout <<MyWeight<<endl;
  
 }
 
@@ -344,7 +350,7 @@ if(!realdata){
     vtxisFake[iv] = vtxs[iv].isFake();
   }
 
- 
+
 
  
 
@@ -356,7 +362,7 @@ tr_1=0;
 tr_2=0;
 tr_3=0;
 
-if(realdata){
+//if(realdata){
 
  
  int ntrigs;
@@ -393,20 +399,17 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_E
 }
 
 
-}
+//}
 //if(tr_3!=0)cout<<tr_3<<endl;
  
   //----------------------------------------------------------------------------
 
 
   //--------------------met-------------------------------------------------
-  caloMET = (caloMEThandle->front()).et();
-  caloSET = (caloMEThandle->front()).sumEt();
+ 
   pfMET = (pfMEThandle->front()).et();
   pfSET = (pfMEThandle->front()).sumEt(); 
 
-  caloMETX = (caloMEThandle->front()).px();
-  caloMETY = (caloMEThandle->front()).py();
 
   pfMETX = (pfMEThandle->front()).px();
   pfMETY = (pfMEThandle->front()).py();
@@ -461,6 +464,8 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_E
 
 
   for (int jj = 0; jj<50; ++jj){
+    Elecd0vtx[jj] = -99.;
+    Elecdzvtx[jj] = -99.;
     ElecPt[jj] = -99.;
     ElecPx[jj] = -99.;
     ElecPy[jj] = -99.;
@@ -482,19 +487,72 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_E
     ElechadronicOverEm[jj] = -99.;
     ElecgsfTrack_numberOfLostHits[jj] = -99.;
     ElecDcotTheta[jj] = -99.;
+ElecMVATrigId[jj]=-99.;
+ElecMVANonTrigId[jj]=-99.;
+Elecd0vtx[jj]=-99.;
+Elecdzvtx[jj]=-99.; 
+chIso03[jj]=-99.;
+nhIso03[jj]=-99.;
+phIso03[jj]=-99.;
+puChIso03[jj]=-99.;
+relIso[jj]=-99.;
+relIsodb[jj]=-99.;
+relIsorho[jj]=-99.;
   }
   Elecindex = 0;
+
+double probMin =1e-6; 
+double lxyMin=2.0;  
+double nHitsBeforeVtxMax=0;
+
+//for (unsigned int i=0; i < elec->size()-1;++i){
+ // pat::Electron el = elec->at(i);
+
+
   for(edm::View<pat::Electron>::const_iterator el = elec->begin(); el != elec->end();  ++el) {
+
+  
+    // apply to neutrals
+
+
+ Elecooeoop[Elecindex] =1.0/ el->ecalEnergy() - (el->eSuperClusterOverP()/el->ecalEnergy());
+
+ if (pvHandle->size() > 0) {
+        reco::VertexRef vtx(pvHandle, 0);    
+        Elecd0vtx[Elecindex] = el->gsfTrack()->dxy(vtx->position());
+        Elecdzvtx[Elecindex] = el->gsfTrack()->dz(vtx->position());
+    } else {
+        Elecd0vtx[Elecindex] = el->gsfTrack()->dxy();
+        Elecdzvtx[Elecindex] = el->gsfTrack()->dz();
+    }
+
+
+  hasMatchedConversion[Elecindex] = false;
+    for (edm::View<pat::Conversion>::const_iterator iconv=conversions->begin() ; iconv != conversions->end(); ++iconv) {
+
+     if (iconv->index() != Elecindex) continue;
+      if (!(iconv->vtxProb()>probMin &&  iconv->lxy()>lxyMin && iconv->nHitsMax()<=nHitsBeforeVtxMax)) continue;
+      hasMatchedConversion[Elecindex] = true;
+    }
+
+
+const string mvaTrigV0 = "mvaTrigV0";
+const string mvaNonTrigV0 = "mvaNonTrigV0";
+
+//cout<<el->electronID(mvaTrigV0)<<endl;
+	ElecMVATrigId[Elecindex]= el->electronID(mvaTrigV0);
+	ElecMVANonTrigId[Elecindex]= el->electronID(mvaNonTrigV0);
+//cout<<el->electronID(mvaTrigV0)<<"  "<<el->electronID(mvaNonTrigV0)<<endl;
 	ElecPt[Elecindex] = el->pt();
         ElecPx[Elecindex] = el->px();
 	ElecPy[Elecindex] = el->py();
 	ElecPz[Elecindex] = el->pz();
-	ElecEta[Elecindex] = el->eta();
+	ElecEta[Elecindex] = el->superCluster()->eta();
 	ElecPhi[Elecindex] = el->phi();	
         ElecE[Elecindex] = el->energy();
 	ElecM[Elecindex] = el->mass();
 	ElecCharge[Elecindex] = el->charge();
-	//ElecGsfTrk_d0[Elecindex] = el->gsfTrack()->d0();
+//	ElecGsfTrk_d0[Elecindex] = el->gsfTrack()->d0();
         ElecGsfTrk_d0[Elecindex] =  el->convDist(); //new (28 02 2012)
 	ElecDcotTheta[Elecindex] = el->convDcot();//new (28 02 2012)
 	ElecIsEB[Elecindex] = el->isEB();
@@ -508,6 +566,25 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_E
 	ElechadronicOverEm[Elecindex] = el->hadronicOverEm();
 //	ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->numberOfLostHits();
         ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->trackerExpectedHitsInner().numberOfHits();//new (28 02 2012)
+double   AEff;
+if(realdata){
+    AEff = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, el->superCluster()->eta(), ElectronEffectiveArea::kEleEAData2011);
+  }else{
+    AEff = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, el->superCluster()->eta(), ElectronEffectiveArea::kEleEAFall11MC);
+  }
+
+//cout<<rhoIso<<endl; 
+ double rhoPrime = std::max(rhoIso, 0.0);
+
+  chIso03[Elecindex] = el->chargedHadronIso();
+    nhIso03[Elecindex] = el->neutralHadronIso();
+    phIso03[Elecindex] = el->photonIso();
+    puChIso03[Elecindex] = el->puChargedHadronIso();
+
+relIso[Elecindex] = ( chIso03[Elecindex] + nhIso03[Elecindex] + phIso03[Elecindex] ) / el->pt() ;
+ relIsodb[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - 0.5*puChIso03[Elecindex]) )/ el->pt();
+// relIsorho[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - rhoPrime*AEff) )/ el->pt();
+
 
       ++Elecindex; 
   }
@@ -571,19 +648,7 @@ for(int i=0; i<100; ++i){
     PFHadEHF[i]=-99;
     PFEmEHF[i]=-99;
 
-    CalojetEta[i]=-99.;
-    CalojetPhi[i]=-99.;
-    CalojetPt[i]=-99.;
-    CalojetCEMF[i]=-99.;
-    CalojetNEMF[i]=-99.; 
-    CaloCorrjetPt[i]=-99;
-    CalojetPx[i]=-99;
-    CalojetPy[i]=-99;
-    CalojetPz[i]=-99;
-    CalojetE[i]=-99;
-    CalojetM[i]=-99;
-    CaloHadEHF[i]=-99;
-    CaloEmEHF[i]=-99;
+ 
 }
   //----------------------------PF jets-------------------------------------------------------------------------------------
   for (int kkk = 0;kkk<100;kkk++){
@@ -593,9 +658,9 @@ for(int i=0; i<100; ++i){
     }
   }
   pfNjets=0;
-  CaloNjets=0;
+
   for(edm::View<pat::Jet>::const_iterator i_jet = PFjets->begin(); i_jet != PFjets->end() && pfNjets < NJets; i_jet++){
-    const math::XYZTLorentzVector theJet = i_jet->p4();
+//    const math::XYZTLorentzVector theJet = i_jet->p4();
     PFjetEta[pfNjets]=i_jet->eta();
     PFjetPhi[pfNjets]=i_jet->phi();
     PFjetPt[pfNjets]=i_jet->correctedJet(0).pt();
@@ -631,29 +696,6 @@ for(int i=0; i<100; ++i){
 
   //-----------------------------end of pf jets--------------------------------------------------------------------------
 
- for(edm::View<pat::Jet>::const_iterator i_jet = Calojets->begin(); i_jet != Calojets->end(); i_jet++){
-    const math::XYZTLorentzVector theJet = i_jet->p4();
-   CalojetEta[CaloNjets]=i_jet->eta();
-    CalojetPhi[CaloNjets]=i_jet->phi();
-    CalojetPt[CaloNjets]=i_jet->correctedJet(0).pt();
-     CalojetPx[CaloNjets]=i_jet->correctedJet(0).px();
-   CalojetPy[CaloNjets]=i_jet->correctedJet(0).py();
-   CalojetPz[CaloNjets]=i_jet->correctedJet(0).pz();
-   CalojetE[CaloNjets]=i_jet->correctedJet(0).energy();
-   CalojetM[CaloNjets]=i_jet->correctedJet(0).mass();
-    CaloHadEHF[CaloNjets]=i_jet->hadEnergyInHF();
-    CaloEmEHF[CaloNjets]=i_jet->emEnergyInHF();    
- //   CaloCorrjetPt[CaloNjets] = i_jet->pt();
-//    CalojetCEMF[CaloNjets]=i_jet->chargedEmEnergyFraction();
-//    CalojetNEMF[CaloNjets]=i_jet->neutralEmEnergyFraction();
- //           cout<<CalojetEta[CaloNjets]<<"  "<<CalojetPt[CaloNjets]<<"  "<<CaloCorrjetPt[CaloNjets]<<endl;
-    // ---- This accesses to the vertex Z of the track-base constituents of Calojets
-
-    
-    CaloNjets++;
-//
-  }
-
 
 
   
@@ -678,6 +720,8 @@ void ntupleGenerator::beginJob()
 
 
   myTree->Branch("Elecindex",&Elecindex,"Elecindex/I");
+ myTree->Branch("hasMatchedConversion",hasMatchedConversion,"hasMatchedConversion[Elecindex]/B");
+myTree->Branch("Elecooeoop",Elecooeoop,"Elecooeoop[Elecindex]/F");
   myTree->Branch("ElecPt",ElecPt,"ElecPt[Elecindex]/F");
   myTree->Branch("ElecPx",ElecPx,"ElecPx[Elecindex]/F");
   myTree->Branch("ElecPy",ElecPy,"ElecPy[Elecindex]/F");
@@ -699,6 +743,13 @@ void ntupleGenerator::beginJob()
   myTree->Branch("ElechadronicOverEm",ElechadronicOverEm,"ElechadronicOverEm[Elecindex]/F");
   myTree->Branch("ElecgsfTrack_numberOfLostHits",ElecgsfTrack_numberOfLostHits,"ElecgsfTrack_numberOfLostHits[Elecindex]/F");
   myTree->Branch("ElecDcotTheta",ElecDcotTheta,"ElecDcotTheta[Elecindex]/F");
+  myTree->Branch("ElecMVATrigId",ElecMVATrigId,"ElecMVATrigId[Elecindex]/F");
+  myTree->Branch("ElecMVANonTrigId",ElecMVANonTrigId,"ElecMVANonTrigId[Elecindex]/F");
+  myTree->Branch("Elecd0vtx",Elecd0vtx,"Elecd0vtx[Elecindex]/F");
+  myTree->Branch("Elecdzvtx",Elecdzvtx,"Elecdzvtx[Elecindex]/F");
+  myTree->Branch("relIso",relIso,"relIso[Elecindex]/F");
+  myTree->Branch("relIsodb",relIsodb,"relIsodb[Elecindex]/F");
+  myTree->Branch("relIsorho",relIsorho,"relIsorho[Elecindex]/F");
 
 myTree->Branch("HFElecindex",&HFElecindex,"HFElecindex/I");
 myTree->Branch("hfelec_Pt",hfelec_Pt,"hfelec_Pt[HFElecindex]/F");
@@ -741,33 +792,16 @@ myTree->Branch("hfelec_charge",hfelec_charge,"hfelec_charge[HFElecindex]/F");
   myTree->Branch("ParticleDaughter", ParticleDaughter, "ParticleDaughter[par_index][5]/I");
   
 
-  myTree->Branch("caloMET", &caloMET, "caloMET/F");
-  myTree->Branch("caloSET", &caloSET, "caloSET/F");
+
   myTree->Branch("pfMET", &pfMET, "pfMET/F");
   myTree->Branch("pfSET", &pfSET, "pfSET/F"); 
-  myTree->Branch("caloMETX", &caloMETX, "caloMETX/F");
   myTree->Branch("pfMETX", &pfMETX, "pfMETX/F");
-  myTree->Branch("caloMETY", &caloMETY, "caloMETY/F");
   myTree->Branch("pfMETY", &pfMETY, "pfMETY/F");
   myTree->Branch("muCorrMET", &muCorrMET, "muCorrMET/F");
   myTree->Branch("muCorrSET", &muCorrSET, "muCorrSET/F");	
 
 
-  myTree->Branch("CaloNjets",&CaloNjets,"CaloNjets/I");
-  myTree->Branch("CalojetEta",CalojetEta,"CalojetEta[CaloNjets]/F");
-  myTree->Branch("CalojetPhi",CalojetPhi,"CalojetPhi[CaloNjets]/F");
-  myTree->Branch("CalojetPt",CalojetPt,"CalojetPt[CaloNjets]/F");
-  myTree->Branch("CalojetPx",CalojetPx,"CalojetPx[CaloNjets]/F");
-  myTree->Branch("CalojetPy",CalojetPy,"CalojetPy[CaloNjets]/F"); 
-  myTree->Branch("CalojetPz",CalojetPz,"CalojetPz[CaloNjets]/F");
-  myTree->Branch("CalojetE",CalojetE,"CalojetE[CaloNjets]/F");
-  myTree->Branch("CalojetM",CalojetM,"CalojetM[CaloNjets]/F");
-  myTree->Branch("CaloHadEHF",CaloHadEHF,"CaloHadEHF[CaloNjets]/F");
-  myTree->Branch("CaloEmEHF",CaloEmEHF,"CaloEmEHF[CaloNjets]/F");
 
-//  myTree->Branch("CaloCorrjetPt",CaloCorrjetPt,"CaloCorrjetPt[CaloNjets]/F");
-//  myTree->Branch("CalojetCEMF",CalojetCEMF,"CalojetCEMF[CaloNjets]/F");
-//  myTree->Branch("CalojetNEMF",CalojetNEMF,"CalojetNEMF[CaloNjets]/F");
 
   myTree->Branch("pfNjets",&pfNjets,"pfNjets/I");
   myTree->Branch("PFjetEta",PFjetEta,"PFjetEta[pfNjets]/F");
@@ -781,8 +815,8 @@ myTree->Branch("hfelec_charge",hfelec_charge,"hfelec_charge[HFElecindex]/F");
   myTree->Branch("PFCorrjetPt",PFCorrjetPt,"PFCorrjetPt[pfNjets]/F");
   myTree->Branch("PFjetCEMF",PFjetCEMF,"PFjetCEMF[pfNjets]/F");
   myTree->Branch("PFjetNEMF",PFjetNEMF,"PFjetNEMF[pfNjets]/F");
-  myTree->Branch("PFHadEHF",PFHadEHF,"PFHadEHF[CaloNjets]/F");
-  myTree->Branch("PFEmEHF",PFEmEHF,"PFEmEHF[CaloNjets]/F");
+  myTree->Branch("PFHadEHF",PFHadEHF,"PFHadEHF[pfNjets]/F");
+  myTree->Branch("PFEmEHF",PFEmEHF,"PFEmEHF[pfNjets]/F");
   myTree->Branch("pfNtracks",&pfNtracks,"pfNtracks/I");
   myTree->Branch("PFjetTrkVZ",PFjetTrkVZ,"PFjetTrkVZ[pfNjets][30]/F");
   myTree->Branch("PFjetTrkPT",PFjetTrkPT,"PFjetTrkPT[pfNjets][30]/F");
@@ -839,7 +873,7 @@ float ntupleGenerator::DeltaR(float eta1, float eta2, float phi1, float phi2)
 
 
 
-  
+
 
 
 
