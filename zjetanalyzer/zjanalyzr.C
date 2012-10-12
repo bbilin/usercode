@@ -52,7 +52,7 @@ TString dataname;
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012A.root");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012B_1.root");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012B_2.root");
-TFile *theFile = new TFile("rootfiles_new/21_09_data.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_data.root","RECREATE");
  dataname = "DATA";
 
 
@@ -61,27 +61,27 @@ TFile *theFile = new TFile("rootfiles_new/21_09_data.root","RECREATE");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball_1.root");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball_2.root");
  ismc =1;
-TFile *theFile = new TFile("rootfiles_new/21_09_mc.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_mc.root","RECREATE");
  dataname = "MC";
 */
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_10_50.root");
  ismc =1;
-TFile *theFile = new TFile("rootfiles_new/21_09_mc_low.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_mc_low.root","RECREATE");
  dataname = "MC_LOW";
 */
 
 //TTbar
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_tt.root");
-TFile *theFile = new TFile("rootfiles_new/21_09_bg_tt.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_bg_tt.root","RECREATE");
  dataname = "TTBAR";
 */
 
 //WJets
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_WJets.root");
-TFile *theFile = new TFile("rootfiles_new/21_09_bg_wjets.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_bg_wjets.root","RECREATE");
  dataname = "WJets";
 */
 
@@ -90,28 +90,28 @@ TFile *theFile = new TFile("rootfiles_new/21_09_bg_wjets.root","RECREATE");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball_1.root");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball_2.root");
  istau =1;
-TFile *theFile = new TFile("rootfiles_new/21_09_bg_ztautau.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_bg_ztautau.root","RECREATE");
  dataname = "ZTauTau";
 */
 
 //WW
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_ww.root");
-TFile *theFile = new TFile("rootfiles_new/21_09_ww.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_ww.root","RECREATE");
  dataname = "WW";
 */
 
 //WZ
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_wz.root");
-TFile *theFile = new TFile("rootfiles_new/21_09_wz.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_wz.root","RECREATE");
  dataname = "WZ";
 */
 
 //ZZ
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_zz.root");
-TFile *theFile = new TFile("rootfiles_new/21_09_zz.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/02_10_zz.root","RECREATE");
  dataname = "ZZ";
 */
 
@@ -272,11 +272,27 @@ TH1F* h_no_good_vtx = new TH1F ("h_no_good_vtx","h_no_good_vtx",60,-0.5,59.5);
 TH1F* h_no_good_vtx_noWeight = new TH1F ("h_no_good_vtx_noWeight","h_no_good_vtx_noWeight",60,-0.5,59.5);
 
 
-TH1F*h_no_good_vtx_zevents[2][2]; TH1F*h_no_good_vtx_noWeight_zevents[2][2]; TH1F *h_deltaphi_z_jet[2][2];TH1F *h_mz[2][2]; TH1F *h_mz_same_sign[2][2];TH1F *h_dielecphi[2][2];TH1F *h_dielec_PT[2][2];TH1F *h_dielec_rapidity[2][2];TH1F *h_mz_1j_all[2][2];TH1F *h_dielecphi_1j_all[2][2];TH1F *h_dielec_PT_1j_all[2][2];TH1F *h_dielec_rapidity_1j_all[2][2];TH1F *h_mz_1j_c[2][2];TH1F *h_dielecphi_1j_c[2][2];TH1F *h_dielec_PT_1j_c[2][2];TH1F *h_dielec_rapidity_1j_c[2][2];TH1F *h_mz_1j_hf[2][2];TH1F *h_dielecphi_1j_hf[2][2];TH1F *h_dielec_PT_1j_hf[2][2];TH1F *h_dielec_rapidity_1j_hf[2][2];TH1F *h_deltar_elec_PFjet[2][2];TH1F *h_numberofPFjets[2][2];TH1F *h_numberofPFjets_hbhe[2][2];TH1F *h_numberofPFjets_hf[2][2];TH1F *h_leading_jet_pt[2][2];TH1F *h_leading_jet_eta[2][2];TH1F *h_jet_pt_all[2][2];TH1F *h_jet_eta_all[2][2];TH1F *h_jet_pt_hbhe[2][2];TH1F *h_jet_eta_hbhe[2][2];TH1F *h_jet_pt_hf[2][2];TH1F *h_jet_eta_hf[2][2];
+TH1F*h_no_good_vtx_zevents[2][2]; TH1F*h_no_good_vtx_noWeight_zevents[2][2]; TH1F *h_deltaphi_z_jet[2][2];TH1F *h_mz[2][2]; TH1F *h_mz_same_sign[2][2];TH1F *h_mz_same_sign_anti_iso[2][2];TH1F *h_mz_same_sign_anti_iso_oppsign[2][2];TH1F *h_dielecphi[2][2];TH1F *h_dielec_PT[2][2];TH1F *h_dielec_rapidity[2][2];TH1F *h_mz_1j_all[2][2];TH1F *h_dielecphi_1j_all[2][2];TH1F *h_dielec_PT_1j_all[2][2];TH1F *h_dielec_rapidity_1j_all[2][2];TH1F *h_mz_1j_c[2][2];TH1F *h_dielecphi_1j_c[2][2];TH1F *h_dielec_PT_1j_c[2][2];TH1F *h_dielec_rapidity_1j_c[2][2];TH1F *h_mz_1j_hf[2][2];TH1F *h_dielecphi_1j_hf[2][2];TH1F *h_dielec_PT_1j_hf[2][2];TH1F *h_dielec_rapidity_1j_hf[2][2];TH1F *h_deltar_elec_PFjet[2][2];TH1F *h_numberofPFjets[2][2];TH1F *h_numberofPFjets_hbhe[2][2];TH1F *h_numberofPFjets_hf[2][2];TH1F *h_leading_jet_pt[2][2];TH1F *h_leading_jet_eta[2][2];TH1F *h_jet_pt_all[2][2];TH1F *h_jet_eta_all[2][2];TH1F *h_jet_pt_hbhe[2][2];TH1F *h_jet_eta_hbhe[2][2];TH1F *h_jet_pt_hf[2][2];TH1F *h_jet_eta_hf[2][2];
+TH1F *h_mz_2j_all[2][2];TH1F *h_dielecphi_2j_all[2][2];TH1F *h_dielec_PT_2j_all[2][2];TH1F *h_dielec_rapidity_2j_all[2][2];TH1F *h_mz_2j_c[2][2];TH1F *h_dielecphi_2j_c[2][2];TH1F *h_dielec_PT_2j_c[2][2];TH1F *h_dielec_rapidity_2j_c[2][2];TH1F *h_mz_2j_hf[2][2];TH1F *h_dielecphi_2j_hf[2][2];TH1F *h_dielec_PT_2j_hf[2][2];TH1F *h_dielec_rapidity_2j_hf[2][2];
+
+TH1F *h_mz_3j_all[2][2];TH1F *h_dielecphi_3j_all[2][2];TH1F *h_dielec_PT_3j_all[2][2];TH1F *h_dielec_rapidity_3j_all[2][2];TH1F *h_mz_3j_c[2][2];TH1F *h_dielecphi_3j_c[2][2];TH1F *h_dielec_PT_3j_c[2][2];TH1F *h_dielec_rapidity_3j_c[2][2];TH1F *h_mz_3j_hf[2][2];TH1F *h_dielecphi_3j_hf[2][2];TH1F *h_dielec_PT_3j_hf[2][2];TH1F *h_dielec_rapidity_3j_hf[2][2];
+
+TH1F *h_mz_4j_all[2][2];TH1F *h_dielecphi_4j_all[2][2];TH1F *h_dielec_PT_4j_all[2][2];TH1F *h_dielec_rapidity_4j_all[2][2];TH1F *h_mz_4j_c[2][2];TH1F *h_dielecphi_4j_c[2][2];TH1F *h_dielec_PT_4j_c[2][2];TH1F *h_dielec_rapidity_4j_c[2][2];TH1F *h_mz_4j_hf[2][2];TH1F *h_dielecphi_4j_hf[2][2];TH1F *h_dielec_PT_4j_hf[2][2];TH1F *h_dielec_rapidity_4j_hf[2][2];
+
+TH1F *h_mz_5j_all[2][2];TH1F *h_dielecphi_5j_all[2][2];TH1F *h_dielec_PT_5j_all[2][2];TH1F *h_dielec_rapidity_5j_all[2][2];TH1F *h_mz_5j_c[2][2];TH1F *h_dielecphi_5j_c[2][2];TH1F *h_dielec_PT_5j_c[2][2];TH1F *h_dielec_rapidity_5j_c[2][2];TH1F *h_mz_5j_hf[2][2];TH1F *h_dielecphi_5j_hf[2][2];TH1F *h_dielec_PT_5j_hf[2][2];TH1F *h_dielec_rapidity_5j_hf[2][2];
+
+TH1F *h_jet_pt_all_2j[2][2];TH1F *h_jet_eta_all_2j[2][2];TH1F *h_jet_pt_hbhe_2j[2][2];TH1F *h_jet_eta_hbhe_2j[2][2];TH1F *h_jet_pt_hf_2j[2][2];TH1F *h_jet_eta_hf_2j[2][2];
+
+TH1F *h_jet_pt_all_3j[2][2];TH1F *h_jet_eta_all_3j[2][2];TH1F *h_jet_pt_hbhe_3j[2][2];TH1F *h_jet_eta_hbhe_3j[2][2];TH1F *h_jet_pt_hf_3j[2][2];TH1F *h_jet_eta_hf_3j[2][2];
+
+TH1F *h_jet_pt_all_4j[2][2];TH1F *h_jet_eta_all_4j[2][2];TH1F *h_jet_pt_hbhe_4j[2][2];TH1F *h_jet_eta_hbhe_4j[2][2];TH1F *h_jet_pt_hf_4j[2][2];TH1F *h_jet_eta_hf_4j[2][2];
+
+TH1F *h_jet_pt_all_5j[2][2];TH1F *h_jet_eta_all_5j[2][2];TH1F *h_jet_pt_hbhe_5j[2][2];TH1F *h_jet_eta_hbhe_5j[2][2];TH1F *h_jet_pt_hf_5j[2][2];TH1F *h_jet_eta_hf_5j[2][2];TH1F *h_dielec_PT_same_sign[2][2];
+
 
 //char name[100][100];
 //char name2[100][100][100];
-TString name2[100];
+TString name2[200];
 
 //sprintf(name2[0],"h_no_good_vtx_zevents_%i",i);
 for(int i=0;i<2;i++){
@@ -284,8 +300,8 @@ for(int j=0;j<2;j++){
 name2[0] = "h_no_good_vtx_zevents_";
 name2[1] ="h_no_good_vtx_noWeight_zevents_";
 name2[2] ="h_deltaphi_z_jet_";
-name2[3] ="h_elec_pt_";
-name2[4] ="h_elec_eta_";
+name2[3] ="h_mz_same_sign_anti_iso_";
+name2[4] ="h_mz_same_sign_anti_iso_oppsign_";
 name2[5] ="h_mz_";
 name2[6]="h_mz_same_sign_";
 name2[7]="h_dielecphi_";
@@ -316,7 +332,80 @@ name2[31] ="h_jet_pt_hbhe_";
 name2[32] ="h_jet_eta_hbhe_";
 name2[33] ="h_jet_pt_hf_";
 name2[34] ="h_jet_eta_hf_";
-for(int k=0;k<35;k++){
+name2[35]="h_mz_2j_all_";
+name2[36] ="h_dielecphi_2j_all_";
+name2[37] ="h_dielec_PT_2j_all_";
+name2[38] ="h_dielec_rapidity_2j_all_";
+name2[39] ="h_mz_2j_c_";
+name2[40] ="h_dielecphi_2j_c_";
+name2[41] ="h_dielec_PT_2j_c_";
+name2[42] ="h_dielec_rapidity_2j_c_";
+name2[43] ="h_mz_2j_hf_";
+name2[44] ="h_dielecphi_2j_hf_";
+name2[45] ="h_dielec_PT_2j_hf_";
+name2[46] ="h_dielec_rapidity_2j_hf_";
+name2[47]="h_mz_3j_all_";
+name2[48] ="h_dielecphi_3j_all_";
+name2[49] ="h_dielec_PT_3j_all_";
+name2[50] ="h_dielec_rapidity_3j_all_";
+name2[51] ="h_mz_3j_c_";
+name2[52] ="h_dielecphi_3j_c_";
+name2[53] ="h_dielec_PT_3j_c_";
+name2[54] ="h_dielec_rapidity_3j_c_";
+name2[55] ="h_mz_3j_hf_";
+name2[56] ="h_dielecphi_3j_hf_";
+name2[57] ="h_dielec_PT_3j_hf_";
+name2[58] ="h_dielec_rapidity_3j_hf_";
+name2[59]="h_mz_4j_all_";
+name2[60] ="h_dielecphi_4j_all_";
+name2[61] ="h_dielec_PT_4j_all_";
+name2[62] ="h_dielec_rapidity_4j_all_";
+name2[63] ="h_mz_4j_c_";
+name2[64] ="h_dielecphi_4j_c_";
+name2[65] ="h_dielec_PT_4j_c_";
+name2[66] ="h_dielec_rapidity_4j_c_";
+name2[67] ="h_mz_4j_hf_";
+name2[68] ="h_dielecphi_4j_hf_";
+name2[69] ="h_dielec_PT_4j_hf_";
+name2[70] ="h_dielec_rapidity_4j_hf_";
+name2[71]="h_mz_5j_all_";
+name2[72] ="h_dielecphi_5j_all_";
+name2[73] ="h_dielec_PT_5j_all_";
+name2[74] ="h_dielec_rapidity_5j_all_";
+name2[75] ="h_mz_5j_c_";
+name2[76] ="h_dielecphi_5j_c_";
+name2[77] ="h_dielec_PT_5j_c_";
+name2[78] ="h_dielec_rapidity_5j_c_";
+name2[79] ="h_mz_5j_hf_";
+name2[80] ="h_dielecphi_5j_hf_";
+name2[81] ="h_dielec_PT_5j_hf_";
+name2[82] ="h_dielec_rapidity_5j_hf_";
+name2[83] ="h_jet_pt_all_2j_";
+name2[84] ="h_jet_eta_all_2j_";
+name2[85] ="h_jet_pt_hbhe_2j_";
+name2[86] ="h_jet_eta_hbhe_2j_";
+name2[87] ="h_jet_pt_hf_2j_";
+name2[88] ="h_jet_eta_hf_2j_";
+name2[89] ="h_jet_pt_all_3j_";
+name2[90] ="h_jet_eta_all_3j_";
+name2[91] ="h_jet_pt_hbhe_3j_";
+name2[92] ="h_jet_eta_hbhe_3j_";
+name2[93] ="h_jet_pt_hf_3j_";
+name2[94] ="h_jet_eta_hf_3j_";
+name2[95] ="h_jet_pt_all_4j_";
+name2[96] ="h_jet_eta_all_4j_";
+name2[97] ="h_jet_pt_hbhe_4j_";
+name2[98] ="h_jet_eta_hbhe_4j_";
+name2[99] ="h_jet_pt_hf_4j_";
+name2[100] ="h_jet_eta_hf_4j_";
+name2[101] ="h_jet_pt_all_5j_";
+name2[102] ="h_jet_eta_all_5j_";
+name2[103] ="h_jet_pt_hbhe_5j_";
+name2[104] ="h_jet_eta_hbhe_5j_";
+name2[105] ="h_jet_pt_hf_5j_";
+name2[106] ="h_jet_eta_hf_5j_";
+name2[107] ="h_dielec_PT_same_sign_";
+for(int k=0;k<108;k++){
 name2[k]+=(j);
 name2[k]+="_";
 name2[k]+=(i);
@@ -324,7 +413,8 @@ name2[k]+=(i);
 h_no_good_vtx_zevents[j][i]=new TH1F (name2[0],name2[0],60,-0.5,59.5);
 h_no_good_vtx_noWeight_zevents[j][i]=new TH1F (name2[1],name2[1],60,-0.5,59.5);
 h_deltaphi_z_jet[j][i]=  new TH1F (name2[2],name2[2],35,0,3.5);
-//h_elec_pt[j][i]=  new TH1F (name2[3],name2[3],70,0,200);
+h_mz_same_sign_anti_iso[j][i]=  new TH1F (name2[3],name2[3],70,0,1000);
+h_mz_same_sign_anti_iso_oppsign[j][i]=  new TH1F (name2[4],name2[4],70,0,1000);
 //h_elec_eta[j][i]=  new TH1F (name2[4],name2[4],80,-5,5);
 h_mz[j][i]=  new TH1F (name2[5],name2[5],80,0,200);
 h_mz_same_sign[j][i]=  new TH1F (name2[6],name2[6],80,0,200);
@@ -356,6 +446,79 @@ h_jet_pt_hbhe[j][i]=  new TH1F (name2[31], name2[31],80,0,200);
 h_jet_eta_hbhe[j][i]=  new TH1F (name2[32], name2[32],40,-6,6);
 h_jet_pt_hf[j][i]=  new TH1F (name2[33], name2[33],80,0,200);
 h_jet_eta_hf[j][i]=  new TH1F (name2[34], name2[34],40,-6,6);
+h_mz_2j_all[j][i]=  new TH1F ( name2[35], name2[35],80,0,200);
+h_dielecphi_2j_all[j][i]=  new TH1F ( name2[36], name2[36],20,-3,3);
+h_dielec_PT_2j_all[j][i]=  new TH1F ( name2[37], name2[37],100,0,200);
+h_dielec_rapidity_2j_all[j][i]=  new TH1F ( name2[38], name2[38],50,-5,5);
+h_mz_2j_c[j][i]=  new TH1F ( name2[39], name2[39],80,0,200);
+h_dielecphi_2j_c[j][i]=  new TH1F ( name2[40], name2[40],20,-3,3);
+h_dielec_PT_2j_c[j][i]=  new TH1F ( name2[41], name2[41],100,0,200);
+h_dielec_rapidity_2j_c[j][i]=  new TH1F ( name2[42], name2[42],50,-5,5);
+h_mz_2j_hf[j][i]=  new TH1F ( name2[43], name2[43],80,0,200);
+h_dielecphi_2j_hf[j][i]=  new TH1F ( name2[44], name2[44],20,-3,3);
+h_dielec_PT_2j_hf[j][i]=  new TH1F ( name2[45], name2[45],100,0,200);
+h_dielec_rapidity_2j_hf[j][i]=  new TH1F ( name2[46], name2[46],50,-5,5);
+h_mz_3j_all[j][i]=  new TH1F ( name2[47], name2[47],80,0,200);
+h_dielecphi_3j_all[j][i]=  new TH1F ( name2[48], name2[48],20,-3,3);
+h_dielec_PT_3j_all[j][i]=  new TH1F ( name2[49], name2[49],100,0,200);
+h_dielec_rapidity_3j_all[j][i]=  new TH1F ( name2[50], name2[50],50,-5,5);
+h_mz_3j_c[j][i]=  new TH1F ( name2[51], name2[51],80,0,200);
+h_dielecphi_3j_c[j][i]=  new TH1F ( name2[52], name2[52],20,-3,3);
+h_dielec_PT_3j_c[j][i]=  new TH1F ( name2[53], name2[53],100,0,200);
+h_dielec_rapidity_3j_c[j][i]=  new TH1F ( name2[54], name2[54],50,-5,5);
+h_mz_3j_hf[j][i]=  new TH1F ( name2[55], name2[55],80,0,200);
+h_dielecphi_3j_hf[j][i]=  new TH1F ( name2[56], name2[56],20,-3,3);
+h_dielec_PT_3j_hf[j][i]=  new TH1F ( name2[57], name2[57],100,0,200);
+h_dielec_rapidity_3j_hf[j][i]=  new TH1F ( name2[58], name2[58],50,-5,5);
+h_mz_4j_all[j][i]=  new TH1F ( name2[59], name2[59],80,0,200);
+h_dielecphi_4j_all[j][i]=  new TH1F ( name2[60], name2[60],20,-3,3);
+h_dielec_PT_4j_all[j][i]=  new TH1F ( name2[61], name2[61],100,0,200);
+h_dielec_rapidity_4j_all[j][i]=  new TH1F ( name2[62], name2[62],50,-5,5);
+h_mz_4j_c[j][i]=  new TH1F ( name2[63], name2[63],80,0,200);
+h_dielecphi_4j_c[j][i]=  new TH1F ( name2[64], name2[64],20,-3,3);
+h_dielec_PT_4j_c[j][i]=  new TH1F ( name2[65], name2[65],100,0,200);
+h_dielec_rapidity_4j_c[j][i]=  new TH1F ( name2[66], name2[66],50,-5,5);
+h_mz_4j_hf[j][i]=  new TH1F ( name2[67], name2[67],80,0,200);
+h_dielecphi_4j_hf[j][i]=  new TH1F ( name2[68], name2[68],20,-3,3);
+h_dielec_PT_4j_hf[j][i]=  new TH1F ( name2[69], name2[69],100,0,200);
+h_dielec_rapidity_4j_hf[j][i]=  new TH1F ( name2[70], name2[70],50,-5,5);
+h_mz_5j_all[j][i]=  new TH1F ( name2[71], name2[71],80,0,200);
+h_dielecphi_5j_all[j][i]=  new TH1F ( name2[72], name2[72],20,-3,3);
+h_dielec_PT_5j_all[j][i]=  new TH1F ( name2[73], name2[73],100,0,200);
+h_dielec_rapidity_5j_all[j][i]=  new TH1F ( name2[74], name2[74],50,-5,5);
+h_mz_5j_c[j][i]=  new TH1F ( name2[75], name2[75],80,0,200);
+h_dielecphi_5j_c[j][i]=  new TH1F ( name2[76], name2[76],20,-3,3);
+h_dielec_PT_5j_c[j][i]=  new TH1F ( name2[77], name2[77],100,0,200);
+h_dielec_rapidity_5j_c[j][i]=  new TH1F ( name2[78], name2[78],50,-5,5);
+h_mz_5j_hf[j][i]=  new TH1F ( name2[79], name2[79],80,0,200);
+h_dielecphi_5j_hf[j][i]=  new TH1F ( name2[80], name2[80],20,-3,3);
+h_dielec_PT_5j_hf[j][i]=  new TH1F ( name2[81], name2[81],100,0,200);
+h_dielec_rapidity_5j_hf[j][i]=  new TH1F ( name2[82], name2[82],50,-5,5);
+h_jet_pt_all_2j[j][i]=  new TH1F (name2[83], name2[83],80,0,200);
+h_jet_eta_all_2j[j][i]=  new TH1F (name2[84], name2[84],40,-6,6);
+h_jet_pt_hbhe_2j[j][i]=  new TH1F (name2[85], name2[85],80,0,200);
+h_jet_eta_hbhe_2j[j][i]=  new TH1F (name2[86], name2[86],40,-6,6);
+h_jet_pt_hf_2j[j][i]=  new TH1F (name2[87], name2[87],80,0,200);
+h_jet_eta_hf_2j[j][i]=  new TH1F (name2[88], name2[88],40,-6,6);
+h_jet_pt_all_3j[j][i]=  new TH1F (name2[89], name2[89],80,0,200);
+h_jet_eta_all_3j[j][i]=  new TH1F (name2[90], name2[90],40,-6,6);
+h_jet_pt_hbhe_3j[j][i]=  new TH1F (name2[91], name2[91],80,0,200);
+h_jet_eta_hbhe_3j[j][i]=  new TH1F (name2[92], name2[92],40,-6,6);
+h_jet_pt_hf_3j[j][i]=  new TH1F (name2[93], name2[93],80,0,200);
+h_jet_eta_hf_3j[j][i]=  new TH1F (name2[94], name2[94],40,-6,6);
+h_jet_pt_all_4j[j][i]=  new TH1F (name2[95], name2[95],80,0,200);
+h_jet_eta_all_4j[j][i]=  new TH1F (name2[96], name2[96],40,-6,6);
+h_jet_pt_hbhe_4j[j][i]=  new TH1F (name2[97], name2[97],80,0,200);
+h_jet_eta_hbhe_4j[j][i]=  new TH1F (name2[98], name2[98],40,-6,6);
+h_jet_pt_hf_4j[j][i]=  new TH1F (name2[99], name2[99],80,0,200);
+h_jet_eta_hf_4j[j][i]=  new TH1F (name2[100], name2[100],40,-6,6);
+h_jet_pt_all_5j[j][i]=  new TH1F (name2[101], name2[101],80,0,200);
+h_jet_eta_all_5j[j][i]=  new TH1F (name2[102], name2[102],40,-6,6);
+h_jet_pt_hbhe_5j[j][i]=  new TH1F (name2[103], name2[103],80,0,200);
+h_jet_eta_hbhe_5j[j][i]=  new TH1F (name2[104], name2[104],40,-6,6);
+h_jet_pt_hf_5j[j][i]=  new TH1F (name2[105], name2[105],80,0,200);
+h_jet_eta_hf_5j[j][i]=  new TH1F (name2[106], name2[106],40,-6,6);
+h_dielec_PT_same_sign[j][i]=  new TH1F ( name2[107], name2[107],100,0,200);
 }
 }
  TH1F *h_short=  new TH1F ( "h_short", "h_short",100,0,200);
@@ -371,7 +534,7 @@ Int_t nevent = myTree.GetEntries();
 // Int_t nevent =1000000;  
 
 for (Int_t iev=0;iev<nevent;iev++) {
-
+//if(iev!=21994 &&iev!=21983 )continue;
  	  if (iev%100000 == 0) cout<<dataname<<" ===>>> "<<iev<<"/"<<nevent<<endl;
 
     	myTree.GetEntry(iev); 
@@ -384,11 +547,11 @@ h_no_good_vtx-> Fill(nGoodVertices,MyWeight);
 h_no_good_vtx_noWeight-> Fill(nGoodVertices);
 
 
-int elec_ind_loose[50];
+int elec_ind_loose[50],elec_ind_anti_iso[50];
 
-for(int i=0; i<50; i++){elec_ind_loose[i]=0;}
+for(int i=0; i<50; i++){elec_ind_loose[i]=0;elec_ind_anti_iso[i]=0;}
 bool MatchedConversion[50];
-int eCharge[50]={},nelec_fire_loose=0;
+int eCharge[50]={},nelec_fire_loose=0, n_anti_iso=0;
 float ePt[50] = {}, eEta[50] = {}, ePhi[50]= {}, ePx[50]={}, ePy[50]={}, ePz[50] = {}, eM[50]= {}, eE[50]={}, eMVATrigId[50]={}, escSigmaIEtaIEta[50]={}, edeltaPhiSuperClusterTrackAtVtx[50]={}, edeltaEtaSuperClusterTrackAtVtx[50]= {}, ehadronicOverEm[50]={} , egsfTrack_numberOfLostHits[50]={},ed0vtx[50]={},edzvtx[50]={}, /*echIso03[50]={},enhIso03[50]={},ephIso03[50]={},epuChIso03[50]={},*/erelIso[50]={},erelIsodb[50]={},erelIsorho[50]={},efMVAVar_fbrem[50]={},  efMVAVar_kfchi2[50]={}, efMVAVar_kfhits[50]={},efMVAVar_gsfchi2[50]={},efMVAVar_detacalo[50]={},efMVAVar_see[50]={}, efMVAVar_spp[50]={} , efMVAVar_etawidth[50]={},efMVAVar_phiwidth[50]={} ,efMVAVar_e1x5e5x5[50]={} , efMVAVar_R9[50]={} ,efMVAVar_EoP[50]={}  ,efMVAVar_IoEmIoP[50]={},efMVAVar_eleEoPout[50]={} ,efMVAVar_PreShowerOverRaw[50]={} ;  /*,eMVANonTrigId[50]={}*/; 
 float jetEta[50]={}, jetPhi[50]={}, jetPt[50]={},jPt[50]={}, HadEHF[200]={}, EmEHF[200]={};
 int sorted_jet_index[50]={};
@@ -478,16 +641,22 @@ efMVAVar_IoEmIoP[ii]=fMVAVar_IoEmIoP[ii];
 efMVAVar_eleEoPout[ii]= fMVAVar_eleEoPout[ii]; 
 efMVAVar_PreShowerOverRaw[ii]=fMVAVar_PreShowerOverRaw[ii];
 
-if(ePt[ii] >30. &&(fabs(eEta[ii]) <1.4442 || fabs(eEta[ii])>1.566) &&fabs(eEta[ii])<2.5&& fabs(ed0vtx[ii])<0.02 
-&& erelIsorho[ii]<0.1
+if(eMVATrigId[ii]>0.&& ePt[ii] >30. 
+&&(fabs(eEta[ii]) <1.4442 || fabs(eEta[ii])>1.566) 
+&&fabs(eEta[ii])<2.5
+&& fabs(ed0vtx[ii])<0.02 
 && egsfTrack_numberOfLostHits[ii]<=0 
-&& !(MatchedConversion[ii])
-&& eMVATrigId[ii]>0.
- ){
+&& !(MatchedConversion[ii])){
+//
+if(erelIsorho[ii]>0.1){
+elec_ind_anti_iso[n_anti_iso]=ii;
+n_anti_iso++;
+			}
+if(erelIsorho[ii]<0.1){
 elec_ind_loose[nelec_fire_loose]=ii;
-
 //cout<<ii<<"  "<<nelec_fire_loose<<"  "<<elec_ind_loose[nelec_fire_loose]<<endl;
 nelec_fire_loose++;
+			}
 }
 }
 //cout<<"newwww"<<endl;
@@ -495,19 +664,31 @@ nelec_fire_loose++;
 h_nelec_fire_loose->Fill(nelec_fire_loose,MyWeight);
 int a=-99;
 int b=-99;
+int aa=-99;
+int bb=-99;
 double    p1dotp2_l=-99.;
 double MZe_l = -99.;
+double    p1dotp2_ll=-99.;
+double MZe_ll = -99.;
 double dielecpt =-99.;
 double dielecrapidity=-99.;
 double dielecphi=-99.;
 int selectt=0;
+int select_ss=0;
+if(n_anti_iso==2){
+ aa= elec_ind_anti_iso[0], bb = elec_ind_anti_iso[1];
+	       p1dotp2_ll = ePx[aa]*ePx[bb]+ePy[aa]*ePy[bb]+ePz[aa]*ePz[bb];
+               MZe_ll = fabs(sqrt(pow(eM[aa],2)+pow(eM[bb],2)+2*(eE[aa]*eE[bb]-p1dotp2_ll)));
+		if (eCharge[aa]*eCharge[bb] != -1)h_mz_same_sign_anti_iso[1][0]->Fill(MZe_ll,MyWeight);
+		if (eCharge[aa]*eCharge[bb] == -1)h_mz_same_sign_anti_iso_oppsign[1][0]->Fill(MZe_ll,MyWeight);
+}
+
 
 if(nelec_fire_loose==2){
  a= elec_ind_loose[0], b = elec_ind_loose[1];
 //           cout<<a<<"  "<<b<<endl;
 	       p1dotp2_l = ePx[a]*ePx[b]+ePy[a]*ePy[b]+ePz[a]*ePz[b];
                MZe_l = fabs(sqrt(pow(eM[a],2)+pow(eM[b],2)+2*(eE[a]*eE[b]-p1dotp2_l)));
-
 
 
 h_no_good_vtx_zevents[1][0]-> Fill(nGoodVertices,MyWeight); 
@@ -518,8 +699,14 @@ h_no_good_vtx_noWeight_zevents[1][0]-> Fill(nGoodVertices);
                   dielecphi = atan2(ePy[a]+ePy[b],ePx[a]+ePx[b]);
 
 if(eCharge[a]*eCharge[b]==-1)h_MZe_l->Fill(MZe_l,MyWeight);
-if (eCharge[a]*eCharge[b] != -1)h_mz_same_sign[1][0]->Fill(MZe_l,MyWeight); 
+if (eCharge[a]*eCharge[b] != -1){
+      h_mz_same_sign[1][1]->Fill(MZe_l,MyWeight); 
+      h_dielec_PT_same_sign[1][1]->Fill(dielecpt,MyWeight); 
+      h_dielecphi[1][1]->Fill(dielecphi,MyWeight); 
+      h_dielec_rapidity[1][1]->Fill(dielecrapidity,MyWeight); 
 
+if(MZe_l<120 && MZe_l>60) select_ss=1;
+}
 
 if(eCharge[a]*eCharge[b]==-1 ){
 
@@ -573,8 +760,233 @@ h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0->Fill(efMVAVar_PreShowerOve
 }
 }
 }
+
+if(select_ss==1){
+
+      double deltaphi_ss = 999.0;
+      int j_in_ss=0;
+      int markPFjet_ss;
+
+           int numberofPFjets_ss = 0;
+           int jetindex_ss[30];
+           int numberofPFjets_hbhe_ss = 0;
+           int numberofPFjets_hf_ss = 0;
+
+//cout<<pfNjets<<endl;
+      for (int PF=0;PF < pfNjets ;PF++){
+	  float deltar_ss = 99.;
+	  float deltar2_ss = 99.;
+	  markPFjet_ss = 0;
+	   deltar_ss = fabs(DeltaR(jetEta[PF],eEta[a],jetPhi[PF],ePhi[a]));
+	   deltar2_ss = fabs(DeltaR(jetEta[PF],eEta[b],jetPhi[PF],ePhi[b]));
+
+	h_deltar_elec_PFjet[1][1] -> Fill(deltar_ss,MyWeight); 
+	h_deltar_elec_PFjet[1][1] -> Fill(deltar2_ss,MyWeight); 
+
+	  if (deltar_ss<0.5) markPFjet_ss = 1; 
+	  if (deltar2_ss<0.5) markPFjet_ss = 1; 
+
+ if (markPFjet_ss == 1)continue;
+
+
+	if (jetPt[PF] < 30.) continue;
+
+
+	  numberofPFjets_ss += 1;
+	  jetindex_ss[j_in_ss]=PF;
+
+//cout<<jetPt[PF]<<endl;
+
+                  if (fabs(jetEta[PF])<2.4){
+	  			numberofPFjets_hbhe_ss += 1;
+         				     }
+
+	                if(fabs(jetEta[PF])>2.4){
+			        numberofPFjets_hf_ss += 1;
+
+						  }
+j_in_ss++;
+}//jet for loop
+
+h_numberofPFjets[1][1]->Fill(numberofPFjets_ss,MyWeight); 
+h_numberofPFjets_hf[1][1]->Fill(numberofPFjets_hf_ss,MyWeight); 
+h_numberofPFjets_hbhe[1][1]->Fill(numberofPFjets_hbhe_ss,MyWeight);
+
+if(numberofPFjets_ss>0){
+
+int jetindex1_ss= jetindex_ss[0];
+//cout<<jetPt[jetindex1_ss]<<endl;
+//cout<<numberofPFjets_ss<<endl;
+//cout<<jetindex_ss[0]<<"   "<<jetindex1_ss<<endl;
+deltaphi_ss = fabs(DeltaPhi(dielecphi,jetPhi[jetindex1_ss]));
+
+if(numberofPFjets_ss==1)h_deltaphi_z_jet[1][1]->Fill(deltaphi_ss,MyWeight); 
+
+
+	h_leading_jet_pt[1][1]->Fill(jetPt[jetindex1_ss],MyWeight); 
+	h_leading_jet_eta[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);
+
+
+if(numberofPFjets_ss==1){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_all[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+   h_mz_1j_all[1][1]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_1j_all[1][1]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_1j_all[1][1]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_1j_all[1][1]->Fill(dielecrapidity,MyWeight); 
+
+if (fabs(jetEta[jetindex1_ss])<2.4){
+if(numberofPFjets_hbhe_ss!=1) cout<<"DANGER THERE IS AN ERROR 1"<<endl;
+  h_jet_pt_hbhe[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_hbhe[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_1j_c[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_1j_c[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_1j_c[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_1j_c[1][1]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (fabs(jetEta[jetindex1_ss])>2.4){
+if(numberofPFjets_hf_ss!=1) cout<<"DANGER THERE IS AN ERROR 2"<<endl;
+  h_jet_pt_hf[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+  h_jet_eta_hf[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_1j_hf[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_1j_hf[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_1j_hf[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_1j_hf[1][1]->Fill(dielecrapidity,MyWeight); 
+}
+
+}
+
+if(numberofPFjets_ss==2){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all_2j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_all_2j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+   h_mz_2j_all[1][1]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_2j_all[1][1]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_2j_all[1][1]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_2j_all[1][1]->Fill(dielecrapidity,MyWeight); 
+
+if (numberofPFjets_hbhe_ss==2){
+  h_jet_pt_hbhe_2j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_hbhe_2j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_2j_c[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_2j_c[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_2j_c[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_2j_c[1][1]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (numberofPFjets_hf_ss==2){
+  h_jet_pt_hf_2j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+  h_jet_eta_hf_2j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_2j_hf[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_2j_hf[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_2j_hf[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_2j_hf[1][1]->Fill(dielecrapidity,MyWeight); 
+}
+
+}
+
+if(numberofPFjets_ss==3){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all_3j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_all_3j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+   h_mz_3j_all[1][1]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_3j_all[1][1]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_3j_all[1][1]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_3j_all[1][1]->Fill(dielecrapidity,MyWeight); 
+
+if (numberofPFjets_hbhe_ss==3){
+  h_jet_pt_hbhe_3j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_hbhe_3j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_3j_c[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_3j_c[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_3j_c[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_3j_c[1][1]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (numberofPFjets_hf_ss==3){
+  h_jet_pt_hf_3j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+  h_jet_eta_hf_3j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_3j_hf[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_3j_hf[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_3j_hf[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_3j_hf[1][1]->Fill(dielecrapidity,MyWeight); 
+}
+
+}
+
+if(numberofPFjets_ss==4){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all_4j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_all_4j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+   h_mz_4j_all[1][1]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_4j_all[1][1]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_4j_all[1][1]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_4j_all[1][1]->Fill(dielecrapidity,MyWeight); 
+
+if (numberofPFjets_hbhe_ss==4){
+  h_jet_pt_hbhe_4j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_hbhe_4j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_4j_c[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_4j_c[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_4j_c[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_4j_c[1][1]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (numberofPFjets_hf_ss==4){
+  h_jet_pt_hf_4j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+  h_jet_eta_hf_4j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_4j_hf[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_4j_hf[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_4j_hf[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_4j_hf[1][1]->Fill(dielecrapidity,MyWeight); 
+}
+
+}
+
+
+if(numberofPFjets_ss==5){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all_5j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_all_5j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+   h_mz_5j_all[1][1]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_5j_all[1][1]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_5j_all[1][1]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_5j_all[1][1]->Fill(dielecrapidity,MyWeight); 
+
+if (numberofPFjets_hbhe_ss==5){
+  h_jet_pt_hbhe_5j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+   h_jet_eta_hbhe_5j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_5j_c[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_5j_c[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_5j_c[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_5j_c[1][1]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (numberofPFjets_hf_ss==5){
+  h_jet_pt_hf_5j[1][1]->Fill(jetPt[jetindex1_ss],MyWeight);   
+  h_jet_eta_hf_5j[1][1]->Fill(jetEta[jetindex1_ss],MyWeight);   
+  h_mz_5j_hf[1][1]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_5j_hf[1][1]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_5j_hf[1][1]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_5j_hf[1][1]->Fill(dielecrapidity,MyWeight); 
+}
+}
+
+
+
+}//if number of jets > 0
+
+}//if samesign pair in mass window
+
 //if(selectt==0&&(a==-99 || b==-99))cout<<a<<" "<<b<<"  "<<selectt<<endl; 
-if(selectt!=1)continue;
+if(selectt==1){
 
 
       double deltaphi = 999.0;
@@ -582,43 +994,45 @@ if(selectt!=1)continue;
       int markPFjet;
 
            int numberofPFjets = 0;
-           int jetindex[30] ={};
+           int jetindex[30];
 	   double Long[50]={};
 	   double Short[50]={};
            int numberofPFjets_hbhe = 0;
            int numberofPFjets_hf = 0;
 
-
+//cout<<pfNjets<<endl;
       for (int PF=0;PF < pfNjets ;PF++){
 	  float deltar = 99.;
 	  float deltar2 = 99.;
 	  markPFjet = 0;
 
 
-
-//if(fabs(jetEta[PF])<2.853){
 	   deltar = fabs(DeltaR(jetEta[PF],eEta[a],jetPhi[PF],ePhi[a]));
 	   deltar2 = fabs(DeltaR(jetEta[PF],eEta[b],jetPhi[PF],ePhi[b]));
-// /*if (deltar<0.5||deltar2<0.5)*/cout<<deltar<<"   "<<deltar2<<endl;
+
 	h_deltar_elec_PFjet[1][0] -> Fill(deltar,MyWeight); 
 	h_deltar_elec_PFjet[1][0] -> Fill(deltar2,MyWeight); 
 
 	  if (deltar<0.5) markPFjet = 1; 
 	  if (deltar2<0.5) markPFjet = 1; 
+
+ //if (deltar<0.5||deltar2<0.5)cout<<deltar<<"   "<<deltar2<<"  "<<PF<<"   "<<jetPt[PF]<<"  "<<markPFjet<<"  "<<j_in<<"  "<<iev<<endl;
  if (markPFjet == 1)continue;
 
-	if (jetPt[PF] < 30.) continue;
-//}
 
-//	  if (markPFjet != 1){
+	if (jetPt[PF] < 30.) continue;
+
+
 	  numberofPFjets += 1;
 	  jetindex[j_in]=PF;
 
-                  if (fabs(jetEta[PF])<2.853){
+//cout<<jetPt[PF]<<endl;
+
+                  if (fabs(jetEta[PF])<2.4){
 	  			numberofPFjets_hbhe += 1;
          				     }
 
-	                if(fabs(jetEta[PF])>2.853){
+	                if(fabs(jetEta[PF])>2.4){
 			        numberofPFjets_hf += 1;
 				Long[j_in]= 0.5 * HadEHF[PF] + EmEHF[PF];
 				Short[j_in]= 0.5 * HadEHF[PF];
@@ -626,14 +1040,20 @@ if(selectt!=1)continue;
 				h_long->Fill(Long[j_in],MyWeight);
 						  }
 j_in++;
-//}			
 }
 
-int jetindex1= jetindex[0];
-deltaphi = fabs(DeltaPhi(dielecphi,jetPhi[jetindex1]));
 h_numberofPFjets[1][0]->Fill(numberofPFjets,MyWeight); 
 h_numberofPFjets_hf[1][0]->Fill(numberofPFjets_hf,MyWeight); 
 h_numberofPFjets_hbhe[1][0]->Fill(numberofPFjets_hbhe,MyWeight);
+
+if(numberofPFjets>0){
+
+int jetindex1= jetindex[0];
+//cout<<jetPt[jetindex1]<<endl;
+//cout<<numberofPFjets<<endl;
+//cout<<jetindex[0]<<"   "<<jetindex1<<endl;
+deltaphi = fabs(DeltaPhi(dielecphi,jetPhi[jetindex1]));
+
 if(numberofPFjets==1)h_deltaphi_z_jet[1][0]->Fill(deltaphi,MyWeight); 
 
 
@@ -642,18 +1062,18 @@ if(numberofPFjets==1)h_deltaphi_z_jet[1][0]->Fill(deltaphi,MyWeight);
 
 
 if(numberofPFjets==1){
-
-   h_jet_pt_all[1][0]->Fill(jetPt[jetindex1]);   
-   h_jet_eta_all[1][0]->Fill(jetEta[jetindex1]);   
+//cout<<MyWeight<<endl;
+   h_jet_pt_all[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_all[1][0]->Fill(jetEta[jetindex1],MyWeight);   
    h_mz_1j_all[1][0]->Fill(MZe_l,MyWeight); 
    h_dielecphi_1j_all[1][0]->Fill(dielecphi,MyWeight); 
    h_dielec_PT_1j_all[1][0]->Fill(dielecpt,MyWeight); 
    h_dielec_rapidity_1j_all[1][0]->Fill(dielecrapidity,MyWeight); 
 
-if (fabs(jetEta[jetindex1])<2.853){
+if (fabs(jetEta[jetindex1])<2.4){
 if(numberofPFjets_hbhe!=1) cout<<"DANGER THERE IS AN ERROR 1"<<endl;
-  h_jet_pt_hbhe[1][0]->Fill(jetPt[jetindex1]);   
-   h_jet_eta_hbhe[1][0]->Fill(jetEta[jetindex1]);   
+  h_jet_pt_hbhe[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_hbhe[1][0]->Fill(jetEta[jetindex1],MyWeight);   
   h_mz_1j_c[1][0]->Fill(MZe_l,MyWeight); 
   h_dielecphi_1j_c[1][0]->Fill(dielecphi,MyWeight); 
   h_dielec_PT_1j_c[1][0]->Fill(dielecpt,MyWeight); 
@@ -661,10 +1081,10 @@ if(numberofPFjets_hbhe!=1) cout<<"DANGER THERE IS AN ERROR 1"<<endl;
 
 }
 
-if (fabs(jetEta[jetindex1])>2.853){
+if (fabs(jetEta[jetindex1])>2.4){
 if(numberofPFjets_hf!=1) cout<<"DANGER THERE IS AN ERROR 2"<<endl;
-  h_jet_pt_hf[1][0]->Fill(jetPt[jetindex1]);   
-  h_jet_eta_hf[1][0]->Fill(jetEta[jetindex1]);   
+  h_jet_pt_hf[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+  h_jet_eta_hf[1][0]->Fill(jetEta[jetindex1],MyWeight);   
   h_mz_1j_hf[1][0]->Fill(MZe_l,MyWeight); 
   h_dielecphi_1j_hf[1][0]->Fill(dielecphi,MyWeight); 
   h_dielec_PT_1j_hf[1][0]->Fill(dielecpt,MyWeight); 
@@ -672,6 +1092,131 @@ if(numberofPFjets_hf!=1) cout<<"DANGER THERE IS AN ERROR 2"<<endl;
 }
 
 }
+
+if(numberofPFjets==2){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all_2j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_all_2j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+   h_mz_2j_all[1][0]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_2j_all[1][0]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_2j_all[1][0]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_2j_all[1][0]->Fill(dielecrapidity,MyWeight); 
+
+if (numberofPFjets_hbhe==2){
+  h_jet_pt_hbhe_2j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_hbhe_2j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+  h_mz_2j_c[1][0]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_2j_c[1][0]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_2j_c[1][0]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_2j_c[1][0]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (numberofPFjets_hf==2){
+  h_jet_pt_hf_2j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+  h_jet_eta_hf_2j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+  h_mz_2j_hf[1][0]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_2j_hf[1][0]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_2j_hf[1][0]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_2j_hf[1][0]->Fill(dielecrapidity,MyWeight); 
+}
+
+}
+
+if(numberofPFjets==3){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all_3j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_all_3j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+   h_mz_3j_all[1][0]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_3j_all[1][0]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_3j_all[1][0]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_3j_all[1][0]->Fill(dielecrapidity,MyWeight); 
+
+if (numberofPFjets_hbhe==3){
+  h_jet_pt_hbhe_3j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_hbhe_3j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+  h_mz_3j_c[1][0]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_3j_c[1][0]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_3j_c[1][0]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_3j_c[1][0]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (numberofPFjets_hf==3){
+  h_jet_pt_hf_3j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+  h_jet_eta_hf_3j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+  h_mz_3j_hf[1][0]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_3j_hf[1][0]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_3j_hf[1][0]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_3j_hf[1][0]->Fill(dielecrapidity,MyWeight); 
+}
+
+}
+
+if(numberofPFjets==4){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all_4j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_all_4j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+   h_mz_4j_all[1][0]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_4j_all[1][0]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_4j_all[1][0]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_4j_all[1][0]->Fill(dielecrapidity,MyWeight); 
+
+if (numberofPFjets_hbhe==4){
+  h_jet_pt_hbhe_4j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_hbhe_4j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+  h_mz_4j_c[1][0]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_4j_c[1][0]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_4j_c[1][0]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_4j_c[1][0]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (numberofPFjets_hf==4){
+  h_jet_pt_hf_4j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+  h_jet_eta_hf_4j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+  h_mz_4j_hf[1][0]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_4j_hf[1][0]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_4j_hf[1][0]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_4j_hf[1][0]->Fill(dielecrapidity,MyWeight); 
+}
+
+}
+
+
+if(numberofPFjets==5){
+//cout<<MyWeight<<endl;
+   h_jet_pt_all_5j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_all_5j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+   h_mz_5j_all[1][0]->Fill(MZe_l,MyWeight); 
+   h_dielecphi_5j_all[1][0]->Fill(dielecphi,MyWeight); 
+   h_dielec_PT_5j_all[1][0]->Fill(dielecpt,MyWeight); 
+   h_dielec_rapidity_5j_all[1][0]->Fill(dielecrapidity,MyWeight); 
+
+if (numberofPFjets_hbhe==5){
+  h_jet_pt_hbhe_5j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+   h_jet_eta_hbhe_5j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+  h_mz_5j_c[1][0]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_5j_c[1][0]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_5j_c[1][0]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_5j_c[1][0]->Fill(dielecrapidity,MyWeight); 
+
+}
+
+if (numberofPFjets_hf==5){
+  h_jet_pt_hf_5j[1][0]->Fill(jetPt[jetindex1],MyWeight);   
+  h_jet_eta_hf_5j[1][0]->Fill(jetEta[jetindex1],MyWeight);   
+  h_mz_5j_hf[1][0]->Fill(MZe_l,MyWeight); 
+  h_dielecphi_5j_hf[1][0]->Fill(dielecphi,MyWeight); 
+  h_dielec_PT_5j_hf[1][0]->Fill(dielecpt,MyWeight); 
+  h_dielec_rapidity_5j_hf[1][0]->Fill(dielecrapidity,MyWeight); 
+}
+
+}
+
+}//if number of jets > 0
+
+}//if opposite sign elec pair in mass window
 
 }//end of event loop
 

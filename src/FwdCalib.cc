@@ -14,7 +14,7 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.9 2012/04/09 15:46:49 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.10 2012/09/12 12:47:17 bbilin Exp $
 //
 //
 
@@ -29,6 +29,8 @@
 #include "FWCore/Framework/interface/Event.h"
 
 #include "FWCore/Framework/interface/EventSetupRecord.h"
+
+#include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
 
 #include "FWCore/Framework/interface/Run.h"
 #include "TH1.h"
@@ -167,7 +169,7 @@ private:
   int event, run,lumi,bxnumber,realdata;
   int hlt_trigger_fired;
 
-float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecDcotTheta[50],ElecMVATrigId[50],ElecMVANonTrigId[50],Elecd0vtx[50],Elecdzvtx[50], chIso03[50],nhIso03[50],phIso03[50],puChIso03[50],relIso[50],relIsodb[50],relIsorho[50];
+float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecDcotTheta[50],ElecMVATrigId[50],ElecMVANonTrigId[50],Elecd0vtx[50],Elecdzvtx[50], chIso03[50],nhIso03[50],phIso03[50],puChIso03[50],relIso[50],relIsodb[50],relIsorho[50],fMVAVar_fbrem[50],  fMVAVar_kfchi2[50], fMVAVar_kfhits[50],fMVAVar_gsfchi2[50],fMVAVar_detacalo[50],fMVAVar_see[50], fMVAVar_spp[50] , fMVAVar_etawidth[50],fMVAVar_phiwidth[50] ,fMVAVar_e1x5e5x5[50] , fMVAVar_R9[50] ,fMVAVar_EoP[50]  ,fMVAVar_IoEmIoP[50],fMVAVar_eleEoPout[50] ,fMVAVar_PreShowerOverRaw[50];
   int Elecindex, HFElecindex,ElecCharge[50],ElecIsEB[50], ElecIsEE[50], Elecooeoop[50]; 
 bool hasMatchedConversion[50]; 
 
@@ -272,7 +274,7 @@ double rhoIso = *rho_;
   iEvent.getByLabel(elecTag_,elecs_h);
   const edm::View<pat::Electron>* elec = elecs_h.failedToGet() ? 0 : &*elecs_h;
 
-
+ // EcalClusterLazyTools const &myEcalCluster;
 
   Handle<BeamSpot> beamSpotHandle;
   if (!iEvent.getByLabel(InputTag("offlineBeamSpot"), beamSpotHandle)) {
@@ -498,6 +500,21 @@ puChIso03[jj]=-99.;
 relIso[jj]=-99.;
 relIsodb[jj]=-99.;
 relIsorho[jj]=-99.;
+fMVAVar_fbrem[jj]=-99;
+  fMVAVar_kfchi2[jj]=-99; 
+fMVAVar_kfhits[jj]=-99;
+fMVAVar_gsfchi2[jj]=-99;
+fMVAVar_detacalo[jj]=-99;
+fMVAVar_see[jj]=-99; 
+fMVAVar_spp[jj] =-99; 
+fMVAVar_etawidth[jj]=-99;
+fMVAVar_phiwidth[jj] =-99;
+fMVAVar_e1x5e5x5[jj] =-99; 
+fMVAVar_R9[jj] =-99;
+fMVAVar_EoP[jj]  =-99;
+fMVAVar_IoEmIoP[jj]=-99;
+fMVAVar_eleEoPout[jj] =-99;
+fMVAVar_PreShowerOverRaw[jj]=-99;
   }
   Elecindex = 0;
 
@@ -542,6 +559,8 @@ const string mvaNonTrigV0 = "mvaNonTrigV0";
 //cout<<el->electronID(mvaTrigV0)<<endl;
 	ElecMVATrigId[Elecindex]= el->electronID(mvaTrigV0);
 	ElecMVANonTrigId[Elecindex]= el->electronID(mvaNonTrigV0);
+
+
 //cout<<el->electronID(mvaTrigV0)<<"  "<<el->electronID(mvaNonTrigV0)<<endl;
 	ElecPt[Elecindex] = el->pt();
         ElecPx[Elecindex] = el->px();
@@ -583,7 +602,40 @@ if(realdata){
 
 relIso[Elecindex] = ( chIso03[Elecindex] + nhIso03[Elecindex] + phIso03[Elecindex] ) / el->pt() ;
  relIsodb[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - 0.5*puChIso03[Elecindex]) )/ el->pt();
-// relIsorho[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - rhoPrime*AEff) )/ el->pt();
+ relIsorho[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - rhoPrime*AEff) )/ el->pt();
+//cout<<relIso[Elecindex]<<"  "<<relIsorho[Elecindex]<<endl;
+
+  bool validKF= false; 
+  reco::TrackRef myTrackRef =el->closestCtfTrackRef();
+  validKF = (myTrackRef.isAvailable());
+  validKF = (myTrackRef.isNonnull());  
+
+
+fMVAVar_fbrem[Elecindex]           =  el->fbrem();
+  fMVAVar_kfchi2[Elecindex]          =  (validKF) ? myTrackRef->normalizedChi2() : 0 ;
+  fMVAVar_kfhits[Elecindex]          =  (validKF) ? myTrackRef->hitPattern().trackerLayersWithMeasurement() : -1. ; 
+
+  fMVAVar_gsfchi2[Elecindex]         =  el->gsfTrack()->normalizedChi2();  
+
+    fMVAVar_detacalo[Elecindex]        =  el->deltaEtaSeedClusterTrackAtCalo();
+  fMVAVar_see[Elecindex]             =  el->sigmaIetaIeta();    //EleSigmaIEtaIEta
+
+ //std::vector<float> vCov = EcalClusterLazyTools localCovariances(*(el->superCluster()->seed())) ;
+  //if (!isnan(vCov[2])) fMVAVar_spp[Elecindex] = sqrt (vCov[2]);   //EleSigmaIPhiIPhi
+  //else fMVAVar_spp[Elecindex] = 0.;    
+    fMVAVar_etawidth[Elecindex]        =  el->superCluster()->etaWidth();
+  fMVAVar_phiwidth[Elecindex]        =  el->superCluster()->phiWidth();
+  fMVAVar_e1x5e5x5[Elecindex]        =  (el->e5x5()) !=0. ? 1.-(el->e1x5()/el->e5x5()) : -1. ;
+
+  //fMVAVar_R9[Elecindex]              =  EcalClusterLazyTools::e3x3(*(el->superCluster()->seed())) / el->superCluster()->rawEnergy();
+  
+  fMVAVar_EoP[Elecindex]             =  el->eSuperClusterOverP();
+
+  fMVAVar_IoEmIoP[Elecindex]         =  (1.0/el->ecalEnergy()) - (1.0 / el->p());  
+  fMVAVar_eleEoPout[Elecindex]       =  el->eEleClusterOverPout();
+  fMVAVar_PreShowerOverRaw[Elecindex]=  el->superCluster()->preshowerEnergy() / el->superCluster()->rawEnergy();
+
+
 
 
       ++Elecindex; 
@@ -672,7 +724,7 @@ for(int i=0; i<100; ++i){
     PFCorrjetPt[pfNjets] = i_jet->pt();
     PFjetCEMF[pfNjets]=i_jet->chargedEmEnergyFraction();
     PFjetNEMF[pfNjets]=i_jet->neutralEmEnergyFraction();
-
+cout<<pfNjets<<"   "<<PFCorrjetPt[pfNjets]/PFjetPt[pfNjets]<<endl;
     PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
     PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
 
@@ -750,6 +802,21 @@ myTree->Branch("Elecooeoop",Elecooeoop,"Elecooeoop[Elecindex]/F");
   myTree->Branch("relIso",relIso,"relIso[Elecindex]/F");
   myTree->Branch("relIsodb",relIsodb,"relIsodb[Elecindex]/F");
   myTree->Branch("relIsorho",relIsorho,"relIsorho[Elecindex]/F");
+  myTree->Branch("fMVAVar_fbrem",fMVAVar_fbrem,"fMVAVar_fbrem[Elecindex]/F");
+  myTree->Branch("fMVAVar_kfchi2",fMVAVar_kfchi2,"fMVAVar_kfchi2[Elecindex]/F");
+  myTree->Branch("fMVAVar_kfhits",fMVAVar_kfhits,"fMVAVar_kfhits[Elecindex]/F");
+  myTree->Branch("fMVAVar_gsfchi2",fMVAVar_gsfchi2,"fMVAVar_gsfchi2[Elecindex]/F");
+  myTree->Branch("fMVAVar_detacalo",fMVAVar_detacalo,"fMVAVar_detacalo[Elecindex]/F");
+  myTree->Branch("fMVAVar_see",fMVAVar_see,"fMVAVar_see[Elecindex]/F");
+  myTree->Branch("fMVAVar_spp",fMVAVar_spp,"fMVAVar_spp[Elecindex]/F");
+  myTree->Branch("fMVAVar_etawidth",fMVAVar_etawidth,"fMVAVar_etawidth[Elecindex]/F");
+  myTree->Branch("fMVAVar_phiwidth",fMVAVar_phiwidth,"fMVAVar_phiwidth[Elecindex]/F");
+  myTree->Branch("fMVAVar_e1x5e5x5",fMVAVar_e1x5e5x5,"fMVAVar_e1x5e5x5[Elecindex]/F");
+  myTree->Branch("fMVAVar_R9",fMVAVar_R9,"fMVAVar_R9[Elecindex]/F");
+  myTree->Branch("fMVAVar_EoP",fMVAVar_EoP,"fMVAVar_EoP[Elecindex]/F");
+  myTree->Branch("fMVAVar_IoEmIoP",fMVAVar_IoEmIoP,"fMVAVar_IoEmIoP[Elecindex]/F");
+  myTree->Branch("fMVAVar_eleEoPout",fMVAVar_eleEoPout,"fMVAVar_eleEoPout[Elecindex]/F");
+  myTree->Branch("fMVAVar_PreShowerOverRaw",fMVAVar_PreShowerOverRaw,"fMVAVar_PreShowerOverRaw[Elecindex]/F");
 
 myTree->Branch("HFElecindex",&HFElecindex,"HFElecindex/I");
 myTree->Branch("hfelec_Pt",hfelec_Pt,"hfelec_Pt[HFElecindex]/F");

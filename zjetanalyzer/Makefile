@@ -1,12 +1,14 @@
 include Makefile.arch
 #----------------------------------------------------------------------------------
 #TESTS           := parton_analyzer.C
-TESTS           := zjetanalyzer.C
+#TESTS           := zjetanalyzer.C
+TESTS           := zjanalyzr.C
 #TESTS           := npileup.C
 #TESTS           := parton_analyzer.C
 TESTO           := $(TESTS:.C=.o)
 #TEST            := parton_analyzer
-TEST            := zjetanalyzer
+#TEST            := zjetanalyzer
+TEST            := zjanalyzr
 #TEST            := npileup
 #TEST            := parton_analyzer
 

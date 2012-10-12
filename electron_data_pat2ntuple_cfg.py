@@ -9,9 +9,7 @@ usePFIso( process )
 from PhysicsTools.PatAlgos.tools.metTools import *
 from PhysicsTools.PatAlgos.tools.coreTools import *
 
-#from RecoJets.JetProducers.kt4PFJets_cfi import *
-#kt6PFJetsForIsolation = kt4PFJets.clone( rParam = 0.6, doRhoFastjet = True )
-#kt6PFJetsForIsolation.Rho_EtaMax = cms.double(2.5)
+
 
 mytrigs = ['*']
 # initialize MessageLogger and output report
@@ -88,7 +86,7 @@ process.primaryVertexFilter = cms.EDFilter("GoodVertexFilter",
 
 
 process.TFileService=cms.Service("TFileService",
-    fileName=cms.string("/tmp/bbilin/elec_ntuple.root")
+    fileName=cms.string("elec_ntuple.root")
 )
 
 
@@ -126,7 +124,9 @@ process.patConversions = cms.EDProducer("PATConversionProducer",
 )
 
 
-
+from RecoJets.JetProducers.kt4PFJets_cfi import *
+process.kt6PFJetsForIsolation = kt4PFJets.clone( rParam = 0.6, doRhoFastjet = True )
+process.kt6PFJetsForIsolation.Rho_EtaMax = cms.double(2.5)
 
 process.demo = cms.EDAnalyzer("ntupleGenerator",
 
@@ -144,9 +144,10 @@ process.scrapingVeto*
     process.mvaID + 
     process.patDefaultSequence+
     process.patConversions*
+process.kt6PFJetsForIsolation*
  process.demo
 )
-#process.out.outputCommands = cms.untracked.vstring('drop *')
+process.out.outputCommands = cms.untracked.vstring('drop *')
 
 #process.out.outputCommands +=[
 #     'keep *_patConversions*_*_*'

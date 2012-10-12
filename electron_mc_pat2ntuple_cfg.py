@@ -3,6 +3,8 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("CALIB")
 
 from PhysicsTools.PatAlgos.patTemplate_cfg import *
+from PhysicsTools.PatAlgos.tools.pfTools import *
+usePFIso( process )
 from PhysicsTools.PatAlgos.tools.metTools import *
 from PhysicsTools.PatAlgos.tools.coreTools import *
 
@@ -17,7 +19,8 @@ inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute'])
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'root://eoscms.cern.ch//eos/cms//store/user/bbilin/ntuples/mc/copy/MyOutputFile_1_1_aS5.root'
+#'root://eoscms.cern.ch//eos/cms//store/user/bbilin/ntuples/mc/copy/MyOutputFile_1_1_aS5.root'
+'root://eoscms.cern.ch//eos/cms//store/user/bbilin/QBH/fastsim/522/522_fast_100_1_zEl.root'
 )
 )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
@@ -111,6 +114,9 @@ process.patConversions = cms.EDProducer("PATConversionProducer",
     # this should be your last selected electron collection name since currently index is used to match with electron later. We can fix this using reference pointer. ,
 )
 
+from RecoJets.JetProducers.kt4PFJets_cfi import *
+process.kt6PFJetsForIsolation = kt4PFJets.clone( rParam = 0.6, doRhoFastjet = True )
+process.kt6PFJetsForIsolation.Rho_EtaMax = cms.double(2.5)
 
 process.demo = cms.EDAnalyzer("ntupleGenerator",
 
@@ -126,6 +132,7 @@ process.p = cms.Path(
     process.mvaID + 
     process.patDefaultSequence+
     process.patConversions*
+process.kt6PFJetsForIsolation*
  process.demo
 )
 process.out.outputCommands = cms.untracked.vstring('drop *')
