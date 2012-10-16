@@ -49,10 +49,10 @@ int ismc =0, istau=0;
 TString dataname;
 //2012 DATA 
 
-myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012A.root");
-myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012B_1.root");
-myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012B_2.root");
-TFile *theFile = new TFile("rootfiles_new/02_10_data.root","RECREATE");
+myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012B_rereco_CMSSW535.root");
+myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012A_rereco_CMSSW535.root");
+myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/2012A_recover_CMSSW535.root");
+TFile *theFile = new TFile("rootfiles_new/16_10_data.root","RECREATE");
  dataname = "DATA";
 
 
@@ -61,27 +61,27 @@ TFile *theFile = new TFile("rootfiles_new/02_10_data.root","RECREATE");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball_1.root");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball_2.root");
  ismc =1;
-TFile *theFile = new TFile("rootfiles_new/02_10_mc.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/16_10_mc.root","RECREATE");
  dataname = "MC";
 */
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_10_50.root");
  ismc =1;
-TFile *theFile = new TFile("rootfiles_new/02_10_mc_low.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/16_10_mc_low.root","RECREATE");
  dataname = "MC_LOW";
 */
 
 //TTbar
 /*
-myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_tt.root");
-TFile *theFile = new TFile("rootfiles_new/02_10_bg_tt.root","RECREATE");
+myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_tt_CMSSW535.root");
+TFile *theFile = new TFile("rootfiles_new/16_10_bg_tt.root","RECREATE");
  dataname = "TTBAR";
 */
 
 //WJets
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_WJets.root");
-TFile *theFile = new TFile("rootfiles_new/02_10_bg_wjets.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/16_10_bg_wjets.root","RECREATE");
  dataname = "WJets";
 */
 
@@ -90,28 +90,28 @@ TFile *theFile = new TFile("rootfiles_new/02_10_bg_wjets.root","RECREATE");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball_1.root");
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/mc_Madgraph_tarball_2.root");
  istau =1;
-TFile *theFile = new TFile("rootfiles_new/02_10_bg_ztautau.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/16_10_bg_ztautau.root","RECREATE");
  dataname = "ZTauTau";
 */
 
 //WW
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_ww.root");
-TFile *theFile = new TFile("rootfiles_new/02_10_ww.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/16_10_ww.root","RECREATE");
  dataname = "WW";
 */
 
 //WZ
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_wz.root");
-TFile *theFile = new TFile("rootfiles_new/02_10_wz.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/16_10_wz.root","RECREATE");
  dataname = "WZ";
 */
 
 //ZZ
 /*
 myTree.Add("root://eoscms.cern.ch//eos/cms/store/user/bbilin/ntuples/bg_zz.root");
-TFile *theFile = new TFile("rootfiles_new/02_10_zz.root","RECREATE");
+TFile *theFile = new TFile("rootfiles_new/16_10_zz.root","RECREATE");
  dataname = "ZZ";
 */
 
@@ -138,7 +138,7 @@ double MyWeight;
 
  bool hasMatchedConversion[50];
 
-  float PFjetEta[50], PFjetPhi[50],PFCorrjetPt[50],PFHadEHF[50],PFEmEHF[50];
+  float PFjetEta[50], PFjetPhi[50],PFCorrjetPt[50],PFjetPt[50],PFHadEHF[50],PFEmEHF[50],PFjet_mva[50];
  //
   //met 
 
@@ -214,8 +214,10 @@ myTree.SetBranchAddress("nGoodVertices", &nGoodVertices);
 myTree.SetBranchAddress("MyWeight", &MyWeight );
 
   myTree.SetBranchAddress("pfNjets",&pfNjets);
+  myTree.SetBranchAddress("PFjet_mva",PFjet_mva);
   myTree.SetBranchAddress("PFjetEta",PFjetEta);
   myTree.SetBranchAddress("PFjetPhi",PFjetPhi);
+  myTree.SetBranchAddress("PFjetPt",PFjetPt);
   myTree.SetBranchAddress("PFCorrjetPt",PFCorrjetPt);
   myTree.SetBranchAddress("PFHadEHF",PFHadEHF);
   myTree.SetBranchAddress("PFEmEHF",PFEmEHF);
@@ -266,6 +268,45 @@ TH1F * h_efMVAVar_EoP_mva0_do02_pfiso01_mhits0 =  new TH1F ("h_efMVAVar_EoP_mva0
 TH1F * h_efMVAVar_IoEmIoP_mva0_do02_pfiso01_mhits0=  new TH1F ("h_efMVAVar_IoEmIoP_mva0_do02_pfiso01_mhits0","h_efMVAVar_IoEmIoP_mva0_do02_pfiso01_mhits0",120,-4,4);
 TH1F * h_efMVAVar_eleEoPout_mva0_do02_pfiso01_mhits0=  new TH1F ("h_efMVAVar_eleEoPout_mva0_do02_pfiso01_mhits0","h_efMVAVar_eleEoPout_mva0_do02_pfiso01_mhits0",800,0,2000);
 TH1F * h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0=  new TH1F ("h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0","h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0",120,0,20);
+
+TH1F * h_eEta_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_eEta_mva0_do02_pfiso01_mhits0_ss","h_eEta_mva0_do02_pfiso01_mhits0_ss",120,-5.2,5.2);
+TH1F * h_ePhi_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_ePhi_mva0_do02_pfiso01_mhits0_ss","h_ePhi_mva0_do02_pfiso01_mhits0_ss",120,-6.,6.);
+TH1F * h_ePt_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_ePt_mva0_do02_pfiso01_mhits0_ss","h_ePt_mva0_do02_pfiso01_mhits0_ss",120,0.,500.);
+TH1F * h_ePx_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_ePx_mva0_do02_pfiso01_mhits0_ss","h_ePx_mva0_do02_pfiso01_mhits0_ss",120,0.,500.);
+TH1F * h_ePy_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_ePy_mva0_do02_pfiso01_mhits0_ss","h_ePy_mva0_do02_pfiso01_mhits0_ss",120,0.,500.);
+TH1F * h_ePz_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_ePz_mva0_do02_pfiso01_mhits0_ss","h_ePz_mva0_do02_pfiso01_mhits0_ss",120,0.,500.);
+TH1F * h_eM_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_eM_mva0_do02_pfiso01_mhits0_ss","h_eM_mva0_do02_pfiso01_mhits0_ss",120,0.,1000.);
+TH1F * h_eE_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_eE_mva0_do02_pfiso01_mhits0_ss","h_eE_mva0_do02_pfiso01_mhits0_ss",120,0.,500.);
+TH1F * h_eMVATrigId_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_eMVATrigId_mva0_do02_pfiso01_mhits0_ss","h_eMVATrigId_mva0_do02_pfiso01_mhits0_ss",120,-1.,1.);
+TH1F * h_escSigmaIEtaIEta_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_escSigmaIEtaIEta_mva0_do02_pfiso01_mhits0_ss","h_escSigmaIEtaIEta_mva0_do02_pfiso01_mhits0_ss",120,0,0.1);
+TH1F * h_edeltaPhiSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_edeltaPhiSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss","h_edeltaPhiSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss",120,-8.,8.);
+TH1F * h_edeltaEtaSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss =  new TH1F ("h_edeltaEtaSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss","h_edeltaEtaSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss ",120,-8.,8);
+TH1F * h_ehadronicOverEm_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_ehadronicOverEm_mva0_do02_pfiso01_mhits0_ss","h_ehadronicOverEm_mva0_do02_pfiso01_mhits0_ss",120,0.,200.);
+TH1F * h_egsfTrack_numberOfLostHits_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_egsfTrack_numberOfLostHits_mva0_do02_pfiso01_mhits0_ss","h_egsfTrack_numberOfLostHits_mva0_do02_pfiso01_mhits0_ss",8,-0.5,7.5);
+TH1F * h_ed0vtx_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_ed0vtx_mva0_do02_pfiso01_mhits0_ss","h_ed0vtx_mva0_do02_pfiso01_mhits0_ss",120,-80,80);
+TH1F * h_edzvtx_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_edzvtx_mva0_do02_pfiso01_mhits0_ss","h_edzvtx_mva0_do02_pfiso01_mhits0_ss",600,-400.,1000.);
+//TH1F * h_echIso03=  new TH1F ("h_echIso03","h_echIso03",300,0.,1000.);
+//TH1F * h_enhIso03=  new TH1F ("h_enhIso03","h_enhIso03",300,0,1000);
+//TH1F * h_ephIso03=  new TH1F ("h_ephIso03","h_ephIso03",300,0,1000);
+//TH1F * h_epuChIso03=  new TH1F ("h_epuChIso03","h_epuChIso03",300,0,1000);
+TH1F * h_erelIso_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_erelIso_mva0_do02_pfiso01_mhits0_ss","h_erelIso_mva0_do02_pfiso01_mhits0_ss",300,0,1000);
+TH1F * h_erelIsodb_mva0_do02_pfiso01_mhits0_ss =  new TH1F ("h_erelIsodb_mva0_do02_pfiso01_mhits0_ss","h_erelIsodb_mva0_do02_pfiso01_mhits0_ss",300,0,1000);
+TH1F * h_erelIsorho_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_erelIsorho_mva0_do02_pfiso01_mhits0_ss","h_erelIsorho_mva0_do02_pfiso01_mhits0_ss_mva0_do02_pfiso01_mhits0_ss",300,0,1000);
+TH1F * h_efMVAVar_fbrem_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_fbrem_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_fbrem_mva0_do02_pfiso01_mhits0_ss",600,-1400.,0.);
+TH1F * h_efMVAVar_kfchi2_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_kfchi2_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_kfchi2_mva0_do02_pfiso01_mhits0_ss",120,0,40.);
+TH1F * h_efMVAVar_kfhits_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_kfhits_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_kfhits_mva0_do02_pfiso01_mhits0_ss",12,-2.5,9.5);
+TH1F * h_efMVAVar_gsfchi2_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_gsfchi2_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_gsfchi2_mva0_do02_pfiso01_mhits0_ss",100000,0,900000.);
+TH1F * h_efMVAVar_detacalo_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_detacalo_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_detacalo_mva0_do02_pfiso01_mhits0_ss",120,-8,8);
+TH1F * h_efMVAVar_see_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_see_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_see_mva0_do02_pfiso01_mhits0_ss",480,-8,8);
+TH1F * h_efMVAVar_spp_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_spp_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_spp_mva0_do02_pfiso01_mhits0_ss",120,-8,8);
+TH1F * h_efMVAVar_etawidth_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_etawidth_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_etawidth_mva0_do02_pfiso01_mhits0_ss",120,0,12);
+TH1F * h_efMVAVar_phiwidth_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_phiwidth_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_phiwidth_mva0_do02_pfiso01_mhits0_ss",120,0,12);
+TH1F * h_efMVAVar_e1x5e5x5_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_e1x5e5x5_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_e1x5e5x5_mva0_do02_pfiso01_mhits0_ss",120,-50.,50.);
+TH1F * h_efMVAVar_R9_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_R9_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_R9_mva0_do02_pfiso01_mhits0_ss",120,0,1000);
+TH1F * h_efMVAVar_EoP_mva0_do02_pfiso01_mhits0_ss =  new TH1F ("h_efMVAVar_EoP_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_EoP_mva0_do02_pfiso01_mhits0_ss",800,0,2500);
+TH1F * h_efMVAVar_IoEmIoP_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_IoEmIoP_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_IoEmIoP_mva0_do02_pfiso01_mhits0_ss",120,-4,4);
+TH1F * h_efMVAVar_eleEoPout_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_eleEoPout_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_eleEoPout_mva0_do02_pfiso01_mhits0_ss",800,0,2000);
+TH1F * h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0_ss=  new TH1F ("h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0_ss","h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0_ss",120,0,20);
 
 TH1F* h_nelec_fire_loose = new TH1F ("h_nelec_fire_loose","h_nelec_fire_loose",50,-0.5,49.5);
 TH1F* h_no_good_vtx = new TH1F ("h_no_good_vtx","h_no_good_vtx",60,-0.5,59.5);
@@ -553,11 +594,11 @@ for(int i=0; i<50; i++){elec_ind_loose[i]=0;elec_ind_anti_iso[i]=0;}
 bool MatchedConversion[50];
 int eCharge[50]={},nelec_fire_loose=0, n_anti_iso=0;
 float ePt[50] = {}, eEta[50] = {}, ePhi[50]= {}, ePx[50]={}, ePy[50]={}, ePz[50] = {}, eM[50]= {}, eE[50]={}, eMVATrigId[50]={}, escSigmaIEtaIEta[50]={}, edeltaPhiSuperClusterTrackAtVtx[50]={}, edeltaEtaSuperClusterTrackAtVtx[50]= {}, ehadronicOverEm[50]={} , egsfTrack_numberOfLostHits[50]={},ed0vtx[50]={},edzvtx[50]={}, /*echIso03[50]={},enhIso03[50]={},ephIso03[50]={},epuChIso03[50]={},*/erelIso[50]={},erelIsodb[50]={},erelIsorho[50]={},efMVAVar_fbrem[50]={},  efMVAVar_kfchi2[50]={}, efMVAVar_kfhits[50]={},efMVAVar_gsfchi2[50]={},efMVAVar_detacalo[50]={},efMVAVar_see[50]={}, efMVAVar_spp[50]={} , efMVAVar_etawidth[50]={},efMVAVar_phiwidth[50]={} ,efMVAVar_e1x5e5x5[50]={} , efMVAVar_R9[50]={} ,efMVAVar_EoP[50]={}  ,efMVAVar_IoEmIoP[50]={},efMVAVar_eleEoPout[50]={} ,efMVAVar_PreShowerOverRaw[50]={} ;  /*,eMVANonTrigId[50]={}*/; 
-float jetEta[50]={}, jetPhi[50]={}, jetPt[50]={},jPt[50]={}, HadEHF[200]={}, EmEHF[200]={};
+float jetEta[50]={}, jetPhi[50]={}, jetPt[50]={},jPt[50]={}, HadEHF[200]={}, EmEHF[200]={},jet_mva[200];
 int sorted_jet_index[50]={};
 
 for(int ii=0;ii<pfNjets;ii++){
-jPt[ii]=0; jetPt[ii]=0; jetEta[ii]=0; jetPhi[ii]=0; jetPt[ii]=0,HadEHF[ii]=0, EmEHF[ii]=0; 
+jet_mva[ii]=0;jPt[ii]=0; jetPt[ii]=0; jetEta[ii]=0; jetPhi[ii]=0; jetPt[ii]=0,HadEHF[ii]=0, EmEHF[ii]=0; 
 }
 
 
@@ -584,7 +625,7 @@ nparticle_gen++ ;//9 or 10 only
 if(!realdata && ((ismc ==1 && mcIsElec==0)||(istau==1 && mcIsTau==0))) continue;
 
 for(int ii=0;ii<pfNjets;ii++){
-jPt[ii]=fabs(PFCorrjetPt[ii]);
+if( fabs(PFjetEta[ii])<2.4)jPt[ii]=fabs(PFCorrjetPt[ii]); if( fabs(PFjetEta[ii])>2.4)jPt[ii]=fabs(PFjetPt[ii]);
 }
 
 int sort_jet = 0;
@@ -594,7 +635,8 @@ TMath::Sort(pfNjets,jPt,sorted_jet_index);
 for(int ii = 0 ; ii < pfNjets ; ii++){
 
  sort_jet = sorted_jet_index[ind];
-
+jet_mva[ind]=PFjet_mva[sort_jet];
+//cout<<jet_mva[ind]<<endl;
 jetEta[ind]=PFjetEta[sort_jet]  ;
 jetPhi[ind]=PFjetPhi[sort_jet] ;
 jetPt[ind]= jPt[sort_jet];
@@ -705,7 +747,45 @@ if (eCharge[a]*eCharge[b] != -1){
       h_dielecphi[1][1]->Fill(dielecphi,MyWeight); 
       h_dielec_rapidity[1][1]->Fill(dielecrapidity,MyWeight); 
 
-if(MZe_l<120 && MZe_l>60) select_ss=1;
+if(MZe_l<120 && MZe_l>60){
+ select_ss=1;
+h_eEta_mva0_do02_pfiso01_mhits0_ss->Fill( eEta[a],MyWeight);
+h_ePhi_mva0_do02_pfiso01_mhits0_ss->Fill( ePhi[a],MyWeight);
+h_ePt_mva0_do02_pfiso01_mhits0_ss->Fill( ePt[a],MyWeight);
+h_ePx_mva0_do02_pfiso01_mhits0_ss->Fill( ePx[a],MyWeight);
+h_ePy_mva0_do02_pfiso01_mhits0_ss->Fill(  ePy[a],MyWeight);
+h_ePz_mva0_do02_pfiso01_mhits0_ss->Fill(ePz[a],MyWeight);
+h_eM_mva0_do02_pfiso01_mhits0_ss->Fill( eM[a],MyWeight); 
+h_eE_mva0_do02_pfiso01_mhits0_ss->Fill( eE[a],MyWeight); 
+h_eMVATrigId_mva0_do02_pfiso01_mhits0_ss->Fill(eMVATrigId[a],MyWeight);
+h_escSigmaIEtaIEta_mva0_do02_pfiso01_mhits0_ss->Fill( escSigmaIEtaIEta[a],MyWeight); 
+h_edeltaPhiSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss->Fill(edeltaPhiSuperClusterTrackAtVtx[a],MyWeight);
+h_edeltaEtaSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss->Fill( edeltaEtaSuperClusterTrackAtVtx[a],MyWeight); 
+h_ehadronicOverEm_mva0_do02_pfiso01_mhits0_ss->Fill( ehadronicOverEm[a],MyWeight);
+h_egsfTrack_numberOfLostHits_mva0_do02_pfiso01_mhits0_ss->Fill( egsfTrack_numberOfLostHits[a],MyWeight);
+h_ed0vtx_mva0_do02_pfiso01_mhits0_ss->Fill(ed0vtx[a],MyWeight);
+h_edzvtx_mva0_do02_pfiso01_mhits0_ss->Fill( edzvtx[a],MyWeight); 
+h_erelIso_mva0_do02_pfiso01_mhits0_ss->Fill(erelIso[a],MyWeight);
+h_erelIsodb_mva0_do02_pfiso01_mhits0_ss->Fill(erelIsodb[a],MyWeight);
+h_erelIsorho_mva0_do02_pfiso01_mhits0_ss->Fill(erelIsorho[a],MyWeight);
+h_efMVAVar_fbrem_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_fbrem[a],MyWeight);  
+h_efMVAVar_kfchi2_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_kfchi2[a],MyWeight); 
+h_efMVAVar_kfhits_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_kfhits[a],MyWeight);
+h_efMVAVar_gsfchi2_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_gsfchi2[a],MyWeight);
+h_efMVAVar_detacalo_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_detacalo[a],MyWeight);
+h_efMVAVar_see_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_see[a],MyWeight) ;
+h_efMVAVar_spp_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_spp[a],MyWeight) ; 
+h_efMVAVar_etawidth_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_etawidth[a],MyWeight);
+h_efMVAVar_phiwidth_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_phiwidth[a],MyWeight); 
+h_efMVAVar_e1x5e5x5_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_e1x5e5x5[a],MyWeight);  
+h_efMVAVar_R9_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_R9[a],MyWeight) ;
+h_efMVAVar_EoP_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_EoP[a],MyWeight);  
+h_efMVAVar_IoEmIoP_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_IoEmIoP[a],MyWeight);
+h_efMVAVar_eleEoPout_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_eleEoPout[a],MyWeight); 
+h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0_ss->Fill(efMVAVar_PreShowerOverRaw[a],MyWeight);
+}
+
+
 }
 
 if(eCharge[a]*eCharge[b]==-1 ){
@@ -789,8 +869,10 @@ if(select_ss==1){
  if (markPFjet_ss == 1)continue;
 
 
-	if (jetPt[PF] < 30.) continue;
+	if ((jetPt[PF] < 30.) ||(jet_mva[PF]<0. &&fabs(jetEta[PF])<2.4)) continue;
+//if(jet_mva[PF]>0. && fabs(jetEta[PF])>2.4 ) cout<<"Forward jet with eta "<<jetEta[PF]<<" with Jet MVA "<< jet_mva[PF]<<endl;
 
+if(jet_mva[PF]<0. && fabs(jetEta[PF])<2.4 ) cout<<"DANGER A BIG BUG IN THE CODE!!!!"<<endl;
 
 	  numberofPFjets_ss += 1;
 	  jetindex_ss[j_in_ss]=PF;
@@ -1020,8 +1102,10 @@ if(selectt==1){
  if (markPFjet == 1)continue;
 
 
-	if (jetPt[PF] < 30.) continue;
+		if ((jetPt[PF] < 30.) ||(jet_mva[PF]<0. &&fabs(jetEta[PF])<2.4)) continue;
+if(jet_mva[PF]>0. && fabs(jetEta[PF])>2.9 ) cout<<dataname<<": Forward jet with eta "<<jetEta[PF]<<" with Jet MVA "<< jet_mva[PF]<<endl;
 
+if(jet_mva[PF]<0. && fabs(jetEta[PF])<2.4 ) cout<<"DANGER A BIG BUG IN THE CODE!!!!"<<endl;
 
 	  numberofPFjets += 1;
 	  jetindex[j_in]=PF;
