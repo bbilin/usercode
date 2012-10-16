@@ -6,21 +6,21 @@ gROOT->SetBatch(kTRUE);
 
 TFile * file[16];
 
-file[0] = TFile::Open("rootfiles_new/02_10_data.root");
+file[0] = TFile::Open("rootfiles_new/16_10_52X_data.root");
 
-file[1] = TFile::Open("rootfiles_new/02_10_mc.root");
+file[1] = TFile::Open("rootfiles_new/16_10_52X_mc.root");
 
-file[2] = TFile::Open("rootfiles_new/02_10_bg_ztautau.root");
+file[2] = TFile::Open("rootfiles_new/16_10_52X_bg_ztautau.root");
 
-file[3] = TFile::Open("rootfiles_new/02_10_bg_tt.root");
+file[3] = TFile::Open("rootfiles_new/16_10_52X_bg_tt.root");
 
-file[4] = TFile::Open("rootfiles_new/02_10_bg_wjets.root");
+file[4] = TFile::Open("rootfiles_new/16_10_52X_bg_wjets.root");
 
-file[5] = TFile::Open("rootfiles_new/02_10_ww.root");
-file[6] = TFile::Open("rootfiles_new/02_10_wz.root");
-file[7] = TFile::Open("rootfiles_new/02_10_zz.root");
+file[5] = TFile::Open("rootfiles_new/16_10_52X_ww.root");
+file[6] = TFile::Open("rootfiles_new/16_10_52X_wz.root");
+file[7] = TFile::Open("rootfiles_new/16_10_52X_zz.root");
 
-file[8] = TFile::Open("rootfiles_new/02_10_mc_low.root");
+file[8] = TFile::Open("rootfiles_new/16_10_52X_mc_low.root");
 
 TH1F *h_[500][500];
 TH1F *h1_[500][500];
@@ -1230,9 +1230,201 @@ h_[ii][238]= (TH1F*)h2_[ii][238]->Clone();
 h_[ii][238]->GetXaxis()->SetTitle("Jet #eta of leading jet in Z + 5 forward jet events");
 h_[ii][238]->GetYaxis()->SetTitle("Entries");
 
+h2_[ii][239] =(TH1F*) file[ii] ->Get("h_eEta_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][239]= (TH1F*)h2_[ii][239]->Clone();
+h_[ii][239]->GetXaxis()->SetTitle("Electron Eta  ");
+h_[ii][239]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][240] =(TH1F*) file[ii] ->Get("h_ePhi_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][240]= (TH1F*)h2_[ii][240]->Clone();
+h_[ii][240]->GetXaxis()->SetTitle("Electron Phi  ");
+h_[ii][240]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][241] =(TH1F*) file[ii] ->Get("h_ePt_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][241]= (TH1F*)h2_[ii][241]->Clone();
+h_[ii][241]->GetXaxis()->SetTitle("Electron Pt  ");
+h_[ii][241]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][242] =(TH1F*) file[ii] ->Get("h_ePx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][242]= (TH1F*)h2_[ii][242]->Clone();
+h_[ii][242]->GetXaxis()->SetTitle("Electron Px  ");
+h_[ii][242]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][243] =(TH1F*) file[ii] ->Get("h_ePy_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][243]= (TH1F*)h2_[ii][243]->Clone();
+h_[ii][243]->GetXaxis()->SetTitle("Electron Py  ");
+h_[ii][243]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][244] =(TH1F*) file[ii] ->Get("h_ePz_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][244]= (TH1F*)h2_[ii][244]->Clone();
+h_[ii][244]->GetXaxis()->SetTitle("Electron Pz  ");
+h_[ii][244]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][245] =(TH1F*) file[ii] ->Get("h_eM_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][245]= (TH1F*)h2_[ii][245]->Clone();
+h_[ii][245]->GetXaxis()->SetTitle("Electron M  ");
+h_[ii][245]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][246] =(TH1F*) file[ii] ->Get("h_eE_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][246]= (TH1F*)h2_[ii][246]->Clone();
+h_[ii][246]->GetXaxis()->SetTitle("Electron Energy  ");
+h_[ii][246]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][247] =(TH1F*) file[ii] ->Get("h_eMVATrigId_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][247]= (TH1F*)h2_[ii][247]->Clone();
+h_[ii][247]->GetXaxis()->SetTitle("Electron MVA Trig Id  ");
+h_[ii][247]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][248] =(TH1F*) file[ii] ->Get("h_escSigmaIEtaIEta_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][248]= (TH1F*)h2_[ii][248]->Clone();
+h_[ii][248]->GetXaxis()->SetTitle("Electron SuperCluster #sigma i #eta i #eta ");
+h_[ii][248]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][249] =(TH1F*) file[ii] ->Get("h_edeltaPhiSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][249]= (TH1F*)h2_[ii][249]->Clone();
+h_[ii][249]->GetXaxis()->SetTitle("Electron SuperCluster #Delta #phi  ");
+h_[ii][249]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][250] =(TH1F*) file[ii] ->Get("h_edeltaEtaSuperClusterTrackAtVtx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][250]= (TH1F*)h2_[ii][250]->Clone();
+h_[ii][250]->GetXaxis()->SetTitle("Electron SuperCluster #Delta #eta  ");
+h_[ii][250]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][251] =(TH1F*) file[ii] ->Get("h_ehadronicOverEm_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][251]= (TH1F*)h2_[ii][251]->Clone();
+h_[ii][251]->GetXaxis()->SetTitle("Electron E/M  ");
+h_[ii][251]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][252] =(TH1F*) file[ii] ->Get("h_egsfTrack_numberOfLostHits_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][252]= (TH1F*)h2_[ii][252]->Clone();
+h_[ii][252]->GetXaxis()->SetTitle("Electron number of lost hits  ");
+h_[ii][252]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][253] =(TH1F*) file[ii] ->Get("h_ed0vtx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][253]= (TH1F*)h2_[ii][253]->Clone();
+h_[ii][253]->GetXaxis()->SetTitle("Electron d0  ");
+h_[ii][253]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][254] =(TH1F*) file[ii] ->Get("h_edzvtx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][254]= (TH1F*)h2_[ii][254]->Clone();
+h_[ii][254]->GetXaxis()->SetTitle("Electron dz  ");
+h_[ii][254]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][255] =(TH1F*) file[ii] ->Get("h_edzvtx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][255]= (TH1F*)h2_[ii][255]->Clone();
+h_[ii][255]->GetXaxis()->SetTitle("OBSOLETE_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][255]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][256] =(TH1F*) file[ii] ->Get("h_edzvtx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][256]= (TH1F*)h2_[ii][256]->Clone();
+h_[ii][256]->GetXaxis()->SetTitle("OBSOLETE_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][256]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][257] =(TH1F*) file[ii] ->Get("h_edzvtx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][257]= (TH1F*)h2_[ii][257]->Clone();
+h_[ii][257]->GetXaxis()->SetTitle("OBSOLETE_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][257]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][258] =(TH1F*) file[ii] ->Get("h_edzvtx_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][258]= (TH1F*)h2_[ii][258]->Clone();
+h_[ii][258]->GetXaxis()->SetTitle("OBSOLETE_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][258]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][259] =(TH1F*) file[ii] ->Get("h_erelIso_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][259]= (TH1F*)h2_[ii][259]->Clone();
+h_[ii][259]->GetXaxis()->SetTitle("Electron PF iso  ");
+h_[ii][259]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][260] =(TH1F*) file[ii] ->Get("h_erelIsodb_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][260]= (TH1F*)h2_[ii][260]->Clone();
+h_[ii][260]->GetXaxis()->SetTitle("db corrected Electron PF iso  ");
+h_[ii][260]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][261] =(TH1F*) file[ii] ->Get("h_erelIsorho_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][261]= (TH1F*)h2_[ii][261]->Clone();
+h_[ii][261]->GetXaxis()->SetTitle("EA corrected Electron PF iso  ");
+h_[ii][261]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][262] =(TH1F*) file[ii] ->Get("h_efMVAVar_fbrem_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][262]= (TH1F*)h2_[ii][262]->Clone();
+h_[ii][262]->GetXaxis()->SetTitle("Electron fbrem(mva variable)  ");
+h_[ii][262]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][263] =(TH1F*) file[ii] ->Get("h_efMVAVar_kfchi2_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][263]= (TH1F*)h2_[ii][263]->Clone();
+h_[ii][263]->GetXaxis()->SetTitle("Electron kfchi^2(mva variable)  ");
+h_[ii][263]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][264] =(TH1F*) file[ii] ->Get("h_efMVAVar_kfhits_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][264]= (TH1F*)h2_[ii][264]->Clone();
+h_[ii][264]->GetXaxis()->SetTitle("Electron kfhits(mva variable)  ");
+h_[ii][264]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][265] =(TH1F*) file[ii] ->Get("h_efMVAVar_gsfchi2_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][265]= (TH1F*)h2_[ii][265]->Clone();
+h_[ii][265]->GetXaxis()->SetTitle("Electron gsfchi^2(mva variable)  ");
+h_[ii][265]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][266] =(TH1F*) file[ii] ->Get("h_efMVAVar_detacalo_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][266]= (TH1F*)h2_[ii][266]->Clone();
+h_[ii][266]->GetXaxis()->SetTitle("Electron d #eta Calo(mva variable)  ");
+h_[ii][266]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][267] =(TH1F*) file[ii] ->Get("h_efMVAVar_see_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][267]= (TH1F*)h2_[ii][267]->Clone();
+h_[ii][267]->GetXaxis()->SetTitle("Electron  #sigma i #eta i #eta(mva variable)  ");
+h_[ii][267]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][268] =(TH1F*) file[ii] ->Get("h_efMVAVar_spp_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][268]= (TH1F*)h2_[ii][268]->Clone();
+h_[ii][268]->GetXaxis()->SetTitle("Electron  #sigma i #phi i #phi(mva variable)  ");
+h_[ii][268]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][269] =(TH1F*) file[ii] ->Get("h_efMVAVar_etawidth_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][269]= (TH1F*)h2_[ii][269]->Clone();
+h_[ii][269]->GetXaxis()->SetTitle("Electron eta width(mva variable)  ");
+h_[ii][269]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][270] =(TH1F*) file[ii] ->Get("h_efMVAVar_phiwidth_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][270]= (TH1F*)h2_[ii][270]->Clone();
+h_[ii][270]->GetXaxis()->SetTitle("Electron phi width(mva variable)  ");
+h_[ii][270]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][271] =(TH1F*) file[ii] ->Get("h_efMVAVar_e1x5e5x5_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][271]= (TH1F*)h2_[ii][271]->Clone();
+h_[ii][271]->GetXaxis()->SetTitle("Electron e1x5/e5x5(mva variable)  ");
+h_[ii][271]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][272] =(TH1F*) file[ii] ->Get("h_efMVAVar_R9_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][272]= (TH1F*)h2_[ii][272]->Clone();
+h_[ii][272]->GetXaxis()->SetTitle("Second Leading Electron MVA_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][272]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][273] =(TH1F*) file[ii] ->Get("h_efMVAVar_EoP_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][273]= (TH1F*)h2_[ii][273]->Clone();
+h_[ii][273]->GetXaxis()->SetTitle("Electron scE/p(mva variable)  ");
+h_[ii][273]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][274] =(TH1F*) file[ii] ->Get("h_efMVAVar_IoEmIoP_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][274]= (TH1F*)h2_[ii][274]->Clone();
+h_[ii][274]->GetXaxis()->SetTitle("Electron 1/E - 1/p(mva variable)  ");
+h_[ii][274]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][275] =(TH1F*) file[ii] ->Get("h_efMVAVar_eleEoPout_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][275]= (TH1F*)h2_[ii][275]->Clone();
+h_[ii][275]->GetXaxis()->SetTitle("Electron sc E/P out(mva variable)  ");
+h_[ii][275]->GetYaxis()->SetTitle("Entries");
+
+h2_[ii][276] =(TH1F*) file[ii] ->Get("h_efMVAVar_PreShowerOverRaw_mva0_do02_pfiso01_mhits0_ss");
+h_[ii][276]= (TH1F*)h2_[ii][276]->Clone();
+h_[ii][276]->GetXaxis()->SetTitle("Electron PreShowerOverRaw(mva variable)  ");
+h_[ii][276]->GetYaxis()->SetTitle("Entries");
+
+
 
 }
-int number_of_histos = 239;
+
+int number_of_histos = 277;
 char name1[500];
 char name2[500];
 // TH1F *hsum[100];
@@ -1257,6 +1449,7 @@ ss_index[7]=142;
 for(int j==0;j<numberoffiles;j++){
 for(int ii = 0; ii<number_of_histos;ii++){
 if(ii>7 && ii<29)ss_index[ii]=ii+138;
+if(ii>28&&ii<67)ss_index[ii]=ii + 210;
 if(ii>69 && ii<142)ss_index[ii]=ii+97;
 int jj= ss_index[ii];
 cout<<ii<<"  "<<ss_index[ii]<<endl;
@@ -1348,8 +1541,8 @@ Mont[ii]->Divide(h_[0][ii],mc_bg,1.0,1.0);
 
 
 
-sprintf(name1,"histo_z_plot_new/hist_%i.root",ii);
-sprintf(name2,"histo_z_plot_new/hist_%i.pdf",ii);
+sprintf(name1,"histo_z_plot_new_52X/hist_%i.root",ii);
+sprintf(name2,"histo_z_plot_new_52X/hist_%i.pdf",ii);
           c[ii]->cd(1); 
 
 mc_bg->Draw("hhist");
