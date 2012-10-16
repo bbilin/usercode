@@ -6,21 +6,21 @@ gROOT->SetBatch(kTRUE);
 
 TFile * file[16];
 
-file[0] = TFile::Open("rootfiles_new/16_10_52X_data.root");
+file[0] = TFile::Open("rootfiles_new/16_10_data.root");
 
-file[1] = TFile::Open("rootfiles_new/16_10_52X_mc.root");
+file[1] = TFile::Open("rootfiles_new/16_10_mc.root");
 
-file[2] = TFile::Open("rootfiles_new/16_10_52X_bg_ztautau.root");
+file[2] = TFile::Open("rootfiles_new/16_10_bg_ztautau.root");
 
-file[3] = TFile::Open("rootfiles_new/16_10_52X_bg_tt.root");
+file[3] = TFile::Open("rootfiles_new/16_10_bg_tt.root");
 
-file[4] = TFile::Open("rootfiles_new/16_10_52X_bg_wjets.root");
+file[4] = TFile::Open("rootfiles_new/16_10_bg_wjets.root");
 
-file[5] = TFile::Open("rootfiles_new/16_10_52X_ww.root");
-file[6] = TFile::Open("rootfiles_new/16_10_52X_wz.root");
-file[7] = TFile::Open("rootfiles_new/16_10_52X_zz.root");
+file[5] = TFile::Open("rootfiles_new/16_10_ww.root");
+file[6] = TFile::Open("rootfiles_new/16_10_wz.root");
+file[7] = TFile::Open("rootfiles_new/16_10_zz.root");
 
-file[8] = TFile::Open("rootfiles_new/16_10_52X_mc_low.root");
+file[8] = TFile::Open("rootfiles_new/16_10_mc_low.root");
 
 TH1F *h_[500][500];
 TH1F *h1_[500][500];
@@ -142,7 +142,7 @@ h_[ii][21]= (TH1F*)h2_[ii][21]->Clone();
 h_[ii][21]->GetXaxis()->SetTitle("# of good vertices of Z events ");
 h_[ii][21]->GetYaxis()->SetTitle("Entries");
 
-h2_[ii][22] =(TH1F*) file[ii] ->Get("h_mz_same_sign_1_0");
+h2_[ii][22] =(TH1F*) file[ii] ->Get("h_mz_1_1");
 h_[ii][22]= (TH1F*)h2_[ii][22]->Clone();
 h_[ii][22]->GetXaxis()->SetTitle("same sign electron invariant mass with PFIso<0.1");
 h_[ii][22]->GetYaxis()->SetTitle("Entries");
@@ -1419,6 +1419,7 @@ h2_[ii][276] =(TH1F*) file[ii] ->Get("h_efMVAVar_PreShowerOverRaw_mva0_do02_pfis
 h_[ii][276]= (TH1F*)h2_[ii][276]->Clone();
 h_[ii][276]->GetXaxis()->SetTitle("Electron PreShowerOverRaw(mva variable)  ");
 h_[ii][276]->GetYaxis()->SetTitle("Entries");
+
 
 
 
