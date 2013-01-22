@@ -14,9 +14,10 @@
 //
 // Original Author:  Bugra Bilin,8 R-004,+41227676479,
 //         Created:  Tue May  3 16:39:40 CEST 2011
-// $Id: FwdCalib.cc,v 1.10 2012/09/12 12:47:17 bbilin Exp $
+// $Id: FwdCalib.cc,v 1.11 2012/10/12 10:00:01 bbilin Exp $
 //
 //
+
 
 
 //
@@ -133,87 +134,62 @@ using namespace isodeposit;
 
 
 class ntupleGenerator : public edm::EDAnalyzer {
-public:
-  explicit ntupleGenerator(const edm::ParameterSet&);
-  ~ntupleGenerator();
+  public:
+    explicit ntupleGenerator(const edm::ParameterSet&);
+    ~ntupleGenerator();
 
-  const edm::ValueMap<double>& getValueMap(const edm::Event& iEvent,edm::InputTag& inputTag);
+    const edm::ValueMap<double>& getValueMap(const edm::Event& iEvent,edm::InputTag& inputTag);
       
-  //void produce(const edm::Handle<SuperClusterCollection>& SuperClusters,
-  //				      const HFEMClusterShapeAssociationCollection& AssocShapes,
-  //	     RecoEcalCandidateCollection& RecoECand);
+    //void produce(const edm::Handle<SuperClusterCollection>& SuperClusters,
+    //				      const HFEMClusterShapeAssociationCollection& AssocShapes,
+    //	     RecoEcalCandidateCollection& RecoECand);
 
 
-private:
-  //  virtual void beginJob(const edm::EventSetup&) ;
-  virtual void beginJob();	
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  private:
+    //  virtual void beginJob(const edm::EventSetup&) ;
+    virtual void beginJob();	
+    virtual void analyze(const edm::Event&, const edm::EventSetup&);
+    virtual void endJob() ;
 
+    // ----------member data ---------------------------
 
-
-
-
-
-
-  // ----------member data ---------------------------
-
-  float DeltaPhi(float phi1, float phi2);
-  float DeltaR(float eta1, float eta2, float phi1, float phi2);
-  edm::InputTag elecTag_;
-  string PfJetAlg;
-
- 
-  edm::Service<TFileService> fs;
-  TTree * myTree;
-  int event, run,lumi,bxnumber,realdata;
-  int hlt_trigger_fired;
-
-float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecDcotTheta[50],ElecMVATrigId[50],ElecMVANonTrigId[50],Elecd0vtx[50],Elecdzvtx[50], chIso03[50],nhIso03[50],phIso03[50],puChIso03[50],relIso[50],relIsodb[50],relIsorho[50],fMVAVar_fbrem[50],  fMVAVar_kfchi2[50], fMVAVar_kfhits[50],fMVAVar_gsfchi2[50],fMVAVar_detacalo[50],fMVAVar_see[50], fMVAVar_spp[50] , fMVAVar_etawidth[50],fMVAVar_phiwidth[50] ,fMVAVar_e1x5e5x5[50] , fMVAVar_R9[50] ,fMVAVar_EoP[50]  ,fMVAVar_IoEmIoP[50],fMVAVar_eleEoPout[50] ,fMVAVar_PreShowerOverRaw[50];
-  int Elecindex, HFElecindex,ElecCharge[50],ElecIsEB[50], ElecIsEE[50], Elecooeoop[50]; 
-bool hasMatchedConversion[50]; 
-
-float hfelec_L9[50] ,hfelec_S9[50] ,hfelec_L25[50] ,hfelec_L1[50] ,hhfclustereta[50]   ,hhfclusterphi[50], hfelec_Pt[50] ,hfelec_Eta[50], hfelec_Px[50],hfelec_Py[50],hfelec_Pz[50],hfelec_Phi[50],hfelec_E[50],hfelec_M[50] ,hfelec_charge[50];
-
- 
-  //particle information
-  int par_index, mom[500], daug[500];
-  float ParticlePt[500], ParticleEta[500], ParticlePhi[500], ParticlePx[500], ParticlePy[500], ParticlePz[500], ParticleE[500], ParticleM[500];
-  int ParticleId[500], ParticleStatus[500], ParticleMother[500][100], ParticleDaughter[500][100];
-
-
-
-  //reco jets 
-  int pfNjets,pfNtracks;
-  
-  int CaloNjets;
-
-  float PFjetEta[100], PFjetPhi[100],PFjetPt[100],PFCorrjetPt[100],PFjetCEMF[100],PFjetNEMF[100],PFjetPx[100],PFjetPy[100],PFjetPz[100],PFjetE[100],PFjetM[100],PFHadEHF[100],PFEmEHF[100];
-
-
-
-  float PFjetTrkVZ[100][100],PFjetTrkPT[100][100];
-
-
-  float vtxZ[100],vtxZerr[100];
-  float vtxY[100],vtxYerr[100];
-  float vtxX[100],vtxXerr[100];
-  int vtxisValid[100],vtxisFake[100];
-  int nVertices,nGoodVertices; 
-int NumInteractions,BunchCrossing;
-  float TrueNumInteractions,Tnpv_check;
-  double MyWeight;
-
-  int techTrigger[44];
-  //met 
-  float  pfMET, pfSET;
-  float  pfMETX;
-  float  pfMETY;
-  float muCorrMET, muCorrSET;
-
-int tr_1, tr_2, tr_3;
-
-//  reco::helper::JetIDHelper *jetID;
+    float DeltaPhi(float phi1, float phi2);
+    float DeltaR(float eta1, float eta2, float phi1, float phi2);
+    edm::InputTag elecTag_;
+    string PfJetAlg;
+    edm::Service<TFileService> fs;
+    TTree * myTree;
+    int event, run,lumi,bxnumber,realdata;
+    int hlt_trigger_fired;
+    float ElecPt[50],ElecE[50],ElecM[50],ElecPx[50], ElecPy[50],ElecPz[50],ElecEta[50],ElecPhi[50],ElecGsfTrk_d0[50],Elecdr03TkSumPt[50],Elecdr03EcalRecHitSumEt[50],Elecdr03HcalTowerSumEt[50],ElecscSigmaIEtaIEta[50],ElecdeltaPhiSuperClusterTrackAtVtx[50],ElecdeltaEtaSuperClusterTrackAtVtx[50],ElechadronicOverEm[50],ElecgsfTrack_numberOfLostHits[50],ElecDcotTheta[50],ElecMVATrigId[50],ElecMVANonTrigId[50],Elecd0vtx[50],Elecdzvtx[50], chIso03[50],nhIso03[50],phIso03[50],puChIso03[50],relIso[50],relIsodb[50],relIsorho[50],fMVAVar_fbrem[50],  fMVAVar_kfchi2[50], fMVAVar_kfhits[50],fMVAVar_gsfchi2[50],fMVAVar_detacalo[50],fMVAVar_see[50], fMVAVar_spp[50] , fMVAVar_etawidth[50],fMVAVar_phiwidth[50] ,fMVAVar_e1x5e5x5[50] , fMVAVar_R9[50] ,fMVAVar_EoP[50]  ,fMVAVar_IoEmIoP[50],fMVAVar_eleEoPout[50] ,fMVAVar_PreShowerOverRaw[50];
+    int Elecindex, HFElecindex,ElecCharge[50],ElecIsEB[50], ElecIsEE[50], Elecooeoop[50]; 
+    bool hasMatchedConversion[50]; 
+    float hfelec_L9[50] ,hfelec_S9[50] ,hfelec_L25[50] ,hfelec_L1[50] ,hhfclustereta[50]   ,hhfclusterphi[50], hfelec_Pt[50] ,hfelec_Eta[50], hfelec_Px[50],hfelec_Py[50],hfelec_Pz[50],hfelec_Phi[50],hfelec_E[50],hfelec_M[50] ,hfelec_charge[50];
+    //particle information
+    int par_index, mom[500], daug[500];
+    float ParticlePt[500], ParticleEta[500], ParticlePhi[500], ParticlePx[500], ParticlePy[500], ParticlePz[500], ParticleE[500], ParticleM[500];
+    int ParticleId[500], ParticleStatus[500], ParticleMother[500][100], ParticleDaughter[500][100];
+    //reco jets 
+    int pfNjets,pfNtracks;
+    int CaloNjets;
+    float PFjet_mva[100], PFjetEta[100], PFjetPhi[100],PFjetPt[100],PFCorrjetPt[100],PFjetCEMF[100],PFjetNEMF[100],PFjetPx[100],PFjetPy[100],PFjetPz[100],PFjetE[100],PFjetM[100],PFHadEHF[100],PFEmEHF[100];
+    float PFjetTrkVZ[100][100],PFjetTrkPT[100][100];
+    float vtxZ[100],vtxZerr[100];
+    float vtxY[100],vtxYerr[100];
+    float vtxX[100],vtxXerr[100];
+    int vtxisValid[100],vtxisFake[100];
+    int nVertices,nGoodVertices; 
+    int NumInteractions,BunchCrossing;
+    float TrueNumInteractions,Tnpv_check;
+    double MyWeight;
+    int techTrigger[44];
+    //met 
+    float  pfMET, pfSET;
+    float  pfMETX;
+    float  pfMETY;
+    float muCorrMET, muCorrSET;
+    int tr_1, tr_2, tr_3;
+    //  reco::helper::JetIDHelper *jetID;
 
 };
 
@@ -221,11 +197,8 @@ int tr_1, tr_2, tr_3;
 
 ntupleGenerator::ntupleGenerator(const edm::ParameterSet& iConfig)
 {   
-
   elecTag_ = iConfig.getParameter<edm::InputTag>("elecTag");
   PfJetAlg = iConfig.getParameter<string>("PfJetAlg");
-
-
 }
 
 ntupleGenerator::~ntupleGenerator()
@@ -238,95 +211,101 @@ void
 ntupleGenerator::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-
-
   Handle<GenParticleCollection> genParticles_h;
   iEvent.getByLabel("genParticles", genParticles_h);
   const GenParticleCollection* genParticles  = genParticles_h.failedToGet () ? 0 : &*genParticles_h;
 
 
-Handle<reco::RecoEcalCandidateCollection> HFElectrons;
+  Handle<reco::RecoEcalCandidateCollection> HFElectrons;
   iEvent.getByLabel("hfRecoEcalCandidate",HFElectrons);
-const RecoEcalCandidateCollection* hfelec = HFElectrons.failedToGet() ? 0 : &*HFElectrons;
+  const RecoEcalCandidateCollection* hfelec = HFElectrons.failedToGet() ? 0 : &*HFElectrons;
 
 
 
- Handle<reco::HFEMClusterShapeAssociationCollection>  electronHFClusterAssociation;
- iEvent.getByLabel(edm::InputTag("hfEMClusters"),electronHFClusterAssociation);
+  Handle<reco::HFEMClusterShapeAssociationCollection>  electronHFClusterAssociation;
+  iEvent.getByLabel(edm::InputTag("hfEMClusters"),electronHFClusterAssociation);
  
   
   Handle< edm::View<pat::MET> > pfMEThandle;
   iEvent.getByLabel("patMETsPF", pfMEThandle); 
 
+  Handle<ValueMap<float> > puJetIDMVA;
+  iEvent.getByLabel(InputTag("puJetMva" ,"fullDiscriminant"),puJetIDMVA);
+
 
   edm::Handle<edm::View<pat::Conversion>> conversions;
   iEvent.getByLabel("patConversions",conversions);
 
-edm::Handle<double>  rho_;
-iEvent.getByLabel(InputTag("kt6PFJetsForIsolation", "rho"), rho_);
-//double rhoIso = *(rho_.product());
-double rhoIso = *rho_;
+  edm::Handle<double>  rho_;
+//  iEvent.getByLabel(InputTag("kt6PFJetsForIsolation", "rho"), rho_);
+iEvent.getByLabel(InputTag("kt6PFJets", "rho"), rho_);
+  //double rhoIso = *(rho_.product());
+  double rhoIso = *rho_;
   Handle<edm::View<pat::Jet> > PFjets;
   iEvent.getByLabel(PfJetAlg,PFjets);
-//const edm::View<pat::Jet> & calo_jet = *PFjets;
+  //const edm::View<pat::Jet> & calo_jet = *PFjets;
 
- Handle<edm::View<pat::Electron> > elecs_h;	
+  Handle<edm::View<pat::Electron> > elecs_h;	
   iEvent.getByLabel(elecTag_,elecs_h);
   const edm::View<pat::Electron>* elec = elecs_h.failedToGet() ? 0 : &*elecs_h;
 
- // EcalClusterLazyTools const &myEcalCluster;
+  // EcalClusterLazyTools const &myEcalCluster;
 
   Handle<BeamSpot> beamSpotHandle;
+ 
   if (!iEvent.getByLabel(InputTag("offlineBeamSpot"), beamSpotHandle)) {
-    cout<< ">>> No beam spot found !!!" <<endl;
+    
+	cout<< ">>> No beam spot found !!!" <<endl;
     return;
   }
   
   Handle<VertexCollection> pvHandle;
   iEvent.getByLabel("offlinePrimaryVertices", pvHandle);  
 
- event = iEvent.id().event();
+  event = iEvent.id().event();
   run = iEvent.id().run();
   lumi = iEvent.luminosityBlock();
   bxnumber = iEvent.bunchCrossing();
   realdata = iEvent.isRealData();
 
 
-if(!realdata){
-//cout<<"adasdasdasasasdas"<<endl;
- edm::LumiReWeighting LumiWeights_;
+  if(!realdata){
+    //cout<<"adasdasdasasasdas"<<endl;
+    edm::LumiReWeighting LumiWeights_;
 
-  LumiWeights_ = edm::LumiReWeighting("mc_pup.root", "data.root", "h1D", "pup");
+    LumiWeights_ = edm::LumiReWeighting("mc_pup.root", "data.root", "h1D", "pup");
  
-  Handle<std::vector< PileupSummaryInfo > >  PupInfo;
-  iEvent.getByLabel("addPileupInfo", PupInfo);
+    Handle<std::vector< PileupSummaryInfo > >  PupInfo;
+    iEvent.getByLabel("addPileupInfo", PupInfo);
 
-  std::vector<PileupSummaryInfo>::const_iterator PVI;
+    std::vector<PileupSummaryInfo>::const_iterator PVI;
 
-  NumInteractions=-99;
-  TrueNumInteractions=-99;
-  BunchCrossing=-99;
-  float Tnpv = -1; 
-  // (then, for example, you can do)
-  for( PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI) {
-        NumInteractions = PVI->getPU_NumInteractions();
-        BunchCrossing = PVI->getBunchCrossing();
-        TrueNumInteractions = PVI->getTrueNumInteractions();
-//	std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
-    int BX = PVI->getBunchCrossing();
+    NumInteractions=-99;
+    TrueNumInteractions=-99;
+    BunchCrossing=-99;
+    float Tnpv = -1; 
+    // (then, for example, you can do)
+
+	for( PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI) {
+
+	  NumInteractions = PVI->getPU_NumInteractions();
+	  BunchCrossing = PVI->getBunchCrossing();
+	  TrueNumInteractions = PVI->getTrueNumInteractions();
+    //	std::cout << " Pileup Information: bunchXing, nvtx: " << PVI->getBunchCrossing() << " " << PVI->getPU_NumInteractions() << std::endl;
+      int BX = PVI->getBunchCrossing();
            
-   if(BX == 0) { 
-     Tnpv = PVI->getTrueNumInteractions();
-     Tnpv_check = Tnpv;
-     continue;
-   }
+      if(BX == 0) { 
+        Tnpv = PVI->getTrueNumInteractions();
+        Tnpv_check = Tnpv;
+        continue;
+      }
 
-   }
+    }
 
-  MyWeight = LumiWeights_.weight(Tnpv);
-std::cout <<MyWeight<<endl;
+    MyWeight = LumiWeights_.weight(Tnpv);
+    //std::cout <<MyWeight<<endl;
  
-}
+  }
 
 
   nVertices = pvHandle->size(); 
@@ -334,8 +313,9 @@ std::cout <<MyWeight<<endl;
   const VertexCollection vertexColl = *(pvHandle.product());
 
   nGoodVertices = 0;
+  
   for (VertexCollection::const_iterator vtx = vertexColl.begin(); vtx!= vertexColl.end(); ++vtx){
-       if (vtx->isValid() && !vtx->isFake()) ++nGoodVertices;
+    if (vtx->isValid() && !vtx->isFake()) ++nGoodVertices;
   }
 
   //  if (nVertices != nGoodVertices) cout<<"@@@@@@@@@@@@@   ------> "<<nVertices<<"  "<<nGoodVertices<<endl;
@@ -352,22 +332,15 @@ std::cout <<MyWeight<<endl;
     vtxisFake[iv] = vtxs[iv].isFake();
   }
 
+  //trigger primitive version//
+  tr_1=0;
+  tr_2=0;
+  tr_3=0;
 
-
- 
-
-
-
-
-//trigger primitive version//
-tr_1=0;
-tr_2=0;
-tr_3=0;
-
-//if(realdata){
+  //if(realdata){
 
  
- int ntrigs;
+  int ntrigs;
   vector<string> trigname;
   vector<bool> trigaccept;
   edm::Handle< edm::TriggerResults > HLTResHandle;
@@ -376,30 +349,24 @@ tr_3=0;
 
 
   if ( HLTResHandle.isValid() && !HLTResHandle.failedToGet() ) {
-  edm::RefProd<edm::TriggerNames> trigNames( &(iEvent.triggerNames( *HLTResHandle )) );
-  ntrigs = (int)trigNames->size();
+    edm::RefProd<edm::TriggerNames> trigNames( &(iEvent.triggerNames( *HLTResHandle )) );
+    ntrigs = (int)trigNames->size();
 
-for (int i = 0; i < ntrigs; i++) {
-  trigname.push_back(trigNames->triggerName(i));
-  trigaccept.push_back(HLTResHandle->accept(i));
+    for (int i = 0; i < ntrigs; i++) {
+      trigname.push_back(trigNames->triggerName(i));
+      trigaccept.push_back(HLTResHandle->accept(i));
+      //cout<<trigname[i]<<endl;
+      if (trigaccept[i]){
 
+        if(std::string(trigname[i]).find("HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL")!=std::string::npos)tr_1=1;
 
-//cout<<trigname[i]<<endl;
- if (trigaccept[i]){
+        if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_Ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL")!=std::string::npos)tr_2=1;
 
-if(std::string(trigname[i]).find("HLT_Ele17_CaloIdL_CaloIsoVL_Ele8_CaloIdL_CaloIsoVL")!=std::string::npos)tr_1=1;
+        if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL")!=std::string::npos)tr_3=1;
 
-if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL_Ele8_CaloIdT_TrkIdVL_CaloIsoVL_TrkIsoVL")!=std::string::npos)tr_2=1;
-
-if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_Ele8_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL")!=std::string::npos)tr_3=1;
-
-
-
-
-}
-}
-}
-
+      }
+    }
+  }
 
 //}
 //if(tr_3!=0)cout<<tr_3<<endl;
@@ -441,26 +408,26 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_E
   //--------------------particles-------------------------------------------
   
   if (!realdata && genParticles){	
-   par_index = 0;
+    par_index = 0;
     for (size_t i=0; i<genParticles->size(); ++i){
       //const GenParticle & p = (*genParticles)[i];
-      const Candidate & p = (*genParticles)[i];
-      int id = p.pdgId();
-      int st = p.status();
-      if (st==3 || (st==1 && (abs(id)==13 || abs(id)==11))){
-      	ParticlePt[par_index] = p.pt();
-      	ParticleEta[par_index] = p.eta();
-      	ParticlePhi[par_index] = p.phi();
-      	ParticlePx[par_index] = p.px();
-      	ParticlePy[par_index] = p.py();
-      	ParticlePz[par_index] = p.pz();
-      	ParticleE[par_index] =p.energy();
-      	ParticleM[par_index] =p.mass();
-      	ParticleId[par_index] = id;
-      	ParticleStatus[par_index] = st;
-        ++par_index;
-      }
-    }   
+	  const Candidate & p = (*genParticles)[i];
+	  int id = p.pdgId();
+	  int st = p.status();
+	  if (st==3 || (st==1 && (abs(id)==13 || abs(id)==11))){
+		ParticlePt[par_index] = p.pt();
+		ParticleEta[par_index] = p.eta();
+		ParticlePhi[par_index] = p.phi();
+		ParticlePx[par_index] = p.px();
+		ParticlePy[par_index] = p.py();
+		ParticlePz[par_index] = p.pz();
+		ParticleE[par_index] =p.energy();
+		ParticleM[par_index] =p.mass();
+		ParticleId[par_index] = id;
+		ParticleStatus[par_index] = st;
+		++par_index;
+	  }
+	}   
   }
 
 
@@ -489,90 +456,87 @@ if(std::string(trigname[i]).find("HLT_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_E
     ElechadronicOverEm[jj] = -99.;
     ElecgsfTrack_numberOfLostHits[jj] = -99.;
     ElecDcotTheta[jj] = -99.;
-ElecMVATrigId[jj]=-99.;
-ElecMVANonTrigId[jj]=-99.;
-Elecd0vtx[jj]=-99.;
-Elecdzvtx[jj]=-99.; 
-chIso03[jj]=-99.;
-nhIso03[jj]=-99.;
-phIso03[jj]=-99.;
-puChIso03[jj]=-99.;
-relIso[jj]=-99.;
-relIsodb[jj]=-99.;
-relIsorho[jj]=-99.;
-fMVAVar_fbrem[jj]=-99;
-  fMVAVar_kfchi2[jj]=-99; 
-fMVAVar_kfhits[jj]=-99;
-fMVAVar_gsfchi2[jj]=-99;
-fMVAVar_detacalo[jj]=-99;
-fMVAVar_see[jj]=-99; 
-fMVAVar_spp[jj] =-99; 
-fMVAVar_etawidth[jj]=-99;
-fMVAVar_phiwidth[jj] =-99;
-fMVAVar_e1x5e5x5[jj] =-99; 
-fMVAVar_R9[jj] =-99;
-fMVAVar_EoP[jj]  =-99;
-fMVAVar_IoEmIoP[jj]=-99;
-fMVAVar_eleEoPout[jj] =-99;
-fMVAVar_PreShowerOverRaw[jj]=-99;
+    ElecMVATrigId[jj]=-99.;
+    ElecMVANonTrigId[jj]=-99.;
+    Elecd0vtx[jj]=-99.;
+    Elecdzvtx[jj]=-99.; 
+    chIso03[jj]=-99.;
+    nhIso03[jj]=-99.;
+    phIso03[jj]=-99.;
+    puChIso03[jj]=-99.;
+    relIso[jj]=-99.;
+    relIsodb[jj]=-99.;
+    relIsorho[jj]=-99.;
+    fMVAVar_fbrem[jj]=-99;
+    fMVAVar_kfchi2[jj]=-99; 
+    fMVAVar_kfhits[jj]=-99;
+    fMVAVar_gsfchi2[jj]=-99;
+    fMVAVar_detacalo[jj]=-99;
+    fMVAVar_see[jj]=-99; 
+    fMVAVar_spp[jj] =-99; 
+    fMVAVar_etawidth[jj]=-99;
+    fMVAVar_phiwidth[jj] =-99;
+    fMVAVar_e1x5e5x5[jj] =-99; 
+    fMVAVar_R9[jj] =-99;
+    fMVAVar_EoP[jj]  =-99;
+    fMVAVar_IoEmIoP[jj]=-99;
+    fMVAVar_eleEoPout[jj] =-99;
+    fMVAVar_PreShowerOverRaw[jj]=-99;
   }
   Elecindex = 0;
 
-double probMin =1e-6; 
-double lxyMin=2.0;  
-double nHitsBeforeVtxMax=0;
+  double probMin =1e-6; 
+  double lxyMin=2.0;  
+  double nHitsBeforeVtxMax=0;
 
-//for (unsigned int i=0; i < elec->size()-1;++i){
- // pat::Electron el = elec->at(i);
-
+  //for (unsigned int i=0; i < elec->size()-1;++i){
+  // pat::Electron el = elec->at(i);
 
   for(edm::View<pat::Electron>::const_iterator el = elec->begin(); el != elec->end();  ++el) {
-
   
     // apply to neutrals
 
+     Elecooeoop[Elecindex] =1.0/ el->ecalEnergy() - (el->eSuperClusterOverP()/el->ecalEnergy());
 
- Elecooeoop[Elecindex] =1.0/ el->ecalEnergy() - (el->eSuperClusterOverP()/el->ecalEnergy());
-
- if (pvHandle->size() > 0) {
+     if (pvHandle->size() > 0) {
         reco::VertexRef vtx(pvHandle, 0);    
         Elecd0vtx[Elecindex] = el->gsfTrack()->dxy(vtx->position());
         Elecdzvtx[Elecindex] = el->gsfTrack()->dz(vtx->position());
-    } else {
+    }
+	 else {
         Elecd0vtx[Elecindex] = el->gsfTrack()->dxy();
         Elecdzvtx[Elecindex] = el->gsfTrack()->dz();
     }
 
-
-  hasMatchedConversion[Elecindex] = false;
+	hasMatchedConversion[Elecindex] = false;
     for (edm::View<pat::Conversion>::const_iterator iconv=conversions->begin() ; iconv != conversions->end(); ++iconv) {
 
-     if (iconv->index() != Elecindex) continue;
+      if (iconv->index() != Elecindex) continue;
       if (!(iconv->vtxProb()>probMin &&  iconv->lxy()>lxyMin && iconv->nHitsMax()<=nHitsBeforeVtxMax)) continue;
       hasMatchedConversion[Elecindex] = true;
     }
 
 
-const string mvaTrigV0 = "mvaTrigV0";
-const string mvaNonTrigV0 = "mvaNonTrigV0";
-
-//cout<<el->electronID(mvaTrigV0)<<endl;
+    const string mvaTrigV0 = "mvaTrigV0";
+    const string mvaNonTrigV0 = "mvaNonTrigV0";
+    //cout<<el->r9()<<endl;
+    //cout<<el->electronID(mvaTrigV0)<<endl;
 	ElecMVATrigId[Elecindex]= el->electronID(mvaTrigV0);
 	ElecMVANonTrigId[Elecindex]= el->electronID(mvaNonTrigV0);
-
-
-//cout<<el->electronID(mvaTrigV0)<<"  "<<el->electronID(mvaNonTrigV0)<<endl;
+    //cout<<el->electronID(mvaTrigV0)<<"  "<<el->electronID(mvaNonTrigV0)<<endl;
 	ElecPt[Elecindex] = el->pt();
-        ElecPx[Elecindex] = el->px();
+//	cout<<ElecPt[Elecindex]<<"  "<<endl;
+	ElecPx[Elecindex] = el->px();
 	ElecPy[Elecindex] = el->py();
 	ElecPz[Elecindex] = el->pz();
 	ElecEta[Elecindex] = el->superCluster()->eta();
 	ElecPhi[Elecindex] = el->phi();	
-        ElecE[Elecindex] = el->energy();
+	ElecE[Elecindex] = el->energy();
+    //cout<<run<<"  "<<el->superCluster()->eta()<<" "<<el->r9()<<"  "<<el->energy()<<"  "<<el->ecalEnergy()<<"  "<<el->ecalEnergy()/el->energy()<<endl;
 	ElecM[Elecindex] = el->mass();
 	ElecCharge[Elecindex] = el->charge();
-//	ElecGsfTrk_d0[Elecindex] = el->gsfTrack()->d0();
-        ElecGsfTrk_d0[Elecindex] =  el->convDist(); //new (28 02 2012)
+    //	ElecGsfTrk_d0[Elecindex] = el->gsfTrack()->d0();
+	ElecGsfTrk_d0[Elecindex] =  el->convDist(); //new (28 02 2012)
 	ElecDcotTheta[Elecindex] = el->convDcot();//new (28 02 2012)
 	ElecIsEB[Elecindex] = el->isEB();
 	ElecIsEE[Elecindex] = el->isEE();
@@ -583,68 +547,57 @@ const string mvaNonTrigV0 = "mvaNonTrigV0";
 	ElecdeltaPhiSuperClusterTrackAtVtx[Elecindex] = el->deltaPhiSuperClusterTrackAtVtx();
 	ElecdeltaEtaSuperClusterTrackAtVtx[Elecindex] = el->deltaEtaSuperClusterTrackAtVtx();
 	ElechadronicOverEm[Elecindex] = el->hadronicOverEm();
-//	ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->numberOfLostHits();
-        ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->trackerExpectedHitsInner().numberOfHits();//new (28 02 2012)
-double   AEff;
-if(realdata){
-    AEff = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, el->superCluster()->eta(), ElectronEffectiveArea::kEleEAData2011);
-  }else{
-    AEff = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, el->superCluster()->eta(), ElectronEffectiveArea::kEleEAFall11MC);
-  }
+    //	ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->numberOfLostHits();
+    ElecgsfTrack_numberOfLostHits[Elecindex] = el->gsfTrack()->trackerExpectedHitsInner().numberOfHits();//new (28 02 2012)
+    double   AEff;
+//    if(realdata){
+      AEff = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, el->superCluster()->eta(), ElectronEffectiveArea::kEleEAData2012);
+//    }
+//	else{
+//      AEff = ElectronEffectiveArea::GetElectronEffectiveArea(ElectronEffectiveArea::kEleGammaAndNeutralHadronIso03, el->superCluster()->eta(), ElectronEffectiveArea::kEleEAFall11MC);
+//    }
 
-//cout<<rhoIso<<endl; 
- double rhoPrime = std::max(rhoIso, 0.0);
+    //cout<<rhoIso<<endl; 
+    double rhoPrime = std::max(rhoIso, 0.0);
 
-  chIso03[Elecindex] = el->chargedHadronIso();
+    chIso03[Elecindex] = el->chargedHadronIso();
     nhIso03[Elecindex] = el->neutralHadronIso();
     phIso03[Elecindex] = el->photonIso();
     puChIso03[Elecindex] = el->puChargedHadronIso();
 
-relIso[Elecindex] = ( chIso03[Elecindex] + nhIso03[Elecindex] + phIso03[Elecindex] ) / el->pt() ;
- relIsodb[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - 0.5*puChIso03[Elecindex]) )/ el->pt();
- relIsorho[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - rhoPrime*AEff) )/ el->pt();
-//cout<<relIso[Elecindex]<<"  "<<relIsorho[Elecindex]<<endl;
+    relIso[Elecindex] = ( chIso03[Elecindex] + nhIso03[Elecindex] + phIso03[Elecindex] ) / el->pt() ;
+    relIsodb[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - 0.5*puChIso03[Elecindex]) )/ el->pt();
+    relIsorho[Elecindex] = ( chIso03[Elecindex] + max(0.0, nhIso03[Elecindex] + phIso03[Elecindex] - rhoPrime*AEff) )/ el->pt();
+//    cout<<relIso[Elecindex]<<"  "<<relIsorho[Elecindex]<<"   "<<rhoPrime<<"   "<<AEff<<endl;
 
-  bool validKF= false; 
-  reco::TrackRef myTrackRef =el->closestCtfTrackRef();
-  validKF = (myTrackRef.isAvailable());
-  validKF = (myTrackRef.isNonnull());  
+    bool validKF= false; 
+    reco::TrackRef myTrackRef =el->closestCtfTrackRef();
+    validKF = (myTrackRef.isAvailable());
+    validKF = (myTrackRef.isNonnull());  
 
 
-fMVAVar_fbrem[Elecindex]           =  el->fbrem();
-  fMVAVar_kfchi2[Elecindex]          =  (validKF) ? myTrackRef->normalizedChi2() : 0 ;
-  fMVAVar_kfhits[Elecindex]          =  (validKF) ? myTrackRef->hitPattern().trackerLayersWithMeasurement() : -1. ; 
-
-  fMVAVar_gsfchi2[Elecindex]         =  el->gsfTrack()->normalizedChi2();  
-
+    fMVAVar_fbrem[Elecindex]           =  el->fbrem();
+    fMVAVar_kfchi2[Elecindex]          =  (validKF) ? myTrackRef->normalizedChi2() : 0 ;
+    fMVAVar_kfhits[Elecindex]          =  (validKF) ? myTrackRef->hitPattern().trackerLayersWithMeasurement() : -1. ; 
+    fMVAVar_gsfchi2[Elecindex]         =  el->gsfTrack()->normalizedChi2();  
     fMVAVar_detacalo[Elecindex]        =  el->deltaEtaSeedClusterTrackAtCalo();
-  fMVAVar_see[Elecindex]             =  el->sigmaIetaIeta();    //EleSigmaIEtaIEta
-
- //std::vector<float> vCov = EcalClusterLazyTools localCovariances(*(el->superCluster()->seed())) ;
-  //if (!isnan(vCov[2])) fMVAVar_spp[Elecindex] = sqrt (vCov[2]);   //EleSigmaIPhiIPhi
-  //else fMVAVar_spp[Elecindex] = 0.;    
+    fMVAVar_see[Elecindex]             =  el->sigmaIetaIeta();    //EleSigmaIEtaIEta
+    //std::vector<float> vCov = EcalClusterLazyTools localCovariances(*(el->superCluster()->seed())) ;
+    //if (!isnan(vCov[2])) fMVAVar_spp[Elecindex] = sqrt (vCov[2]);   //EleSigmaIPhiIPhi
+    //else fMVAVar_spp[Elecindex] = 0.;    
     fMVAVar_etawidth[Elecindex]        =  el->superCluster()->etaWidth();
-  fMVAVar_phiwidth[Elecindex]        =  el->superCluster()->phiWidth();
-  fMVAVar_e1x5e5x5[Elecindex]        =  (el->e5x5()) !=0. ? 1.-(el->e1x5()/el->e5x5()) : -1. ;
+    fMVAVar_phiwidth[Elecindex]        =  el->superCluster()->phiWidth();
+    fMVAVar_e1x5e5x5[Elecindex]        =  (el->e5x5()) !=0. ? 1.-(el->e1x5()/el->e5x5()) : -1. ;
 
-  //fMVAVar_R9[Elecindex]              =  EcalClusterLazyTools::e3x3(*(el->superCluster()->seed())) / el->superCluster()->rawEnergy();
-  
-  fMVAVar_EoP[Elecindex]             =  el->eSuperClusterOverP();
-
-  fMVAVar_IoEmIoP[Elecindex]         =  (1.0/el->ecalEnergy()) - (1.0 / el->p());  
-  fMVAVar_eleEoPout[Elecindex]       =  el->eEleClusterOverPout();
-  fMVAVar_PreShowerOverRaw[Elecindex]=  el->superCluster()->preshowerEnergy() / el->superCluster()->rawEnergy();
-
-
-
-
-      ++Elecindex; 
+    //fMVAVar_R9[Elecindex]              =  EcalClusterLazyTools::e3x3(*(el->superCluster()->seed())) / el->superCluster()->rawEnergy();
+    fMVAVar_EoP[Elecindex]             =  el->eSuperClusterOverP();
+    fMVAVar_IoEmIoP[Elecindex]         =  (1.0/el->ecalEnergy()) - (1.0 / el->p());  
+    fMVAVar_eleEoPout[Elecindex]       =  el->eEleClusterOverPout();
+    fMVAVar_PreShowerOverRaw[Elecindex]=  el->superCluster()->preshowerEnergy() / el->superCluster()->rawEnergy();
+	++Elecindex; 
   }
 
-
-
-
-HFElecindex = 0;
+  HFElecindex = 0;
   for(reco::RecoEcalCandidateCollection::const_iterator hfel = hfelec->begin(); hfel != hfelec->end();  ++hfel) {
 
 	const reco::RecoEcalCandidate& HFcan = (*hfel);
@@ -653,39 +606,30 @@ HFElecindex = 0;
 	const reco::HFEMClusterShapeRef clusShapeRef=(*electronHFClusterAssociation).find(theClusRef)->val;
 	const reco::HFEMClusterShape& clusShape=*clusShapeRef;
 
-hfelec_Eta[HFElecindex] = hfel->eta();
-hfelec_Pt[HFElecindex] = hfel->pt();
-
-hfelec_Px[HFElecindex] = hfel->px();
-
-hfelec_Py[HFElecindex] = hfel->py();
-
-hfelec_Pz[HFElecindex] = hfel->pz();
-
-hfelec_Phi[HFElecindex] = hfel->phi();
-hfelec_E[HFElecindex] = hfel->energy();
-hfelec_M[HFElecindex] = hfel->mass();
-hfelec_charge[HFElecindex] = hfel->charge();
-
-hfelec_L9[HFElecindex] = clusShape.eLong3x3();
-
-hfelec_S9[HFElecindex] = clusShape.eShort3x3();
-
-hfelec_L25[HFElecindex] = clusShape.eLong5x5();
-
-hfelec_L1[HFElecindex] = clusShape.eLong1x1();
-
-hhfclustereta[HFElecindex]     = hfECALSuperCluster.eta();
- 
-hhfclusterphi[HFElecindex]     = hfECALSuperCluster.phi();
+	hfelec_Eta[HFElecindex] = hfel->eta();
+	hfelec_Pt[HFElecindex] = hfel->pt();
+	hfelec_Px[HFElecindex] = hfel->px();
+	hfelec_Py[HFElecindex] = hfel->py();
+	hfelec_Pz[HFElecindex] = hfel->pz();
+	hfelec_Phi[HFElecindex] = hfel->phi();
+	hfelec_E[HFElecindex] = hfel->energy();
+	hfelec_M[HFElecindex] = hfel->mass();
+	hfelec_charge[HFElecindex] = hfel->charge();
+	hfelec_L9[HFElecindex] = clusShape.eLong3x3();
+	hfelec_S9[HFElecindex] = clusShape.eShort3x3();
+	hfelec_L25[HFElecindex] = clusShape.eLong5x5();
+	hfelec_L1[HFElecindex] = clusShape.eLong1x1();
+	hhfclustereta[HFElecindex] = hfECALSuperCluster.eta();
+	hhfclusterphi[HFElecindex] = hfECALSuperCluster.phi();
 
     ++HFElecindex; 
   }
 
   
-  int NJets = 20;
+  //  int NJets = 50;
 
-for(int i=0; i<100; ++i){
+  for(int i=0; i<100; ++i){
+    PFjet_mva[i]=-99;
     PFjetEta[i]=-99.;
     PFjetPhi[i]=-99.;
     PFjetPt[i]=-99.;
@@ -699,57 +643,64 @@ for(int i=0; i<100; ++i){
     PFjetM[i]=-99;
     PFHadEHF[i]=-99;
     PFEmEHF[i]=-99;
-
- 
-}
+  }
   //----------------------------PF jets-------------------------------------------------------------------------------------
   for (int kkk = 0;kkk<100;kkk++){
     for (int jjj = 0;jjj<100;jjj++){
-	PFjetTrkVZ[kkk][jjj] = -99;
-	PFjetTrkPT[kkk][jjj] = -99;
+	  PFjetTrkVZ[kkk][jjj] = -99;
+	  PFjetTrkPT[kkk][jjj] = -99;
     }
   }
   pfNjets=0;
 
-  for(edm::View<pat::Jet>::const_iterator i_jet = PFjets->begin(); i_jet != PFjets->end() && pfNjets < NJets; i_jet++){
-//    const math::XYZTLorentzVector theJet = i_jet->p4();
-    PFjetEta[pfNjets]=i_jet->eta();
-    PFjetPhi[pfNjets]=i_jet->phi();
-    PFjetPt[pfNjets]=i_jet->correctedJet(0).pt();
-     PFjetPx[pfNjets]=i_jet->correctedJet(0).px();
-   PFjetPy[pfNjets]=i_jet->correctedJet(0).py();
-   PFjetPz[pfNjets]=i_jet->correctedJet(0).pz();
-   PFjetE[pfNjets]=i_jet->correctedJet(0).energy();
-   PFjetM[pfNjets]=i_jet->correctedJet(0).mass();
-    PFCorrjetPt[pfNjets] = i_jet->pt();
-    PFjetCEMF[pfNjets]=i_jet->chargedEmEnergyFraction();
-    PFjetNEMF[pfNjets]=i_jet->neutralEmEnergyFraction();
-cout<<pfNjets<<"   "<<PFCorrjetPt[pfNjets]/PFjetPt[pfNjets]<<endl;
-    PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
-    PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
+  for ( unsigned int i=0; i<PFjets->size(); ++i ) {
 
+    // for(edm::View<pat::Jet>::const_iterator i_jet = PFjets->begin(); i_jet != PFjets->end() && pfNjets < NJets; i_jet++){
+    //    const math::XYZTLorentzVector theJet = i_jet->p4();
 
-    PFHadEHF[pfNjets]=i_jet->HFHadronEnergy();
-    PFEmEHF[pfNjets]=i_jet->HFEMEnergy();    
+    //float mva   = (*puJetIdMVA)[jets->refAt(i)];
+    ////      int    idflag = (*puJetIdFlag)[jets->refAt(i)];
 
+    //float mva = i_jet-> puJetIdMVA();
+ 
+	const pat::Jet & i_jet = PFjets->at(i);
+
+    if(i_jet.pt()<15.)continue;
+
+    PFjet_mva[pfNjets]   = (*puJetIDMVA)[PFjets->refAt(i)];
+
+    //if(i_jet.eta()>2.9)cout<<PFjet_mva[pfNjets]<<endl;
+
+    PFjetEta[pfNjets]=i_jet.eta();
+    PFjetPhi[pfNjets]=i_jet.phi();
+    PFjetPt[pfNjets]=i_jet.correctedJet(0).pt();
+	PFjetPx[pfNjets]=i_jet.correctedJet(0).px();
+    PFjetPy[pfNjets]=i_jet.correctedJet(0).py();
+    PFjetPz[pfNjets]=i_jet.correctedJet(0).pz();
+    PFjetE[pfNjets]=i_jet.correctedJet(0).energy();
+    PFjetM[pfNjets]=i_jet.correctedJet(0).mass();
+    PFCorrjetPt[pfNjets] = i_jet.pt();
+    PFjetCEMF[pfNjets]=i_jet.chargedEmEnergyFraction();
+    PFjetNEMF[pfNjets]=i_jet.neutralEmEnergyFraction();
+    //cout<<pfNjets<<"   "<<PFCorrjetPt[pfNjets]/PFjetPt[pfNjets]<<endl;
+    PFHadEHF[pfNjets]=i_jet.HFHadronEnergy();
+    PFEmEHF[pfNjets]=i_jet.HFEMEnergy();    
+    PFHadEHF[pfNjets]=i_jet.HFHadronEnergy();
+    PFEmEHF[pfNjets]=i_jet.HFEMEnergy();    
     pfNtracks=0;
 
+    const reco::TrackRefVector &tracks = i_jet.associatedTracks();
 
-
-    const reco::TrackRefVector &tracks = i_jet->associatedTracks();
-    for (reco::TrackRefVector::const_iterator iTrack = tracks.begin();iTrack != tracks.end(); ++iTrack) {
-          PFjetTrkVZ[pfNjets][pfNtracks] = (**iTrack).vz();
-          PFjetTrkPT[pfNjets][pfNtracks] = (**iTrack).pt();
-          pfNtracks++;
+	for (reco::TrackRefVector::const_iterator iTrack = tracks.begin();iTrack != tracks.end(); ++iTrack) {
+      PFjetTrkVZ[pfNjets][pfNtracks] = (**iTrack).vz();
+	  PFjetTrkPT[pfNjets][pfNtracks] = (**iTrack).pt();
+	  pfNtracks++;
     }
     pfNjets++;
-//
+
   }
 
   //-----------------------------end of pf jets--------------------------------------------------------------------------
-
-
-
   
   myTree->Fill();//!!!!!!
 
@@ -767,13 +718,9 @@ void ntupleGenerator::beginJob()
   myTree->Branch("lumi", &lumi, "lumi/I");
   myTree->Branch("bxnumber", &bxnumber, "bxnumber/I");
   myTree->Branch("realdata", &realdata, "realdata/I");
-
-
-
-
   myTree->Branch("Elecindex",&Elecindex,"Elecindex/I");
- myTree->Branch("hasMatchedConversion",hasMatchedConversion,"hasMatchedConversion[Elecindex]/B");
-myTree->Branch("Elecooeoop",Elecooeoop,"Elecooeoop[Elecindex]/F");
+  myTree->Branch("hasMatchedConversion",hasMatchedConversion,"hasMatchedConversion[Elecindex]/B");
+  myTree->Branch("Elecooeoop",Elecooeoop,"Elecooeoop[Elecindex]/F");
   myTree->Branch("ElecPt",ElecPt,"ElecPt[Elecindex]/F");
   myTree->Branch("ElecPx",ElecPx,"ElecPx[Elecindex]/F");
   myTree->Branch("ElecPy",ElecPy,"ElecPy[Elecindex]/F");
@@ -817,31 +764,24 @@ myTree->Branch("Elecooeoop",Elecooeoop,"Elecooeoop[Elecindex]/F");
   myTree->Branch("fMVAVar_IoEmIoP",fMVAVar_IoEmIoP,"fMVAVar_IoEmIoP[Elecindex]/F");
   myTree->Branch("fMVAVar_eleEoPout",fMVAVar_eleEoPout,"fMVAVar_eleEoPout[Elecindex]/F");
   myTree->Branch("fMVAVar_PreShowerOverRaw",fMVAVar_PreShowerOverRaw,"fMVAVar_PreShowerOverRaw[Elecindex]/F");
-
-myTree->Branch("HFElecindex",&HFElecindex,"HFElecindex/I");
-myTree->Branch("hfelec_Pt",hfelec_Pt,"hfelec_Pt[HFElecindex]/F");
-myTree->Branch("hfelec_Eta",hfelec_Eta,"hfelec_Eta[HFElecindex]/F");
-myTree->Branch("hfelec_L9",hfelec_L9,"hfelec_L9[HFElecindex]/F");
-myTree->Branch("hfelec_S9",hfelec_S9,"hfelec_S9[HFElecindex]/F");
-myTree->Branch("hfelec_L25",hfelec_L25,"hfelec_L25[HFElecindex]/F");
-myTree->Branch("hfelec_L1",hfelec_L1,"hfelec_L1[HFElecindex]/F");
-myTree->Branch("hhfclustereta",hhfclustereta,"hhfclustereta[HFElecindex]/F");
-myTree->Branch("hhfclusterphi",hhfclusterphi,"hhfclusterphi[HFElecindex]/F");
-
-myTree->Branch("hfelec_Px",hfelec_Px,"hfelec_Px[HFElecindex]/F");
-myTree->Branch("hfelec_Py",hfelec_Py,"hfelec_Py[HFElecindex]/F");
-myTree->Branch("hfelec_Pz",hfelec_Pz,"hfelec_Pz[HFElecindex]/F");
-myTree->Branch("hfelec_Phi",hfelec_Phi,"hfelec_Phi[HFElecindex]/F");
-myTree->Branch("hfelec_E",hfelec_E,"hfelec_E[HFElecindex]/F");
-myTree->Branch("hfelec_M",hfelec_M,"hfelec_M[HFElecindex]/F");
-myTree->Branch("hfelec_charge",hfelec_charge,"hfelec_charge[HFElecindex]/F");
-
-
-
+  myTree->Branch("HFElecindex",&HFElecindex,"HFElecindex/I");
+  myTree->Branch("hfelec_Pt",hfelec_Pt,"hfelec_Pt[HFElecindex]/F");
+  myTree->Branch("hfelec_Eta",hfelec_Eta,"hfelec_Eta[HFElecindex]/F");
+  myTree->Branch("hfelec_L9",hfelec_L9,"hfelec_L9[HFElecindex]/F");
+  myTree->Branch("hfelec_S9",hfelec_S9,"hfelec_S9[HFElecindex]/F");
+  myTree->Branch("hfelec_L25",hfelec_L25,"hfelec_L25[HFElecindex]/F");
+  myTree->Branch("hfelec_L1",hfelec_L1,"hfelec_L1[HFElecindex]/F");
+  myTree->Branch("hhfclustereta",hhfclustereta,"hhfclustereta[HFElecindex]/F");
+  myTree->Branch("hhfclusterphi",hhfclusterphi,"hhfclusterphi[HFElecindex]/F");
+  myTree->Branch("hfelec_Px",hfelec_Px,"hfelec_Px[HFElecindex]/F");
+  myTree->Branch("hfelec_Py",hfelec_Py,"hfelec_Py[HFElecindex]/F");
+  myTree->Branch("hfelec_Pz",hfelec_Pz,"hfelec_Pz[HFElecindex]/F");
+  myTree->Branch("hfelec_Phi",hfelec_Phi,"hfelec_Phi[HFElecindex]/F");
+  myTree->Branch("hfelec_E",hfelec_E,"hfelec_E[HFElecindex]/F");
+  myTree->Branch("hfelec_M",hfelec_M,"hfelec_M[HFElecindex]/F");
+  myTree->Branch("hfelec_charge",hfelec_charge,"hfelec_charge[HFElecindex]/F");
   myTree->Branch("techTrigger",techTrigger, "techTrigger[44]/I");
-
-  //particles
-  
+  //particles  
   myTree->Branch("par_index", &par_index, "par_index/I");
   myTree->Branch("ParticlePt", ParticlePt, "ParticlePt[par_index]/F");
   myTree->Branch("ParticleEta", ParticleEta, "ParticleEta[par_index]/F");
@@ -857,20 +797,14 @@ myTree->Branch("hfelec_charge",hfelec_charge,"hfelec_charge[HFElecindex]/F");
   myTree->Branch("ParticleStatus", ParticleStatus, "ParticleStatus[par_index]/I");
   myTree->Branch("ParticleMother", ParticleMother, "ParticleMother[par_index][5]/I");
   myTree->Branch("ParticleDaughter", ParticleDaughter, "ParticleDaughter[par_index][5]/I");
-  
-
-
   myTree->Branch("pfMET", &pfMET, "pfMET/F");
   myTree->Branch("pfSET", &pfSET, "pfSET/F"); 
   myTree->Branch("pfMETX", &pfMETX, "pfMETX/F");
   myTree->Branch("pfMETY", &pfMETY, "pfMETY/F");
   myTree->Branch("muCorrMET", &muCorrMET, "muCorrMET/F");
   myTree->Branch("muCorrSET", &muCorrSET, "muCorrSET/F");	
-
-
-
-
   myTree->Branch("pfNjets",&pfNjets,"pfNjets/I");
+  myTree->Branch("PFjet_mva",PFjet_mva,"PFjet_mva[pfNjets]/F");
   myTree->Branch("PFjetEta",PFjetEta,"PFjetEta[pfNjets]/F");
   myTree->Branch("PFjetPhi",PFjetPhi,"PFjetPhi[pfNjets]/F");
   myTree->Branch("PFjetPt",PFjetPt,"PFjetPt[pfNjets]/F");
@@ -887,8 +821,6 @@ myTree->Branch("hfelec_charge",hfelec_charge,"hfelec_charge[HFElecindex]/F");
   myTree->Branch("pfNtracks",&pfNtracks,"pfNtracks/I");
   myTree->Branch("PFjetTrkVZ",PFjetTrkVZ,"PFjetTrkVZ[pfNjets][30]/F");
   myTree->Branch("PFjetTrkPT",PFjetTrkPT,"PFjetTrkPT[pfNjets][30]/F");
-	
-
   myTree->Branch("nVertices",&nVertices,"nVertices/I");
   myTree->Branch("nGoodVertices",&nGoodVertices,"nGoodVertices/I");
   myTree->Branch("NumInteractions", &NumInteractions, "NumInteractions/I");
@@ -904,10 +836,9 @@ myTree->Branch("hfelec_charge",hfelec_charge,"hfelec_charge[HFElecindex]/F");
   myTree->Branch("vtxZerr",vtxZerr,"vtxZerr[nVertices]/F");
   myTree->Branch("vtxisValid",vtxisValid,"vtxisValid[nVertices]/I");
   myTree->Branch("vtxisFake",vtxisFake,"vtxisFake[nVertices]/I");
-
-myTree->Branch("tr_1",&tr_1,"tr_1/I");
-myTree->Branch("tr_2",&tr_2,"tr_2/I");
-myTree->Branch("tr_3",&tr_3,"tr_3/I");
+  myTree->Branch("tr_1",&tr_1,"tr_1/I");
+  myTree->Branch("tr_2",&tr_2,"tr_2/I");
+  myTree->Branch("tr_3",&tr_3,"tr_3/I");
 
 }
 
@@ -937,11 +868,6 @@ float ntupleGenerator::DeltaR(float eta1, float eta2, float phi1, float phi2)
   float DELTAR = sqrt(pow(dphi,2)+pow(deta,2))*1.0;
   return DELTAR;
 }
-
-
-
-
-
 
 
 //
