@@ -22,15 +22,18 @@ inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute'])
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-'root://eoscms.cern.ch//eos/cms/store/data/Run2012A/DoubleElectron/RECO/30May2012-GR_P_V32_525p1-v1/0000/040D970A-B0AA-E111-A70B-0026189438F9.root'
+'root://eoscms.cern.ch//eos/cms/store/data/Run2012A/DoubleElectron/AOD/13Jul2012-v1/00000/001360BD-61DA-E111-BE60-848F69FD3048.root'
 )
 )
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2) )
 
-process.load("Configuration.StandardSequences.Geometry_cff")
+process.load("Configuration.StandardSequences.GeometryIdeal_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = cms.string(  'GR_R_52_V9D::All')
+process.GlobalTag.globaltag = cms.string(  'GR_R_53_V18::All')
 process.load("Configuration.StandardSequences.MagneticField_cff")
+
+process.load('RecoMET.METFilters.ecalLaserCorrFilter_cfi')
+
 
 removeMCMatching(process, ['All'])
 addPfMET(process, 'PF')
@@ -124,9 +127,30 @@ process.patConversions = cms.EDProducer("PATConversionProducer",
 )
 
 
-from RecoJets.JetProducers.kt4PFJets_cfi import *
-process.kt6PFJetsForIsolation = kt4PFJets.clone( rParam = 0.6, doRhoFastjet = True )
-process.kt6PFJetsForIsolation.Rho_EtaMax = cms.double(2.5)
+#from RecoJets.JetProducers.kt4PFJets_cfi import *
+#process.kt6PFJetsForIsolation = kt4PFJets.clone( rParam = 0.6, doRhoFastjet = True )
+#process.kt6PFJetsForIsolation.Rho_EtaMax = cms.double(2.5)
+
+
+#load the PU JetID sequence
+process.load("CMGTools.External.pujetidsequence_cff")
+
+
+
+#process.load("EgammaAnalysis.ElectronTools.calibratedPatElectrons_cfi")
+
+	# dataset to correct
+	#process.calibratedGsfElectrons.inputDataset = cms.string("Jan16ReReco")
+	#process.calibratedGsfElectrons.inputDataset = cms.string("ReReco")
+#process.calibratedPatElectrons.inputDataset = cms.string("Summer12_DR53X_HCP2012")
+	#process.calibratedGsfElectrons.inputDataset = cms.string("Fall11")
+#process.calibratedPatElectrons.isMC = cms.bool(True)
+#process.calibratedPatElectrons.isAOD = cms.bool(True)
+#process.calibratedPatElectrons.updateEnergyError = cms.bool(True)
+#process.calibratedPatElectrons.applyCorrections = cms.int32(1)
+#process.calibratedPatElectrons.debug = cms.bool(True)
+
+
 
 process.demo = cms.EDAnalyzer("ntupleGenerator",
 
@@ -137,18 +161,25 @@ process.demo = cms.EDAnalyzer("ntupleGenerator",
 )
 process.p = cms.Path(
 #process.elec_HLT *
-process.scrapingVeto*
-    process.primaryVertexFilter*
-    process.HBHENoiseFilter*
-#process.hltSelection     * 
-    process.mvaID + 
-    process.patDefaultSequence+
-    process.patConversions*
-process.kt6PFJetsForIsolation*
- process.demo
+process.ecalLaserCorrFilter
+*process.scrapingVeto
+*   process.primaryVertexFilter
+*   process.HBHENoiseFilter
+#*process.hltSelection     
+*   process.mvaID 
+*   process.patDefaultSequence
+*   process.patConversions
+#*   process.kt6PFJetsForIsolation
+*   process.puJetIdSqeuence
+*   process.demo
 )
 process.out.outputCommands = cms.untracked.vstring('drop *')
 
+#process.out.outputCommands +=[
+#"keep *_puJetId_*_*", # input variables
+#"keep *_puJetMva_*_*", # final MVAs and working point flags
+# 'keep *_kt6PFJets_rho_*'
+#]
 #process.out.outputCommands +=[
 #     'keep *_patConversions*_*_*'
 #]

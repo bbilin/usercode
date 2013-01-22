@@ -19,15 +19,15 @@ inputJetCorrLabell = ('AK5Calo',['L2Relative', 'L3Absolute'])
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-#'root://eoscms.cern.ch//eos/cms//store/user/bbilin/ntuples/mc/copy/MyOutputFile_1_1_aS5.root'
-'root://eoscms.cern.ch//eos/cms//store/user/bbilin/QBH/fastsim/522/522_fast_100_1_zEl.root'
-)
+        'root://eoscms.cern.ch//eos/cms//store/user/bbilin/ntuples/mc/copy/MyOutputFile_1_1_aS5.root'
+        #'root://eoscms.cern.ch//eos/cms//store/user/bbilin/QBH/fastsim/522/522_fast_100_1_zEl.root'
+    )
 )
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
-process.load("Configuration.StandardSequences.Geometry_cff")
+#process.load("Configuration.StandardSequences.GeometryIdeal_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = cms.string(  'START52_V9::All')
+process.GlobalTag.globaltag = cms.string(  'START53_V11::All')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 
 
@@ -64,14 +64,7 @@ switchJetCollection(process,cms.InputTag('ak5PFJets'),
 process.patJets.addTagInfos = True
 process.patJets.tagInfoSources  = cms.VInputTag(
     cms.InputTag("secondaryVertexTagInfosAOD"),
-    )
-
-
-
-
-
-
-
+)
 
 process.load('CommonTools/RecoAlgos/HBHENoiseFilter_cfi')
 
@@ -114,25 +107,29 @@ process.patConversions = cms.EDProducer("PATConversionProducer",
     # this should be your last selected electron collection name since currently index is used to match with electron later. We can fix this using reference pointer. ,
 )
 
-from RecoJets.JetProducers.kt4PFJets_cfi import *
-process.kt6PFJetsForIsolation = kt4PFJets.clone( rParam = 0.6, doRhoFastjet = True )
-process.kt6PFJetsForIsolation.Rho_EtaMax = cms.double(2.5)
+#from RecoJets.JetProducers.kt4PFJets_cfi import *
+#process.kt6PFJetsForIsolation = kt4PFJets.clone( rParam = 0.6, doRhoFastjet = True )
+#process.kt6PFJetsForIsolation.Rho_EtaMax = cms.double(2.5)
+
+#load the PU JetID sequence
+process.load("CMGTools.External.pujetidsequence_cff")
 
 process.demo = cms.EDAnalyzer("ntupleGenerator",
 
-				PfJetAlg = cms.string("selectedPatJets"),
-				CaloJetAlg =cms.string("selectedPatJetsAK5Calo"),
-				elecTag  = cms.InputTag("selectedPatElectrons")
+	PfJetAlg = cms.string("selectedPatJets"),
+	CaloJetAlg =cms.string("selectedPatJetsAK5Calo"),
+	elecTag  = cms.InputTag("selectedPatElectrons")
 				
 )
 
 process.p = cms.Path(
-#process.elec_HLT *
-#process.hltSelection *    
-    process.mvaID + 
-    process.patDefaultSequence+
-    process.patConversions*
-process.kt6PFJetsForIsolation*
- process.demo
+#*process.elec_HLT 
+#*process.hltSelection 
+    process.mvaID 
+*    process.patDefaultSequence
+*    process.patConversions
+#*    process.kt6PFJetsForIsolation
+*    process.puJetIdSqeuence
+* process.demo
 )
 process.out.outputCommands = cms.untracked.vstring('drop *')

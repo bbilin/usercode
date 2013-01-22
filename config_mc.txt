@@ -1,0 +1,6 @@
+crab_elec_bg_WJets.cfg
+crab_elec_bg_WW.cfg
+crab_elec_bg_WZ.cfg
+crab_elec_bg_ZZ.cfg
+crab_elec_bg_tt.cfg
+crab_elec_mc.cfg
